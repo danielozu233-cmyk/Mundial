@@ -532,7 +532,7 @@
         function populateFaseSelector() {
             const selector = document.getElementById('fase-selector');
             const fases = [...new Set(allMatchesData.map(m => m.fase))];
-            selector.innerHTML = `<option value="Todas">👉 Mostrar Todas las Fases</option>`;
+            selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
             fases.forEach(f => {
                 selector.innerHTML += `<option value="${f}">${f}</option>`;
             });
