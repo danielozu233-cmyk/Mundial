@@ -670,9 +670,15 @@
                 }
 
                 const displayDate = formatUIMatchDate(match.time);
-                const lockUI = isLocked 
-                    ? `<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px] z-10 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"><span class="bg-rose-500 text-white font-black px-4 py-2 rounded-xl text-sm shadow-xl flex items-center gap-2"><i class="fa-solid fa-lock"></i> CERRADO</span></div>` 
-                    : '';
+// Asegúrate de que el contenedor de la tarjeta tenga la clase 'relative'
+// Luego usa este código para el cartel:
+const lockUI = isLocked 
+    ? `<div class="absolute inset-0 z-[9999] flex items-center justify-center bg-slate-900/80 backdrop-blur-[2px] rounded-2xl">
+        <span class="bg-rose-600 text-white font-black px-6 py-3 rounded-xl shadow-2xl rotate-[-5deg] text-lg border-2 border-white/20">
+            <i class="fa-solid fa-lock"></i> CERRADO
+        </span>
+       </div>` 
+    : '';
                 const lockIcon = isLocked ? `<span class="text-rose-500 animate-pulse font-bold ml-2" title="Cerrado"><i class="fa-solid fa-lock"></i></span>` : `<span class="text-emerald-500 font-bold ml-2" title="Abierto"><i class="fa-solid fa-unlock"></i></span>`;
 
                 // Aquí van las correcciones de min-w-0, truncate, inline-block y flex-shrink-0
