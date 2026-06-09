@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiniela Mundialista 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            /* Se redujo la opacidad del color oscuro para que el fondo.png resalte mucho más */
+            background: linear-gradient(rgba(10, 25, 47, 0.4), rgba(16, 44, 87, 0.5)), url('fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(234, 179, 8, 0.5);
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2), 0 8px 10px -6px rgba(234, 179, 8, 0.1);
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .active-tab {
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0.0) 100%);
+            border-left: 4px solid #eab308;
+            color: #eab308;
+        }
+
+        @media (max-width: 768px) {
+            .active-tab {
+                background: linear-gradient(180deg, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0.0) 100%);
+                border-left: none;
+                border-top: 4px solid #eab308;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(234, 179, 8, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(234, 179, 8, 0.7);
+        }
+
+        .podium-1 {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.3) 0%, rgba(202, 138, 4, 0.1) 100%);
+            border: 2px solid #eab308;
+        }
+        .podium-2 {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.3) 0%, rgba(75, 85, 99, 0.1) 100%);
+            border: 2px solid #9ca3af;
+        }
+        .podium-3 {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.3) 0%, rgba(146, 64, 14, 0.1) 100%);
+            border: 2px solid #d97706;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-64 max-w-[90vw]"></div>
+
+    <div id="main-loader" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-500 mb-4"></div>
+        <p class="text-yellow-500 font-bold tracking-widest text-lg animate-pulse">CARGANDO QUINIELA...</p>
+    </div>
+
+    <div id="auth-container" class="hidden min-h-screen w-full flex items-center justify-center p-4 py-8">
+        <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl relative overflow-hidden border border-slate-700/50">
+            <div class="text-center mb-6 sm:mb-8">
+                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-500/20 text-yellow-500 mb-3 gold-glow">
+                    <i class="fa-solid font-black fa-trophy text-2xl sm:text-3xl"></i>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">QUINIELA MUNDIALISTA</h1>
+                <p class="text-yellow-500 font-bold tracking-widest text-xs sm:text-sm uppercase">Edición 2026</p>
+            </div>
+
+            <div id="login-box" class="space-y-4 sm:space-y-5">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-200">Iniciar Sesión</h2>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="login-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="login-password" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg text-base tracking-wide">
+                        Ingresar <i class="fa-solid fa-right-to-bracket ml-1"></i>
+                    </button>
+                </form>
+
+                <div class="relative flex py-1 sm:py-2 items-center">
+                    <div class="flex-grow border-t border-slate-700/50"></div>
+                    <span class="flex-shrink mx-4 text-xs uppercase tracking-wider text-slate-500 font-semibold">O</span>
+                    <div class="flex-grow border-t border-slate-700/50"></div>
+                </div>
+
+                <button id="google-signin-btn" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-3 text-sm shadow-md">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5">
+                    Acceder con Google
+                </button>
+
+                <p class="text-center text-sm text-slate-400 mt-4 sm:mt-6">
+                    ¿No tienes una cuenta? <button id="to-register-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Regístrate aquí</button>
+                </p>
+            </div>
+
+            <div id="register-box" class="hidden space-y-4 sm:space-y-5">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-200">Crear Cuenta Nueva</h2>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nombre</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="reg-name" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Dany Gálvez">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Teléfono</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-phone"></i></span>
+                            <input type="tel" id="reg-phone" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="55554444">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="reg-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="reg-password" required minlength="6" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Mínimo 6 caracteres">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-white font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg text-base tracking-wide mt-2">
+                        Registrarme <i class="fa-solid fa-user-plus ml-1"></i>
+                    </button>
+                </form>
+                <p class="text-center text-sm text-slate-400 mt-4 sm:mt-6">
+                    ¿Ya posees una cuenta? <button id="to-login-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Inicia Sesión</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-wrapper" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <aside class="w-full md:w-64 lg:w-72 bg-slate-900/95 border-b md:border-b-0 md:border-r border-slate-800/80 flex flex-col z-40 relative flex-shrink-0">
+            <div class="p-4 md:p-6 border-b border-slate-800/80 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex w-14 h-14 bg-gradient-to-tr from-yellow-500 to-amber-500 rounded-full items-center justify-center font-bold text-slate-950 text-xl shadow-lg border-2 border-slate-800" id="user-avatar">
+                        U
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-200 text-sm tracking-wide" id="user-display-name">Usuario</h3>
+                        <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1" id="user-display-email">correo@ejemplo.com</p>
+                    </div>
+                </div>
+                
+                <div class="px-3 py-1.5 md:mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-yellow-500 font-extrabold text-xs tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-solid fa-star"></i> <span id="user-aside-points" class="text-sm font-black text-white">0</span> pts
+                </div>
+            </div>
+
+            <nav class="p-2 md:p-4 flex flex-row md:flex-col overflow-x-auto gap-2 md:gap-0 md:space-y-1">
+                <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-futbol text-base text-slate-400 group-hover:text-yellow-500"></i> Quiniela
+                </button>
+                <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab" class="flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-ranking-star text-base text-slate-400 group-hover:text-yellow-500"></i> Posiciones
+                </button>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="hidden flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all group border border-dashed border-rose-500/20 whitespace-nowrap">
+                    <i class="fa-solid fa-screwdriver-wrench text-base text-rose-400"></i> Admin
+                </button>
+                
+                <button id="mobile-logout-btn" class="md:hidden flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+            </nav>
+
+            <div class="mt-auto hidden md:block p-4 border-t border-slate-800/80 bg-slate-950/40">
+                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold bg-slate-800 hover:bg-rose-600/20 hover:text-rose-400 text-slate-400 border border-slate-700/50 hover:border-rose-500/30 transition-all">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col overflow-y-auto w-full">
+            <header class="glass-panel px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-30">
+                <div>
+                    <h2 class="text-base sm:text-lg font-black text-white tracking-wide uppercase" id="page-title">Mi Quiniela</h2>
+                    <p class="text-[10px] sm:text-xs text-slate-400">Pronósticos Mundial 2026</p>
+                </div>
+                
+                <div class="hidden sm:flex items-center gap-3 text-xs font-bold">
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                        <span class="text-amber-500">🥇</span> <span class="text-slate-200">Q1,000.00</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-400/10 border border-slate-400/30 rounded-lg">
+                        <span class="text-slate-300">🥈</span> <span class="text-slate-200">Balón</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-amber-700/10 border border-amber-700/30 rounded-lg">
+                        <span class="text-amber-700">🥉</span> <span class="text-slate-200">Q200.00</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6 pb-20">
+
+                <section id="quiniela-tab" class="tab-content space-y-5">
+                    <div class="glass-card p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-l-4 border-yellow-500">
+                        <div class="space-y-1">
+                            <h4 class="font-bold text-white flex items-center gap-2 text-sm"><i class="fa-solid fa-circle-info text-yellow-500"></i> Puntuación</h4>
+                            <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">
+                                Gana <strong class="text-yellow-400">4 puntos</strong> por el marcador exacto. Si aciertas el ganador o el empate sin goles exactos, sumas <strong class="text-yellow-400">2 puntos</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <form id="predictions-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="matches-prediction-container">
+                            </div>
+                        
+                        <div class="mt-8 flex justify-center md:justify-end sticky bottom-4 z-20 px-2 md:px-0">
+                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 text-slate-950 font-extrabold px-6 py-4 rounded-xl transition-all shadow-[0_10px_30px_-5px_rgba(234,179,8,0.4)] flex items-center justify-center gap-2 text-sm tracking-wide">
+                                <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Guardar Mis Pronósticos
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <section id="leaderboard-tab" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2" id="podium-container">
+                        <div class="glass-card podium-2 rounded-2xl p-5 text-center order-2 sm:order-1 flex flex-col justify-between relative">
+                            <div class="absolute top-2 right-3 text-slate-400 text-xl font-black opacity-30">#2</div>
+                            <div>
+                                <div class="w-10 h-10 mx-auto rounded-full bg-slate-500/20 text-slate-300 flex items-center justify-center mb-2 text-base font-bold"><i class="fa-solid fa-medal"></i></div>
+                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-2">Cargando...</h4>
+                            </div>
+                            <div class="mt-3">
+                                <div class="text-2xl font-black text-slate-100" id="podium-pts-2">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-1 text-[10px] sm:text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥈 Balón Mundial</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card podium-1 rounded-2xl p-6 text-center order-1 sm:order-2 flex flex-col justify-between relative transform sm:scale-105 shadow-xl shadow-yellow-500/10">
+                            <div class="absolute top-2 right-3 text-yellow-500 text-2xl font-black opacity-30">#1</div>
+                            <div>
+                                <div class="w-12 h-12 mx-auto rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-2 text-lg gold-glow border border-yellow-500/30"><i class="fa-solid fa-crown"></i></div>
+                                <h4 class="font-extrabold text-white text-base truncate" id="podium-name-1">Cargando...</h4>
+                            </div>
+                            <div class="mt-3">
+                                <div class="text-3xl font-black text-yellow-400" id="podium-pts-1">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-1 text-[10px] sm:text-xs font-extrabold text-slate-950 px-2 py-1 bg-yellow-400 rounded-md inline-block uppercase tracking-wider">🏆 Q1,000.00</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card podium-3 rounded-2xl p-5 text-center order-3 flex flex-col justify-between relative">
+                            <div class="absolute top-2 right-3 text-amber-700 text-xl font-black opacity-30">#3</div>
+                            <div>
+                                <div class="w-10 h-10 mx-auto rounded-full bg-amber-700/20 text-amber-600 flex items-center justify-center mb-2 text-base font-bold"><i class="fa-solid fa-award"></i></div>
+                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-3">Cargando...</h4>
+                            </div>
+                            <div class="mt-3">
+                                <div class="text-2xl font-black text-amber-600" id="podium-pts-3">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-1 text-[10px] sm:text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥉 Q200.00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
+                        <div class="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+                            <h3 class="font-bold text-white text-xs sm:text-sm uppercase tracking-wider">Clasificación General</h3>
+                            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold" id="leaderboard-count">0 Participantes</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="bg-slate-950/40 text-[10px] sm:text-xs font-bold text-slate-400 uppercase border-b border-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-3 text-center w-12">Pos</th>
+                                        <th class="px-4 py-3">Nombre</th>
+                                        <th class="px-4 py-3 text-center w-20">Puntos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="admin-tab" class="tab-content hidden space-y-5">
+                    <div class="p-4 glass-card rounded-xl bg-gradient-to-r from-rose-950/30 to-slate-900 border-l-4 border-rose-500">
+                        <h3 class="text-sm sm:text-base font-bold text-rose-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Panel de Administrador</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-300 mt-1">
+                            Ingresa los resultados oficiales para recalcular los puntos de todos.
+                        </p>
+                    </div>
+
+                    <form id="admin-results-form">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-matches-container">
+                            </div>
+
+                        <div class="mt-6 flex justify-center sm:justify-end">
+                            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 text-white font-extrabold px-6 py-4 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 text-sm tracking-wide">
+                                <i class="fa-solid fa-calculator"></i> Publicar Resultados
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAa2q0jJsl_PU7KBn9e2g1FlnRwYRA8qGE",
+            authDomain: "quinielamundialista-2026.firebaseapp.com",
+            projectId: "quinielamundialista-2026",
+            storageBucket: "quinielamundialista-2026.firebasestorage.app",
+            messagingSenderId: "312310430145",
+            appId: "1:312310430145:web:0906810aca57d90e089740",
+            measurementId: "G-HQ0QHG97QH"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        const ADMIN_EMAILS = ["workplaceqr@gmail.com", "chrishernandez2801@gmail.com"];
+
+        const matchesData = [
+            { id: "m1", group: "Grupo A", J: "Jornada 1", teamHome: "México", flagHome: "mx", teamAway: "Sudáfrica", flagAway: "za", time: "Jueves 11/06/2026 1:00 PM" },
+            { id: "m2", group: "Grupo A", J: "Jornada 1", teamHome: "Corea del Sur", flagHome: "kr", teamAway: "República Checa", flagAway: "cz", time: "Jueves 11/06/2026 8:00 PM" },
+            { id: "m3", group: "Grupo B", J: "Jornada 1", teamHome: "Canadá", flagHome: "ca", teamAway: "Bosnia y Herzegovina", flagAway: "ba", time: "Viernes 12/06/2026 1:00 PM" },
+            { id: "m4", group: "Grupo D", J: "Jornada 1", teamHome: "Estados Unidos", flagHome: "us", teamAway: "Paraguay", flagAway: "py", time: "Viernes 12/06/2026 7:00 PM" },
+            { id: "m5", group: "Grupo B", J: "Jornada 1", teamHome: "Qatar", flagHome: "qa", teamAway: "Suiza", flagAway: "ch", time: "Sábado 13/06/2026 1:00 PM" },
+            { id: "m6", group: "Grupo C", J: "Jornada 1", teamHome: "Brasil", flagHome: "br", teamAway: "Marruecos", flagAway: "ma", time: "Sábado 13/06/2026 4:00 PM" },
+            { id: "m7", group: "Grupo C", J: "Jornada 1", teamHome: "Haití", flagHome: "ht", teamAway: "Escocia", flagAway: "gb-sct", time: "Sábado 13/06/2026 7:00 PM" },
+            { id: "m8", group: "Grupo D", J: "Jornada 1", teamHome: "Australia", flagHome: "au", teamAway: "Turquía", flagAway: "tr", time: "Sábado 13/06/2026 10:00 PM" },
+            { id: "m9", group: "Grupo E", J: "Jornada 1", teamHome: "Alemania", flagHome: "de", teamAway: "Curazao", flagAway: "cw", time: "Domingo 14/06/2026 11:00 AM" },
+            { id: "m10", group: "Grupo F", J: "Jornada 1", teamHome: "Países Bajos", flagHome: "nl", teamAway: "Japón", flagAway: "jp", time: "Domingo 14/06/2026 2:00 PM" },
+            { id: "m11", group: "Grupo E", J: "Jornada 1", teamHome: "Costa de Marfil", flagHome: "ci", teamAway: "Ecuador", flagAway: "ec", time: "Domingo 14/06/2026 5:00 PM" },
+            { id: "m12", group: "Grupo F", J: "Jornada 1", teamHome: "Suecia", flagHome: "se", teamAway: "Túnez", flagAway: "tn", time: "Domingo 14/06/2026 8:00 PM" },
+            { id: "m13", group: "Grupo H", J: "Jornada 1", teamHome: "España", flagHome: "es", teamAway: "Cabo Verde", flagAway: "cv", time: "Lunes 15/06/2026 10:00 AM" },
+            { id: "m14", group: "Grupo G", J: "Jornada 1", teamHome: "Bélgica", flagHome: "be", teamAway: "Egipto", flagAway: "eg", time: "Lunes 15/06/2026 1:00 PM" },
+            { id: "m15", group: "Grupo H", J: "Jornada 1", teamHome: "Arabia Saudita", flagHome: "sa", teamAway: "Uruguay", flagAway: "uy", time: "Lunes 15/06/2026 4:00 PM" },
+            { id: "m16", group: "Grupo G", J: "Jornada 1", teamHome: "Irán", flagHome: "ir", teamAway: "Nueva Zelanda", flagAway: "nz", time: "Lunes 15/06/2026 7:00 PM" },
+            { id: "m17", group: "Grupo I", J: "Jornada 1", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "Martes 16/06/2026 1:00 PM" },
+            { id: "m18", group: "Grupo I", J: "Jornada 1", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "Martes 16/06/2026 4:00 PM" },
+            { id: "m19", group: "Grupo J", J: "Jornada 1", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "Martes 16/06/2026 7:00 PM" },
+            { id: "m20", group: "Grupo J", J: "Jornada 1", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "Martes 16/06/2026 10:00 PM" },
+            { id: "m21", group: "Grupo K", J: "Jornada 1", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "Miércoles 17/06/2026 11:00 AM" },
+            { id: "m22", group: "Grupo L", J: "Jornada 1", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "Miércoles 17/06/2026 2:00 PM" }
+        ];
+
+        let currentUser = null;
+        let globalResults = {};
+        let userPredictions = {};
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 border transition-all duration-300 transform translate-y-2 opacity-0 glass-panel bg-slate-900/90`;
+            
+            if(type === 'success') {
+                toast.classList.add('border-emerald-500', 'text-emerald-400');
+                toast.innerHTML = `<i class="fa-solid fa-circle-check text-base"></i> ${message}`;
+            } else {
+                toast.classList.add('border-rose-500', 'text-rose-400');
+                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation text-base"></i> ${message}`;
+            }
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-5');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        document.getElementById('to-register-btn').addEventListener('click', () => {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('register-box').classList.remove('hidden');
+        });
+        document.getElementById('to-login-btn').addEventListener('click', () => {
+            document.getElementById('register-box').classList.add('hidden');
+            document.getElementById('login-box').classList.remove('hidden');
+        });
+
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
+            document.getElementById(`btn-${tabId}`).classList.add('active-tab');
+            
+            const titleMap = {
+                'quiniela-tab': 'Mi Quiniela',
+                'leaderboard-tab': 'Tabla de Posiciones',
+                'admin-tab': 'Panel Administrativo'
+            };
+            document.getElementById('page-title').innerText = titleMap[tabId] || 'Panel';
+
+            if(tabId === 'leaderboard-tab') loadLeaderboard();
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            document.getElementById('main-loader').classList.remove('opacity-0');
+            document.getElementById('main-loader').style.display = 'flex';
+            
+            if (user) {
+                currentUser = user;
+                const isAdmin = ADMIN_EMAILS.includes(user.email);
+                
+                const userDocRef = doc(db, "users", user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+                
+                let userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || 'Participante',
+                    phone: user.phoneNumber || 'No Registrado',
+                    totalPoints: 0,
+                    isAdmin: isAdmin
+                };
+
+                if (userDocSnap.exists()) {
+                    const existing = userDocSnap.data();
+                    userData.name = existing.name || userData.name;
+                    userData.phone = existing.phone || userData.phone;
+                    userData.totalPoints = existing.totalPoints ?? 0;
+                } else {
+                    await setDoc(userDocRef, userData);
+                }
+
+                document.getElementById('user-display-name').innerText = userData.name;
+                document.getElementById('user-display-email').innerText = userData.email;
+                document.getElementById('user-avatar').innerText = userData.name.charAt(0).toUpperCase();
+                document.getElementById('user-aside-points').innerText = userData.totalPoints;
+
+                if (isAdmin) {
+                    document.getElementById('btn-admin-tab').classList.remove('hidden');
+                } else {
+                    document.getElementById('btn-admin-tab').classList.add('hidden');
+                }
+
+                await fetchGlobalResults();
+                await fetchUserPredictions();
+                
+                renderMatchesPredictionGrid();
+                if(isAdmin) renderAdminMatchesGrid();
+
+                document.getElementById('auth-container').classList.add('hidden');
+                document.getElementById('app-wrapper').classList.remove('hidden');
+                switchTab('quiniela-tab');
+            } else {
+                currentUser = null;
+                document.getElementById('app-wrapper').classList.add('hidden');
+                document.getElementById('auth-container').classList.remove('hidden');
+            }
+            
+            document.getElementById('main-loader').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    totalPoints: 0,
+                    isAdmin: ADMIN_EMAILS.includes(email)
+                });
+                
+                showToast("Cuenta registrada exitosamente");
+                document.getElementById('register-form').reset();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast("Sesión iniciada");
+                document.getElementById('login-form').reset();
+            } catch (error) {
+                showToast("Credenciales inválidas", 'error');
+            }
+        });
+
+        document.getElementById('google-signin-btn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                showToast("Autenticado con Google");
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        const logoutHandler = () => {
+            signOut(auth).then(() => showToast("Sesión cerrada"));
+        };
+        document.getElementById('logout-btn').addEventListener('click', logoutHandler);
+        document.getElementById('mobile-logout-btn').addEventListener('click', logoutHandler);
+
+        async function fetchGlobalResults() {
+            try {
+                const docSnap = await getDoc(doc(db, "results", "global"));
+                globalResults = docSnap.exists() ? (docSnap.data().results || {}) : {};
+            } catch (e) {
+                console.error("Error global results", e);
+            }
+        }
+
+        async function fetchUserPredictions() {
+            if (!currentUser) return;
+            try {
+                const docSnap = await getDoc(doc(db, "predictions", currentUser.uid));
+                userPredictions = docSnap.exists() ? (docSnap.data().predictions || {}) : {};
+            } catch (e) {
+                console.error("Error user preds", e);
+            }
+        }
+
+        function renderMatchesPredictionGrid() {
+            const container = document.getElementById('matches-prediction-container');
+            container.innerHTML = '';
+
+            matchesData.forEach(match => {
+                const pred = userPredictions[match.id] || { home: '', away: '' };
+                const real = globalResults[match.id] || { home: null, away: null };
+                
+                let pointsBadgeHTML = '';
+                let statusBorder = 'border-slate-800/40';
+                
+                if (real.home !== null && real.away !== null && real.home !== "" && real.away !== "") {
+                    const points = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
+                    if (points === 4) {
+                        pointsBadgeHTML = `<span class="bg-yellow-500 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black"><i class="fa-solid fa-star"></i> +4 Ptos</span>`;
+                        statusBorder = 'border-yellow-500/70 shadow-md shadow-yellow-500/10';
+                    } else if (points === 2) {
+                        pointsBadgeHTML = `<span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-check"></i> +2 Ptos</span>`;
+                        statusBorder = 'border-emerald-500/50';
+                    } else {
+                        pointsBadgeHTML = `<span class="bg-slate-700 text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">0 Ptos</span>`;
+                        statusBorder = 'border-slate-800';
+                    }
+                }
+
+                const cardHTML = `
+                    <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between border ${statusBorder}">
+                        <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold text-slate-400 mb-3 pb-2 border-b border-slate-800/40">
+                            <span class="text-yellow-500"><i class="fa-solid fa-layer-group mr-1"></i> ${match.group} - ${match.J}</span>
+                            ${pointsBadgeHTML}
+                        </div>
+                        
+                        <div class="flex items-center justify-between my-2 gap-2">
+                            <div class="flex flex-col items-center flex-1 text-center w-[30%]">
+                                <img src="flags/${match.flagHome}.png" alt="${match.teamHome}" class="w-10 sm:w-12 h-7 sm:h-8 object-cover mb-1.5 rounded-sm shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/40x28?text=?';">
+                                <span class="text-[11px] sm:text-xs font-bold text-slate-200 truncate w-full" title="${match.teamHome}">${match.teamHome}</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-1">
+                                <input type="number" min="0" required name="pred-${match.id}-home" value="${pred.home}" 
+                                    class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-950/80 text-white font-extrabold text-center rounded-xl border border-slate-700 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all text-base sm:text-lg p-0" placeholder="-">
+                                <span class="text-slate-500 font-bold text-xs">vs</span>
+                                <input type="number" min="0" required name="pred-${match.id}-away" value="${pred.away}" 
+                                    class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-950/80 text-white font-extrabold text-center rounded-xl border border-slate-700 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all text-base sm:text-lg p-0" placeholder="-">
+                            </div>
+                            
+                            <div class="flex flex-col items-center flex-1 text-center w-[30%]">
+                                <img src="flags/${match.flagAway}.png" alt="${match.teamAway}" class="w-10 sm:w-12 h-7 sm:h-8 object-cover mb-1.5 rounded-sm shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/40x28?text=?';">
+                                <span class="text-[11px] sm:text-xs font-bold text-slate-200 truncate w-full" title="${match.teamAway}">${match.teamAway}</span>
+                            </div>
+                        </div>
+
+                        <div class="text-[9px] sm:text-[10px] text-slate-400 text-center mt-3 pt-2 border-t border-slate-800/30 font-medium">
+                            <i class="fa-regular fa-clock"></i> ${match.time}
+                        </div>
+                        
+                        ${real.home !== null && real.home !== undefined && real.home !== "" ? `
+                            <div class="mt-2.5 px-2 py-1.5 bg-slate-950/50 rounded-lg text-center border border-slate-800 text-[10px] sm:text-[11px] font-semibold">
+                                <span class="text-slate-400">Marcador Oficial:</span> <strong class="text-yellow-500 ml-1">${real.home} - ${real.away}</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        document.getElementById('predictions-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            document.getElementById('main-loader').style.display = 'flex';
+            document.getElementById('main-loader').classList.remove('opacity-0');
+
+            const formData = new FormData(e.target);
+            const newPredictions = {};
+
+            matchesData.forEach(match => {
+                const homeVal = formData.get(`pred-${match.id}-home`);
+                const awayVal = formData.get(`pred-${match.id}-away`);
+                newPredictions[match.id] = {
+                    home: homeVal !== "" ? parseInt(homeVal) : "",
+                    away: awayVal !== "" ? parseInt(awayVal) : ""
+                };
+            });
+
+            try {
+                await setDoc(doc(db, "predictions", currentUser.uid), { predictions: newPredictions }, { merge: true });
+                userPredictions = newPredictions;
+                showToast("¡Pronósticos guardados correctamente!");
+                
+                await fetchGlobalResults();
+                const myPoints = calculateTotalUserScore(userPredictions, globalResults);
+                await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPoints });
+                document.getElementById('user-aside-points').innerText = myPoints;
+                
+                renderMatchesPredictionGrid();
+            } catch (error) {
+                showToast("Error al guardar: " + error.message, 'error');
+            } finally {
+                document.getElementById('main-loader').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+            }
+        });
+
+        function renderAdminMatchesGrid() {
+            const container = document.getElementById('admin-matches-container');
+            container.innerHTML = '';
+
+            matchesData.forEach(match => {
+                const real = globalResults[match.id] || { home: '', away: '' };
+                const cardHTML = `
+                    <div class="glass-card rounded-xl p-3 border border-slate-700/50 bg-slate-900/40">
+                        <div class="text-[10px] font-bold text-rose-400 mb-2 pb-1 bg-rose-500/5 px-2 py-0.5 rounded">
+                            <i class="fa-solid fa-gamepad"></i> ${match.group}
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-[10px] font-bold text-slate-300 w-1/3 truncate text-right pr-2">${match.teamHome}</div>
+                            
+                            <div class="flex items-center justify-center gap-1 w-1/3">
+                                <input type="number" min="0" name="admin-${match.id}-home" value="${real.home ?? ''}" 
+                                    class="w-8 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:border-rose-400 p-0 text-xs">
+                                <span class="text-slate-600 font-bold text-xs">-</span>
+                                <input type="number" min="0" name="admin-${match.id}-away" value="${real.away ?? ''}" 
+                                    class="w-8 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:border-rose-400 p-0 text-xs">
+                            </div>
+                            
+                            <div class="text-[10px] font-bold text-slate-300 w-1/3 truncate text-left pl-2">${match.teamAway}</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        document.getElementById('admin-results-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
+
+            document.getElementById('main-loader').style.display = 'flex';
+            document.getElementById('main-loader').classList.remove('opacity-0');
+
+            const formData = new FormData(e.target);
+            const newGlobalResults = {};
+
+            matchesData.forEach(match => {
+                const hVal = formData.get(`admin-${match.id}-home`);
+                const aVal = formData.get(`admin-${match.id}-away`);
+                newGlobalResults[match.id] = {
+                    home: (hVal !== null && hVal !== "") ? parseInt(hVal) : null,
+                    away: (aVal !== null && aVal !== "") ? parseInt(aVal) : null
+                };
+            });
+
+            try {
+                await setDoc(doc(db, "results", "global"), { results: newGlobalResults });
+                globalResults = newGlobalResults;
+
+                const usersSnapshot = await getDocs(collection(db, "users"));
+                for (const userDoc of usersSnapshot.docs) {
+                    const uData = userDoc.data();
+                    const predSnap = await getDoc(doc(db, "predictions", uData.uid));
+                    let uPoints = 0;
+                    if (predSnap.exists()) {
+                        uPoints = calculateTotalUserScore(predSnap.data().predictions || {}, globalResults);
+                    }
+                    await updateDoc(doc(db, "users", uData.uid), { totalPoints: uPoints });
+                    
+                    if(userDoc.id === currentUser.uid) document.getElementById('user-aside-points').innerText = uPoints;
+                }
+
+                showToast("¡Puntajes recalculados!");
+                renderMatchesPredictionGrid();
+            } catch (err) {
+                showToast("Error: " + err.message, 'error');
+            } finally {
+                document.getElementById('main-loader').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+            }
+        });
+
+        function calcSingleMatchPoints(pH, pA, rH, rA) {
+            if (rH === null || rA === null || rH === "" || rA === "") return 0;
+            if (pH === null || pA === null || pH === "" || pA === "") return 0;
+
+            pH = parseInt(pH); pA = parseInt(pA);
+            rH = parseInt(rH); rA = parseInt(rA);
+
+            if (isNaN(pH) || isNaN(pA) || isNaN(rH) || isNaN(rA)) return 0;
+            if (pH === rH && pA === rA) return 4;
+
+            const predSign = pH > pA ? 1 : (pH < pA ? -1 : 0);
+            const realSign = rH > rA ? 1 : (rH < rA ? -1 : 0);
+            if (predSign === realSign) return 2;
+
+            return 0;
+        }
+
+        function calculateTotalUserScore(preds, reals) {
+            let total = 0;
+            matchesData.forEach(match => {
+                const p = preds[match.id];
+                const r = reals[match.id];
+                if (p && r) total += calcSingleMatchPoints(p.home, p.away, r.home, r.away);
+            });
+            return total;
+        }
+
+        async function loadLeaderboard() {
+            const tbody = document.getElementById('leaderboard-table-body');
+            tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Cargando...</td></tr>`;
+
+            try {
+                const q = query(collection(db, "users"), orderBy("totalPoints", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                tbody.innerHTML = '';
+                const usersList = [];
+                querySnapshot.forEach(doc => usersList.push(doc.data()));
+
+                document.getElementById('leaderboard-count').innerText = `${usersList.length} Participantes`;
+
+                for (let idx = 1; idx <= 3; idx++) {
+                    document.getElementById(`podium-name-${idx}`).innerText = "Sin aspirante";
+                    document.getElementById(`podium-pts-${idx}`).innerHTML = `0 <span class="text-[10px] font-semibold text-slate-400">pts</span>`;
+                }
+
+                if(usersList[0]) {
+                    document.getElementById('podium-name-1').innerText = usersList[0].name;
+                    document.getElementById('podium-pts-1').innerHTML = `${usersList[0].totalPoints} <span class="text-[10px] font-black text-yellow-900/60">pts</span>`;
+                }
+                if(usersList[1]) {
+                    document.getElementById('podium-name-2').innerText = usersList[1].name;
+                    document.getElementById('podium-pts-2').innerHTML = `${usersList[1].totalPoints} <span class="text-[10px] font-semibold text-slate-300">pts</span>`;
+                }
+                if(usersList[2]) {
+                    document.getElementById('podium-name-3').innerText = usersList[2].name;
+                    document.getElementById('podium-pts-3').innerHTML = `${usersList[2].totalPoints} <span class="text-[10px] font-semibold text-amber-900">pts</span>`;
+                }
+
+                usersList.forEach((user, index) => {
+                    const rank = index + 1;
+                    let rankBadge = `<span class="font-bold text-slate-400">${rank}</span>`;
+                    let rowHighlight = 'hover:bg-slate-800/20';
+
+                    if (rank === 1) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-yellow-500 text-slate-950 font-black text-xs shadow">🥇</span>`; rowHighlight = 'bg-yellow-500/5 hover:bg-yellow-500/10'; }
+                    else if (rank === 2) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-slate-400 text-slate-950 font-black text-xs shadow">🥈</span>`; rowHighlight = 'bg-slate-400/5 hover:bg-slate-400/10'; }
+                    else if (rank === 3) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-amber-700 text-white font-black text-xs shadow">🥉</span>`; rowHighlight = 'bg-amber-700/5 hover:bg-amber-700/10'; }
+
+                    if (currentUser && user.uid === currentUser.uid) rowHighlight += ' border-l-2 border-yellow-500 font-semibold text-yellow-400';
+
+                    tbody.innerHTML += `
+                        <tr class="transition-colors ${rowHighlight}">
+                            <td class="px-4 py-3 text-center">${rankBadge}</td>
+                            <td class="px-4 py-3">
+                                <div class="font-bold text-slate-200">${user.name} ${currentUser && user.uid === currentUser.uid ? '<span class="text-[9px] bg-yellow-500/20 text-yellow-400 px-1 py-0.5 rounded ml-1 uppercase font-black">Tú</span>' : ''}</div>
+                                <div class="text-[10px] sm:text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-phone mr-1"></i> ${user.phone || 'S/N'}</div>
+                            </td>
+                            <td class="px-4 py-3 text-center font-black text-base text-white">${user.totalPoints}</td>
+                        </tr>
+                    `;
+                });
+
+                if(usersList.length === 0) tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-slate-500">No hay participantes aún.</td></tr>`;
+
+            } catch (error) {
+                showToast("Error en posiciones", 'error');
+            }
+        }
+    </script>
+</body>
+</html>
