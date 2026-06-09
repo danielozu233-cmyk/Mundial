@@ -5,351 +5,412 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quiniela Mundialista 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
-            /* Se redujo la opacidad del color oscuro para que el fondo.png resalte mucho más */
-            background: linear-gradient(rgba(10, 25, 47, 0.4), rgba(16, 44, 87, 0.5)), url('fondo.jpg') no-repeat center center fixed;
+            background: linear-gradient(rgba(10, 25, 47, 0.6), rgba(16, 44, 87, 0.7)), url('fondo.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #f3f4f6;
             min-height: 100vh;
+            scroll-behavior: smooth;
         }
         
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .glass-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(234, 179, 8, 0.5);
-            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2), 0 8px 10px -6px rgba(234, 179, 8, 0.1);
+        .glass-card:hover:not(.locked-card) {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(234, 179, 8, 0.6);
+            box-shadow: 0 15px 35px -5px rgba(234, 179, 8, 0.25), 0 10px 15px -5px rgba(0, 0, 0, 0.5);
         }
 
-        .gold-glow {
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        .locked-card {
+            opacity: 0.85;
+            filter: grayscale(20%);
+            border-color: rgba(225, 29, 72, 0.2);
         }
+
+        .gold-glow { box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); }
+        .red-glow { box-shadow: 0 0 15px rgba(225, 29, 72, 0.5); }
 
         .active-tab {
-            background: linear-gradient(90deg, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0.0) 100%);
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.0) 100%);
             border-left: 4px solid #eab308;
-            color: #eab308;
+            color: #fef08a;
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
         }
 
         @media (max-width: 768px) {
             .active-tab {
-                background: linear-gradient(180deg, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0.0) 100%);
+                background: linear-gradient(180deg, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.0) 100%);
                 border-left: none;
                 border-top: 4px solid #eab308;
             }
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(10, 15, 30, 0.8); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ca8a04, #eab308); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #facc15; }
+
+        .podium-1 { background: linear-gradient(135deg, rgba(250, 204, 21, 0.25) 0%, rgba(202, 138, 4, 0.05) 100%); border: 2px solid #eab308; }
+        .podium-2 { background: linear-gradient(135deg, rgba(156, 163, 175, 0.25) 0%, rgba(75, 85, 99, 0.05) 100%); border: 2px solid #9ca3af; }
+        .podium-3 { background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(146, 64, 14, 0.05) 100%); border: 2px solid #d97706; }
+
+        /* Animaciones para las tarjetas */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(234, 179, 8, 0.4);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(234, 179, 8, 0.7);
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
         }
 
-        .podium-1 {
-            background: linear-gradient(135deg, rgba(250, 204, 21, 0.3) 0%, rgba(202, 138, 4, 0.1) 100%);
-            border: 2px solid #eab308;
-        }
-        .podium-2 {
-            background: linear-gradient(135deg, rgba(156, 163, 175, 0.3) 0%, rgba(75, 85, 99, 0.1) 100%);
-            border: 2px solid #9ca3af;
-        }
-        .podium-3 {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.3) 0%, rgba(146, 64, 14, 0.1) 100%);
-            border: 2px solid #d97706;
+        /* Inputs bloqueados */
+        input:disabled {
+            background-color: rgba(15, 23, 42, 0.5);
+            color: #64748b;
+            border-color: rgba(225, 29, 72, 0.3);
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-64 max-w-[90vw]"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-72 max-w-[90vw]"></div>
 
-    <div id="main-loader" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-500 mb-4"></div>
-        <p class="text-yellow-500 font-bold tracking-widest text-lg animate-pulse">CARGANDO QUINIELA...</p>
+    <div id="main-loader" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative w-24 h-24 mb-4">
+            <div class="absolute inset-0 border-t-4 border-b-4 border-yellow-500 rounded-full animate-spin"></div>
+            <div class="absolute inset-2 border-l-4 border-r-4 border-white/30 rounded-full animate-spin direction-reverse" style="animation-direction: reverse;"></div>
+            <i class="fa-solid fa-futbol absolute inset-0 flex items-center justify-center text-3xl text-yellow-500 animate-pulse"></i>
+        </div>
+        <p class="text-yellow-500 font-black tracking-widest text-lg animate-pulse uppercase">Cargando Quiniela...</p>
     </div>
 
-    <div id="auth-container" class="hidden min-h-screen w-full flex items-center justify-center p-4 py-8">
-        <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl relative overflow-hidden border border-slate-700/50">
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-500/20 text-yellow-500 mb-3 gold-glow">
-                    <i class="fa-solid font-black fa-trophy text-2xl sm:text-3xl"></i>
-                </div>
-                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">QUINIELA MUNDIALISTA</h1>
-                <p class="text-yellow-500 font-bold tracking-widest text-xs sm:text-sm uppercase">Edición 2026</p>
+    <div id="auth-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-10 rounded-3xl shadow-2xl text-center relative overflow-hidden group">
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-yellow-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+            
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-600 to-yellow-400 text-slate-900 mb-6 gold-glow transform transition-transform group-hover:scale-110">
+                <i class="fa-solid fa-trophy text-5xl"></i>
             </div>
+            <h1 class="text-3xl font-black text-white tracking-tight mb-1">QUINIELA MUNDIALISTA</h1>
+            <p class="text-yellow-500 font-extrabold tracking-[0.2em] text-sm uppercase mb-10">Edición 2026</p>
+            
+            <button id="google-signin-btn" class="relative overflow-hidden w-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold py-4 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-base shadow-[0_10px_20px_-10px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 relative z-10">
+                <span class="relative z-10">Ingresar con Google</span>
+            </button>
+            <p class="text-xs text-slate-400 mt-8 font-medium">Plataforma segura vinculada a tu cuenta de Google.</p>
+        </div>
+    </div>
 
-            <div id="login-box" class="space-y-4 sm:space-y-5">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-200">Iniciar Sesión</h2>
-                <form id="login-form" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo Electrónico</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" id="login-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="login-password" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="••••••••">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg text-base tracking-wide">
-                        Ingresar <i class="fa-solid fa-right-to-bracket ml-1"></i>
-                    </button>
-                </form>
-
-                <div class="relative flex py-1 sm:py-2 items-center">
-                    <div class="flex-grow border-t border-slate-700/50"></div>
-                    <span class="flex-shrink mx-4 text-xs uppercase tracking-wider text-slate-500 font-semibold">O</span>
-                    <div class="flex-grow border-t border-slate-700/50"></div>
+    <div id="complete-registration-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mb-4">
+                    <i class="fa-solid fa-user-plus text-3xl"></i>
                 </div>
+                <h2 class="text-2xl font-black text-white">Último Paso</h2>
+                <p class="text-sm text-slate-400 mt-2">Ingresa tu número de WhatsApp para finalizar el registro.</p>
+            </div>
+            <form id="complete-reg-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Teléfono (WhatsApp)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-emerald-500"><i class="fa-brands fa-whatsapp text-lg"></i></span>
+                        <input type="tel" id="reg-phone" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-base text-white font-bold focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all" placeholder="Ej. 55554444">
+                    </div>
+                </div>
+                <br>
+                <br>
 
-                <button id="google-signin-btn" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-3 text-sm shadow-md">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5">
-                    Acceder con Google
+                <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 text-base tracking-wide mt-2 flex justify-center items-center gap-2">
+                    Comenzar <i class="fa-solid fa-arrow-right"></i>
                 </button>
+            </form>
+        </div>
+    </div>
 
-                <p class="text-center text-sm text-slate-400 mt-4 sm:mt-6">
-                    ¿No tienes una cuenta? <button id="to-register-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Regístrate aquí</button>
-                </p>
-            </div>
-
-            <div id="register-box" class="hidden space-y-4 sm:space-y-5">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-200">Crear Cuenta Nueva</h2>
-                <form id="register-form" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nombre</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" id="reg-name" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Dany Gálvez">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Teléfono</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-phone"></i></span>
-                            <input type="tel" id="reg-phone" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="55554444">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" id="reg-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" id="reg-password" required minlength="6" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-3 text-base text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Mínimo 6 caracteres">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-white font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg text-base tracking-wide mt-2">
-                        Registrarme <i class="fa-solid fa-user-plus ml-1"></i>
-                    </button>
-                </form>
-                <p class="text-center text-sm text-slate-400 mt-4 sm:mt-6">
-                    ¿Ya posees una cuenta? <button id="to-login-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Inicia Sesión</button>
-                </p>
-            </div>
+    <div id="verification-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
+            <i class="fa-solid fa-user-clock text-6xl text-yellow-500 mb-6 mt-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse"></i>
+            <h2 class="text-2xl font-black text-white mb-4">Cuenta Pendiente</h2>
+            <p class="text-sm text-slate-300 leading-relaxed mb-8">
+                Para activar tu acceso a los pronósticos, debes realizar el pago de inscripción de <span class="text-yellow-400 font-black text-lg bg-yellow-400/10 px-2 py-1 rounded">Q50.00</span>.
+            </p>
+            <button id="btn-whatsapp-pago" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-[#25D366]/40 hover:-translate-y-1 text-base tracking-wide flex items-center justify-center gap-2 mb-6">
+                <i class="fa-brands fa-whatsapp text-2xl"></i> Notificar Pago
+            </button>
+            <button id="logout-pending-btn" class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider"><i class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión</button>
         </div>
     </div>
 
     <div id="app-wrapper" class="hidden min-h-screen flex flex-col md:flex-row">
         
-        <aside class="w-full md:w-64 lg:w-72 bg-slate-900/95 border-b md:border-b-0 md:border-r border-slate-800/80 flex flex-col z-40 relative flex-shrink-0">
-            <div class="p-4 md:p-6 border-b border-slate-800/80 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="hidden md:flex w-14 h-14 bg-gradient-to-tr from-yellow-500 to-amber-500 rounded-full items-center justify-center font-bold text-slate-950 text-xl shadow-lg border-2 border-slate-800" id="user-avatar">
-                        U
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-slate-200 text-sm tracking-wide" id="user-display-name">Usuario</h3>
-                        <p class="text-xs text-slate-400 mt-0.5 flex items-center gap-1" id="user-display-email">correo@ejemplo.com</p>
+        <aside class="w-full md:w-64 lg:w-72 glass-panel border-r border-slate-700/50 flex flex-col z-40 relative flex-shrink-0 shadow-2xl">
+            <div class="p-6 border-b border-slate-700/50 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center gap-4 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
+                
+                <div class="flex flex-col items-center gap-3 relative z-10">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-2xl shadow-lg border-4 border-slate-800 gold-glow transform transition hover:scale-110" id="user-avatar">U</div>
+                    <div class="hidden md:block">
+                        <h3 class="font-black text-white text-base tracking-wide truncate w-48" id="user-display-name">Usuario</h3>
+                        <p class="text-[11px] font-semibold text-slate-400 mt-0.5 truncate w-48" id="user-display-email">correo@ejemplo.com</p>
                     </div>
                 </div>
-                
-                <div class="px-3 py-1.5 md:mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-yellow-500 font-extrabold text-xs tracking-wider flex items-center gap-1.5 whitespace-nowrap">
-                    <i class="fa-solid fa-star"></i> <span id="user-aside-points" class="text-sm font-black text-white">0</span> pts
+                <div class="px-4 py-2 md:mt-2 bg-slate-900/80 border border-yellow-500/30 rounded-xl text-yellow-500 font-extrabold text-xs tracking-wider flex items-center gap-2 shadow-inner">
+                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> 
+                    <span id="user-aside-points" class="text-lg font-black text-white">0</span> <span class="text-slate-400">PTS</span>
                 </div>
             </div>
 
-            <nav class="p-2 md:p-4 flex flex-row md:flex-col overflow-x-auto gap-2 md:gap-0 md:space-y-1">
-                <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-futbol text-base text-slate-400 group-hover:text-yellow-500"></i> Quiniela
+            <nav class="p-3 md:p-5 flex flex-row md:flex-col overflow-x-auto gap-2 md:gap-3 hide-scrollbar">
+                <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-futbol text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> Pronósticos
                 </button>
-                <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab" class="flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-ranking-star text-base text-slate-400 group-hover:text-yellow-500"></i> Posiciones
+                <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab" class="flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-ranking-star text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> Ranking Oficial
                 </button>
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="hidden flex-shrink-0 md:w-full flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all group border border-dashed border-rose-500/20 whitespace-nowrap">
-                    <i class="fa-solid fa-screwdriver-wrench text-base text-rose-400"></i> Admin
+                <button onclick="switchTab('about-tab')" id="btn-about-tab" class="flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-circle-info text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> Reglas
+                </button>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="hidden flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all group border border-rose-500/20 whitespace-nowrap bg-rose-500/5">
+                    <i class="fa-solid fa-shield-halved text-lg text-rose-400"></i> Panel Admin
                 </button>
                 
-                <button id="mobile-logout-btn" class="md:hidden flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
-                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                <button id="mobile-logout-btn" class="md:hidden flex-shrink-0 flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
+                    <i class="fa-solid fa-power-off"></i> Salir
                 </button>
             </nav>
 
-            <div class="mt-auto hidden md:block p-4 border-t border-slate-800/80 bg-slate-950/40">
-                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold bg-slate-800 hover:bg-rose-600/20 hover:text-rose-400 text-slate-400 border border-slate-700/50 hover:border-rose-500/30 transition-all">
-                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            <div class="mt-auto hidden md:block p-5 border-t border-slate-700/50 bg-slate-900/50">
+                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold bg-slate-800/80 hover:bg-rose-500 hover:text-white text-slate-300 border border-slate-700/50 transition-all group">
+                    <i class="fa-solid fa-power-off group-hover:animate-pulse"></i> Cerrar Sesión
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col overflow-y-auto w-full">
-            <header class="glass-panel px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-30">
+        <main class="flex-1 flex flex-col overflow-y-auto w-full relative">
+            <header class="glass-panel px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
                 <div>
-                    <h2 class="text-base sm:text-lg font-black text-white tracking-wide uppercase" id="page-title">Mi Quiniela</h2>
-                    <p class="text-[10px] sm:text-xs text-slate-400">Pronósticos Mundial 2026</p>
+                    <h2 class="text-xl font-black text-white tracking-wider uppercase" id="page-title">Mi Quiniela</h2>
+                    <p class="text-xs font-bold text-yellow-500 tracking-widest uppercase mt-1">Mundial 2026</p>
                 </div>
                 
-                <div class="hidden sm:flex items-center gap-3 text-xs font-bold">
-                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                        <span class="text-amber-500">🥇</span> <span class="text-slate-200">Q1,000.00</span>
+                <div class="hidden sm:flex items-center gap-4 text-xs font-black">
+                    <div class="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/30 rounded-lg shadow-sm">
+                        <span class="text-yellow-400 text-lg">🥇</span> <span class="text-white">Q1,000.00</span>
                     </div>
-                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-slate-400/10 border border-slate-400/30 rounded-lg">
-                        <span class="text-slate-300">🥈</span> <span class="text-slate-200">Balón</span>
+                    <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-400/10 border border-slate-400/30 rounded-lg shadow-sm">
+                        <span class="text-slate-300 text-lg">🥈</span> <span class="text-white">Balón Oficial</span>
                     </div>
-                    <div class="flex items-center gap-1.5 px-2.5 py-1 bg-amber-700/10 border border-amber-700/30 rounded-lg">
-                        <span class="text-amber-700">🥉</span> <span class="text-slate-200">Q200.00</span>
+                    <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-700/10 border border-amber-700/30 rounded-lg shadow-sm">
+                        <span class="text-amber-600 text-lg">🥉</span> <span class="text-white">Q200.00</span>
                     </div>
                 </div>
             </header>
 
-            <div class="p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-6 pb-20">
+            <div class="p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8 pb-24">
 
-                <section id="quiniela-tab" class="tab-content space-y-5">
-                    <div class="glass-card p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-l-4 border-yellow-500">
-                        <div class="space-y-1">
-                            <h4 class="font-bold text-white flex items-center gap-2 text-sm"><i class="fa-solid fa-circle-info text-yellow-500"></i> Puntuación</h4>
-                            <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                                Gana <strong class="text-yellow-400">4 puntos</strong> por el marcador exacto. Si aciertas el ganador o el empate sin goles exactos, sumas <strong class="text-yellow-400">2 puntos</strong>.
+                <section id="about-tab" class="tab-content hidden space-y-5 animate-fade-in-up">
+                    <div class="glass-card p-8 rounded-3xl border border-slate-700/50">
+                        <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i class="fa-solid fa-scroll text-yellow-500"></i> Reglamento Oficial</h3>
+                        <div class="space-y-4 text-slate-300 text-sm md:text-base font-medium leading-relaxed">
+                            <p class="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+                                <i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> <strong>Regla de Oro:</strong> Tienes hasta exactamente <strong class="text-white">1 hora antes</strong> del inicio programado del partido para ingresar o modificar tu pronóstico. Pasado ese tiempo, el partido se bloquea automáticamente y ya no podrás guardar cambios para ese encuentro.
                             </p>
+                            <p>
+                                El sistema de puntuación está diseñado para premiar la exactitud:
+                            </p>
+                            <ul class="list-none space-y-3 pl-2">
+                                <li class="flex items-center gap-3"><span class="bg-yellow-500 text-slate-900 font-black px-2 py-1 rounded text-xs">4 PTS</span> Acertar el marcador exacto del partido.</li>
+                                <li class="flex items-center gap-3"><span class="bg-emerald-500 text-slate-900 font-black px-2 py-1 rounded text-xs">2 PTS</span> Acertar la tendencia (ganador o empate), pero no el marcador exacto.</li>
+                                <li class="flex items-center gap-3"><span class="bg-slate-700 text-slate-300 font-black px-2 py-1 rounded text-xs">0 PTS</span> Fallar completamente el resultado.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-slate-700/50">
+                            <a href="https://whatsapp.com/channel/TU_CODIGO_DE_CANAL_AQUI" target="_blank" class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20">
+                                <i class="fa-brands fa-whatsapp text-2xl"></i> Únete al Grupo de WhatsApp
+                            </a>
                         </div>
                     </div>
+                </section>
 
-                    <form id="predictions-form">
-                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="matches-prediction-container">
-                            </div>
+                <section id="quiniela-tab" class="tab-content space-y-6 animate-fade-in-up">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-panel p-5 rounded-2xl border-l-4 border-l-yellow-500 shadow-lg">
+                        <div class="space-y-1">
+                            <h4 class="font-black text-white flex items-center gap-2 text-base"><i class="fa-solid fa-filter text-yellow-500"></i> Partidos Disponibles</h4>
+                            <p class="text-xs font-semibold text-slate-400">Recuerda: Los partidos se bloquean 1 hora antes de iniciar.</p>
+                        </div>
+                        <select id="fase-selector" class="bg-slate-900 border-2 border-slate-700 text-white font-bold text-sm rounded-xl focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:w-auto p-3 outline-none transition-colors cursor-pointer hover:border-slate-600">
+                            <option value="Todas">Cargando fases...</option>
+                        </select>
+                    </div>
+
+                    <form id="predictions-form" class="relative">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-32" id="matches-prediction-container"></div>
                         
-                        <div class="mt-8 flex justify-center md:justify-end sticky bottom-4 z-20 px-2 md:px-0">
-                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 text-slate-950 font-extrabold px-6 py-4 rounded-xl transition-all shadow-[0_10px_30px_-5px_rgba(234,179,8,0.4)] flex items-center justify-center gap-2 text-sm tracking-wide">
-                                <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Guardar Mis Pronósticos
+                        <div class="fixed md:sticky bottom-6 right-6 left-6 md:left-auto md:right-auto md:mt-10 flex justify-center md:justify-end z-40">
+                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 hover:from-yellow-300 hover:to-yellow-500 text-slate-900 font-black px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.8)] flex items-center justify-center gap-3 text-sm md:text-base tracking-wide border border-yellow-300/50">
+                                <i class="fa-solid fa-floppy-disk text-xl"></i> GUARDAR PRONÓSTICOS
                             </button>
                         </div>
                     </form>
                 </section>
 
-                <section id="leaderboard-tab" class="tab-content hidden space-y-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2" id="podium-container">
-                        <div class="glass-card podium-2 rounded-2xl p-5 text-center order-2 sm:order-1 flex flex-col justify-between relative">
-                            <div class="absolute top-2 right-3 text-slate-400 text-xl font-black opacity-30">#2</div>
-                            <div>
-                                <div class="w-10 h-10 mx-auto rounded-full bg-slate-500/20 text-slate-300 flex items-center justify-center mb-2 text-base font-bold"><i class="fa-solid fa-medal"></i></div>
-                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-2">Cargando...</h4>
+                <section id="leaderboard-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 pt-4" id="podium-container">
+                        <div class="glass-card podium-2 rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
+                            <div class="absolute -top-4 -right-4 text-slate-400 text-6xl font-black opacity-10 group-hover:scale-110 transition-transform">2</div>
+                            <div class="relative z-10">
+                                <div class="w-14 h-14 mx-auto rounded-full bg-slate-400/20 text-slate-300 flex items-center justify-center mb-3 text-xl font-bold border border-slate-400/30 shadow-lg"><i class="fa-solid fa-medal"></i></div>
+                                <h4 class="font-black text-white text-base truncate" id="podium-name-2">Cargando...</h4>
                             </div>
-                            <div class="mt-3">
-                                <div class="text-2xl font-black text-slate-100" id="podium-pts-2">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
-                                <div class="mt-1 text-[10px] sm:text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥈 Balón Mundial</div>
-                            </div>
-                        </div>
-
-                        <div class="glass-card podium-1 rounded-2xl p-6 text-center order-1 sm:order-2 flex flex-col justify-between relative transform sm:scale-105 shadow-xl shadow-yellow-500/10">
-                            <div class="absolute top-2 right-3 text-yellow-500 text-2xl font-black opacity-30">#1</div>
-                            <div>
-                                <div class="w-12 h-12 mx-auto rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-2 text-lg gold-glow border border-yellow-500/30"><i class="fa-solid fa-crown"></i></div>
-                                <h4 class="font-extrabold text-white text-base truncate" id="podium-name-1">Cargando...</h4>
-                            </div>
-                            <div class="mt-3">
-                                <div class="text-3xl font-black text-yellow-400" id="podium-pts-1">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
-                                <div class="mt-1 text-[10px] sm:text-xs font-extrabold text-slate-950 px-2 py-1 bg-yellow-400 rounded-md inline-block uppercase tracking-wider">🏆 Q1,000.00</div>
+                            <div class="mt-4 relative z-10">
+                                <div class="text-3xl font-black text-slate-200" id="podium-pts-2">0 <span class="text-xs font-bold text-slate-400">PTS</span></div>
+                                <div class="mt-2 text-xs font-bold text-slate-300 px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-600 inline-block shadow-inner">🥈 Balón Oficial</div>
                             </div>
                         </div>
 
-                        <div class="glass-card podium-3 rounded-2xl p-5 text-center order-3 flex flex-col justify-between relative">
-                            <div class="absolute top-2 right-3 text-amber-700 text-xl font-black opacity-30">#3</div>
-                            <div>
-                                <div class="w-10 h-10 mx-auto rounded-full bg-amber-700/20 text-amber-600 flex items-center justify-center mb-2 text-base font-bold"><i class="fa-solid fa-award"></i></div>
-                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-3">Cargando...</h4>
+                        <div class="glass-card podium-1 rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative transform sm:scale-110 sm:-translate-y-4 shadow-[0_20px_50px_-15px_rgba(234,179,8,0.3)] z-10 overflow-hidden group">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-amber-600"></div>
+                            <div class="absolute -top-4 -right-4 text-yellow-500 text-8xl font-black opacity-10 group-hover:scale-110 transition-transform">1</div>
+                            <div class="relative z-10">
+                                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 text-slate-900 flex items-center justify-center mb-4 text-3xl gold-glow border-4 border-slate-900 shadow-xl animate-bounce" style="animation-duration: 3s;"><i class="fa-solid fa-crown"></i></div>
+                                <h4 class="font-black text-white text-lg truncate" id="podium-name-1">Cargando...</h4>
                             </div>
-                            <div class="mt-3">
-                                <div class="text-2xl font-black text-amber-600" id="podium-pts-3">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
-                                <div class="mt-1 text-[10px] sm:text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥉 Q200.00</div>
+                            <div class="mt-4 relative z-10">
+                                <div class="text-5xl font-black text-yellow-400 drop-shadow-md" id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
+                                <div class="mt-3 text-xs font-black text-slate-900 px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg inline-block uppercase tracking-widest shadow-lg">🏆 Q1,000.00</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card podium-3 rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
+                            <div class="absolute -top-4 -right-4 text-amber-700 text-6xl font-black opacity-10 group-hover:scale-110 transition-transform">3</div>
+                            <div class="relative z-10">
+                                <div class="w-14 h-14 mx-auto rounded-full bg-amber-700/20 text-amber-500 flex items-center justify-center mb-3 text-xl font-bold border border-amber-700/30 shadow-lg"><i class="fa-solid fa-award"></i></div>
+                                <h4 class="font-black text-white text-base truncate" id="podium-name-3">Cargando...</h4>
+                            </div>
+                            <div class="mt-4 relative z-10">
+                                <div class="text-3xl font-black text-amber-500" id="podium-pts-3">0 <span class="text-xs font-bold text-amber-700/50">PTS</span></div>
+                                <div class="mt-2 text-xs font-bold text-amber-200 px-3 py-1.5 bg-amber-900/40 rounded-lg border border-amber-700/50 inline-block shadow-inner">🥉 Q200.00</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-panel rounded-xl overflow-hidden border border-slate-800">
-                        <div class="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
-                            <h3 class="font-bold text-white text-xs sm:text-sm uppercase tracking-wider">Clasificación General</h3>
-                            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold" id="leaderboard-count">0 Participantes</span>
+                    <div class="glass-panel rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
+                        <div class="px-6 py-4 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
+                            <h3 class="font-black text-white text-sm uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-list-ol text-yellow-500"></i> Tabla General</h3>
+                            <span class="text-xs text-slate-400 font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700" id="leaderboard-count">0 Participantes</span>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="bg-slate-950/40 text-[10px] sm:text-xs font-bold text-slate-400 uppercase border-b border-slate-800">
-                                    <tr>
-                                        <th class="px-4 py-3 text-center w-12">Pos</th>
-                                        <th class="px-4 py-3">Nombre</th>
-                                        <th class="px-4 py-3 text-center w-20">Puntos</th>
+                                <thead class="bg-slate-950/80 text-xs font-black text-slate-400 uppercase tracking-wider border-b border-slate-700/50">
+                                    <tr id="leaderboard-header-row">
+                                        <th class="px-6 py-4 text-center w-16">Pos</th>
+                                        <th class="px-6 py-4">Participante</th>
+                                        <th class="px-6 py-4 text-center w-24">Puntos</th>
                                     </tr>
                                 </thead>
-                                <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/60 text-xs sm:text-sm">
-                                    </tbody>
+                                <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/80 text-sm font-medium"></tbody>
                             </table>
                         </div>
                     </div>
                 </section>
 
-                <section id="admin-tab" class="tab-content hidden space-y-5">
-                    <div class="p-4 glass-card rounded-xl bg-gradient-to-r from-rose-950/30 to-slate-900 border-l-4 border-rose-500">
-                        <h3 class="text-sm sm:text-base font-bold text-rose-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Panel de Administrador</h3>
-                        <p class="text-[10px] sm:text-xs text-slate-300 mt-1">
-                            Ingresa los resultados oficiales para recalcular los puntos de todos.
-                        </p>
+                <section id="admin-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
+                    
+                    <div class="glass-card rounded-2xl border border-emerald-500/30 overflow-hidden shadow-lg">
+                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
+                            <h3 class="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-user-check"></i> Aprobar Pagos</h3>
+                        </div>
+                        <div class="p-0 overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="text-xs font-bold text-slate-500 uppercase bg-slate-950/50 border-b border-slate-800">
+                                    <tr>
+                                        <th class="px-5 py-3">Nombre / Correo</th>
+                                        <th class="px-5 py-3">Teléfono</th>
+                                        <th class="px-5 py-3 text-right">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pending-users-tbody" class="divide-y divide-slate-800/50 text-sm font-medium"></tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <form id="admin-results-form">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="admin-matches-container">
-                            </div>
-
-                        <div class="mt-6 flex justify-center sm:justify-end">
-                            <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 text-white font-extrabold px-6 py-4 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 text-sm tracking-wide">
-                                <i class="fa-solid fa-calculator"></i> Publicar Resultados
-                            </button>
+                    <div class="glass-card rounded-2xl border border-blue-500/30 overflow-hidden shadow-lg">
+                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-calendar-plus"></i> Nuevo Partido Oficial</h3>
                         </div>
-                    </form>
+                        <div class="p-6">
+                            <form id="admin-create-match-form" class="space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fase del Torneo</label>
+                                        <input type="text" id="new-match-fase" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors" placeholder="Ej. Fase de Grupos">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Grupo (Opcional)</label>
+                                        <input type="text" id="new-match-group" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors" placeholder="Ej. Grupo A">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fecha y Hora (-1Hr)</label>
+                                        <input type="datetime-local" id="new-match-time" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
+                                    </div>
+                                    <div class="md:col-span-1 lg:col-span-1">
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Local</label>
+                                        <select id="new-match-home" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
+                                    </div>
+                                    <div class="md:col-span-1 lg:col-span-1">
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Visitante</label>
+                                        <select id="new-match-away" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end pt-4">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 px-8 rounded-xl text-sm transition-all hover:-translate-y-1 shadow-[0_5px_15px_rgba(37,99,235,0.4)]">Guardar Partido</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl border border-rose-500/30 overflow-hidden shadow-lg">
+                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center">
+                            <h3 class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales</h3>
+                        </div>
+                        <div class="p-6">
+                            <form id="admin-results-form">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-matches-container"></div>
+                                <div class="mt-8 flex justify-end border-t border-slate-700/50 pt-6">
+                                    <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-[0_10px_20px_-5px_rgba(225,29,72,0.5)] flex items-center justify-center gap-2 text-sm tracking-widest uppercase">
+                                        <i class="fa-solid fa-calculator"></i> Calcular Punteos Globales
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </section>
 
             </div>
@@ -358,8 +419,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAa2q0jJsl_PU7KBn9e2g1FlnRwYRA8qGE",
@@ -377,135 +438,162 @@
         const googleProvider = new GoogleAuthProvider();
 
         const ADMIN_EMAILS = ["workplaceqr@gmail.com", "chrishernandez2801@gmail.com"];
+        const WHATSAPP_ADMIN = "50250193116";
 
-        const matchesData = [
-            { id: "m1", group: "Grupo A", J: "Jornada 1", teamHome: "México", flagHome: "mx", teamAway: "Sudáfrica", flagAway: "za", time: "Jueves 11/06/2026 1:00 PM" },
-            { id: "m2", group: "Grupo A", J: "Jornada 1", teamHome: "Corea del Sur", flagHome: "kr", teamAway: "República Checa", flagAway: "cz", time: "Jueves 11/06/2026 8:00 PM" },
-            { id: "m3", group: "Grupo B", J: "Jornada 1", teamHome: "Canadá", flagHome: "ca", teamAway: "Bosnia y Herzegovina", flagAway: "ba", time: "Viernes 12/06/2026 1:00 PM" },
-            { id: "m4", group: "Grupo D", J: "Jornada 1", teamHome: "Estados Unidos", flagHome: "us", teamAway: "Paraguay", flagAway: "py", time: "Viernes 12/06/2026 7:00 PM" },
-            { id: "m5", group: "Grupo B", J: "Jornada 1", teamHome: "Qatar", flagHome: "qa", teamAway: "Suiza", flagAway: "ch", time: "Sábado 13/06/2026 1:00 PM" },
-            { id: "m6", group: "Grupo C", J: "Jornada 1", teamHome: "Brasil", flagHome: "br", teamAway: "Marruecos", flagAway: "ma", time: "Sábado 13/06/2026 4:00 PM" },
-            { id: "m7", group: "Grupo C", J: "Jornada 1", teamHome: "Haití", flagHome: "ht", teamAway: "Escocia", flagAway: "gb-sct", time: "Sábado 13/06/2026 7:00 PM" },
-            { id: "m8", group: "Grupo D", J: "Jornada 1", teamHome: "Australia", flagHome: "au", teamAway: "Turquía", flagAway: "tr", time: "Sábado 13/06/2026 10:00 PM" },
-            { id: "m9", group: "Grupo E", J: "Jornada 1", teamHome: "Alemania", flagHome: "de", teamAway: "Curazao", flagAway: "cw", time: "Domingo 14/06/2026 11:00 AM" },
-            { id: "m10", group: "Grupo F", J: "Jornada 1", teamHome: "Países Bajos", flagHome: "nl", teamAway: "Japón", flagAway: "jp", time: "Domingo 14/06/2026 2:00 PM" },
-            { id: "m11", group: "Grupo E", J: "Jornada 1", teamHome: "Costa de Marfil", flagHome: "ci", teamAway: "Ecuador", flagAway: "ec", time: "Domingo 14/06/2026 5:00 PM" },
-            { id: "m12", group: "Grupo F", J: "Jornada 1", teamHome: "Suecia", flagHome: "se", teamAway: "Túnez", flagAway: "tn", time: "Domingo 14/06/2026 8:00 PM" },
-            { id: "m13", group: "Grupo H", J: "Jornada 1", teamHome: "España", flagHome: "es", teamAway: "Cabo Verde", flagAway: "cv", time: "Lunes 15/06/2026 10:00 AM" },
-            { id: "m14", group: "Grupo G", J: "Jornada 1", teamHome: "Bélgica", flagHome: "be", teamAway: "Egipto", flagAway: "eg", time: "Lunes 15/06/2026 1:00 PM" },
-            { id: "m15", group: "Grupo H", J: "Jornada 1", teamHome: "Arabia Saudita", flagHome: "sa", teamAway: "Uruguay", flagAway: "uy", time: "Lunes 15/06/2026 4:00 PM" },
-            { id: "m16", group: "Grupo G", J: "Jornada 1", teamHome: "Irán", flagHome: "ir", teamAway: "Nueva Zelanda", flagAway: "nz", time: "Lunes 15/06/2026 7:00 PM" },
-            { id: "m17", group: "Grupo I", J: "Jornada 1", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "Martes 16/06/2026 1:00 PM" },
-            { id: "m18", group: "Grupo I", J: "Jornada 1", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "Martes 16/06/2026 4:00 PM" },
-            { id: "m19", group: "Grupo J", J: "Jornada 1", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "Martes 16/06/2026 7:00 PM" },
-            { id: "m20", group: "Grupo J", J: "Jornada 1", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "Martes 16/06/2026 10:00 PM" },
-            { id: "m21", group: "Grupo K", J: "Jornada 1", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "Miércoles 17/06/2026 11:00 AM" },
-            { id: "m22", group: "Grupo L", J: "Jornada 1", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "Miércoles 17/06/2026 2:00 PM" }
+        const COUNTRIES = {
+            "ad": "Andorra", "ae": "United Arab Emirates", "af": "Afghanistan", "ag": "Antigua and Barbuda", "ai": "Anguilla", "al": "Albania", "am": "Armenia", "ao": "Angola", "aq": "Antarctica", "ar": "Argentina", "as": "American Samoa", "at": "Austria", "au": "Australia", "aw": "Aruba", "ax": "Åland Islands", "az": "Azerbaijan", "ba": "Bosnia and Herzegovina", "bb": "Barbados", "bd": "Bangladesh", "be": "Belgium", "bf": "Burkina Faso", "bg": "Bulgaria", "bh": "Bahrain", "bi": "Burundi", "bj": "Benin", "bl": "Saint Barthélemy", "bm": "Bermuda", "bn": "Brunei", "bo": "Bolivia", "bq": "Caribbean Netherlands", "br": "Brazil", "bs": "Bahamas", "bt": "Bhutan", "bv": "Bouvet Island", "bw": "Botswana", "by": "Belarus", "bz": "Belize", "ca": "Canada", "cc": "Cocos (Keeling) Islands", "cd": "DR Congo", "cf": "Central African Republic", "cg": "Republic of the Congo", "ch": "Switzerland", "ci": "Côte d'Ivoire (Ivory Coast)", "ck": "Cook Islands", "cl": "Chile", "cm": "Cameroon", "cn": "China", "co": "Colombia", "cr": "Costa Rica", "cu": "Cuba", "cv": "Cape Verde", "cw": "Curaçao", "cx": "Christmas Island", "cy": "Cyprus", "cz": "Czechia", "de": "Germany", "dj": "Djibouti", "dk": "Denmark", "dm": "Dominica", "do": "Dominican Republic", "dz": "Algeria", "ec": "Ecuador", "ee": "Estonia", "eg": "Egypt", "eh": "Western Sahara", "er": "Eritrea", "es": "Spain", "et": "Ethiopia", "eu": "European Union", "fi": "Finland", "fj": "Fiji", "fk": "Falkland Islands", "fm": "Micronesia", "fo": "Faroe Islands", "fr": "France", "ga": "Gabon", "gb": "United Kingdom", "gb-eng": "England", "gb-nir": "Northern Ireland", "gb-sct": "Scotland", "gb-wls": "Wales", "gd": "Grenada", "ge": "Georgia", "gf": "French Guiana", "gg": "Guernsey", "gh": "Ghana", "gi": "Gibraltar", "gl": "Greenland", "gm": "Gambia", "gn": "Guinea", "gp": "Guadeloupe", "gq": "Equatorial Guinea", "gr": "Greece", "gs": "South Georgia", "gt": "Guatemala", "gu": "Guam", "gw": "Guinea-Bissau", "gy": "Guyana", "hk": "Hong Kong", "hm": "Heard Island and McDonald Islands", "hn": "Honduras", "hr": "Croatia", "ht": "Haiti", "hu": "Hungary", "id": "Indonesia", "ie": "Ireland", "il": "Israel", "im": "Isle of Man", "in": "India", "io": "British Indian Ocean Territory", "iq": "Iraq", "ir": "Iran", "is": "Iceland", "it": "Italy", "je": "Jersey", "jm": "Jamaica", "jo": "Jordan", "jp": "Japan", "ke": "Kenya", "kg": "Kyrgyzstan", "kh": "Cambodia", "ki": "Kiribati", "km": "Comoros", "kn": "Saint Kitts and Nevis", "kp": "North Korea", "kr": "South Korea", "kw": "Kuwait", "ky": "Cayman Islands", "kz": "Kazakhstan", "la": "Laos", "lb": "Lebanon", "lc": "Saint Lucia", "li": "Liechtenstein", "lk": "Sri Lanka", "lr": "Liberia", "ls": "Lesotho", "lt": "Lithuania", "lu": "Luxembourg", "lv": "Latvia", "ly": "Libya", "ma": "Morocco", "mc": "Monaco", "md": "Moldova", "me": "Montenegro", "mf": "Saint Martin", "mg": "Madagascar", "mh": "Marshall Islands", "mk": "North Macedonia", "ml": "Mali", "mm": "Myanmar", "mn": "Mongolia", "mo": "Macau", "mp": "Northern Mariana Islands", "mq": "Martinique", "mr": "Mauritania", "ms": "Montserrat", "mt": "Malta", "mu": "Mauritius", "mv": "Maldives", "mw": "Malawi", "mx": "Mexico", "my": "Malaysia", "mz": "Mozambique", "na": "Namibia", "nc": "New Caledonia", "ne": "Niger", "nf": "Norfolk Island", "ng": "Nigeria", "ni": "Nicaragua", "nl": "Netherlands", "no": "Norway", "np": "Nepal", "nr": "Nauru", "nu": "Niue", "nz": "New Zealand", "om": "Oman", "pa": "Panama", "pe": "Peru", "pf": "French Polynesia", "pg": "Papua New Guinea", "ph": "Philippines", "pk": "Pakistan", "pl": "Poland", "pm": "Saint Pierre and Miquelon", "pn": "Pitcairn Islands", "pr": "Puerto Rico", "ps": "Palestine", "pt": "Portugal", "pw": "Palau", "py": "Paraguay", "qa": "Qatar", "re": "Réunion", "ro": "Romania", "rs": "Serbia", "ru": "Russia", "rw": "Rwanda", "sa": "Saudi Arabia", "sb": "Solomon Islands", "sc": "Seychelles", "sd": "Sudan", "se": "Sweden", "sg": "Singapore", "sh": "Saint Helena, Ascension and Tristan da Cunha", "si": "Slovenia", "sj": "Svalbard and Jan Mayen", "sk": "Slovakia", "sl": "Sierra Leone", "sm": "San Marino", "sn": "Senegal", "so": "Somalia", "sr": "Suriname", "ss": "South Sudan", "st": "São Tomé and Príncipe", "sv": "El Salvador", "sx": "Sint Maarten", "sy": "Syria", "sz": "Eswatini (Swaziland)", "tc": "Turks and Caicos Islands", "td": "Chad", "tf": "French Southern and Antarctic Lands", "tg": "Togo", "th": "Thailand", "tj": "Tajikistan", "tk": "Tokelau", "tl": "Timor-Leste", "tm": "Turkmenistan", "tn": "Tunisia", "to": "Tonga", "tr": "Turkey", "tt": "Trinidad and Tobago", "tv": "Tuvalu", "tw": "Taiwan", "tz": "Tanzania", "ua": "Ukraine", "ug": "Uganda", "um": "United States Minor Outlying Islands", "un": "United Nations", "us": "United States", "uy": "Uruguay", "uz": "Uzbekistan", "va": "Vatican City (Holy See)", "vc": "Saint Vincent and the Grenadines", "ve": "Venezuela", "vg": "British Virgin Islands", "vi": "United States Virgin Islands", "vn": "Vietnam", "vu": "Vanuatu", "wf": "Wallis and Futuna", "ws": "Samoa", "xk": "Kosovo", "ye": "Yemen", "yt": "Mayotte", "za": "South Africa", "zm": "Zambia", "zw": "Zimbabwe"
+        };
+
+        const initialMatchesSeed = [
+            { id: "m1", fase: "Fase de Grupos", group: "Grupo A", teamHome: "México", flagHome: "mx", teamAway: "Sudáfrica", flagAway: "za", time: "2026-06-11T13:00" },
+            { id: "m2", fase: "Fase de Grupos", group: "Grupo A", teamHome: "Corea del Sur", flagHome: "kr", teamAway: "República Checa", flagAway: "cz", time: "2026-06-11T20:00" },
+            { id: "m3", fase: "Fase de Grupos", group: "Grupo B", teamHome: "Canadá", flagHome: "ca", teamAway: "Bosnia y Herzegovina", flagAway: "ba", time: "2026-06-12T13:00" },
+            { id: "m4", fase: "Fase de Grupos", group: "Grupo D", teamHome: "Estados Unidos", flagHome: "us", teamAway: "Paraguay", flagAway: "py", time: "2026-06-12T19:00" },
+            { id: "m5", fase: "Fase de Grupos", group: "Grupo B", teamHome: "Qatar", flagHome: "qa", teamAway: "Suiza", flagAway: "ch", time: "2026-06-13T13:00" },
+            { id: "m6", fase: "Fase de Grupos", group: "Grupo C", teamHome: "Brasil", flagHome: "br", teamAway: "Marruecos", flagAway: "ma", time: "2026-06-13T16:00" },
+            { id: "m7", fase: "Fase de Grupos", group: "Grupo C", teamHome: "Haití", flagHome: "ht", teamAway: "Escocia", flagAway: "gb-sct", time: "2026-06-13T19:00" },
+            { id: "m8", fase: "Fase de Grupos", group: "Grupo D", teamHome: "Australia", flagHome: "au", teamAway: "Turquía", flagAway: "tr", time: "2026-06-13T22:00" },
+            { id: "m9", fase: "Fase de Grupos", group: "Grupo E", teamHome: "Alemania", flagHome: "de", teamAway: "Curazao", flagAway: "cw", time: "2026-06-14T11:00" }
         ];
 
         let currentUser = null;
+        let userDataModel = null;
         let globalResults = {};
         let userPredictions = {};
+        let allMatchesData = [];
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `px-4 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-xl flex items-center gap-2 border transition-all duration-300 transform translate-y-2 opacity-0 glass-panel bg-slate-900/90`;
-            
+            toast.className = `px-5 py-4 rounded-xl font-bold text-sm shadow-2xl flex items-center gap-3 border transition-all duration-500 transform translate-y-4 opacity-0 glass-panel`;
             if(type === 'success') {
                 toast.classList.add('border-emerald-500', 'text-emerald-400');
-                toast.innerHTML = `<i class="fa-solid fa-circle-check text-base"></i> ${message}`;
+                toast.innerHTML = `<i class="fa-solid fa-circle-check text-xl"></i> <span>${message}</span>`;
             } else {
                 toast.classList.add('border-rose-500', 'text-rose-400');
-                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation text-base"></i> ${message}`;
+                toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> <span>${message}</span>`;
             }
-            
             container.appendChild(toast);
-            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-x-5');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => toast.classList.remove('translate-y-4', 'opacity-0'), 50);
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-10'); setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        document.getElementById('to-register-btn').addEventListener('click', () => {
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('register-box').classList.remove('hidden');
-        });
-        document.getElementById('to-login-btn').addEventListener('click', () => {
-            document.getElementById('register-box').classList.add('hidden');
-            document.getElementById('login-box').classList.remove('hidden');
-        });
+        function formatUIMatchDate(isoString) {
+            try {
+                const d = new Date(isoString);
+                const options = { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true };
+                return new Intl.DateTimeFormat('es-GT', options).format(d).replace(',', ' -');
+            } catch (e) {
+                return isoString; 
+            }
+        }
 
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-            document.getElementById(tabId).classList.remove('hidden');
+            const targetTab = document.getElementById(tabId);
+            targetTab.classList.remove('hidden');
             
+            targetTab.classList.remove('animate-fade-in-up');
+            void targetTab.offsetWidth;
+            targetTab.classList.add('animate-fade-in-up');
+
             document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
             document.getElementById(`btn-${tabId}`).classList.add('active-tab');
-            
-            const titleMap = {
-                'quiniela-tab': 'Mi Quiniela',
-                'leaderboard-tab': 'Tabla de Posiciones',
-                'admin-tab': 'Panel Administrativo'
-            };
-            document.getElementById('page-title').innerText = titleMap[tabId] || 'Panel';
-
+            const titles = { 'quiniela-tab': 'Mis Pronósticos', 'leaderboard-tab': 'Ranking General', 'about-tab': 'Reglas del Juego', 'admin-tab': 'Centro de Mando' };
+            document.getElementById('page-title').innerText = titles[tabId] || 'Panel';
             if(tabId === 'leaderboard-tab') loadLeaderboard();
+            if(tabId === 'admin-tab') loadPendingUsers();
         };
+
+        function hideAllViews() {
+            document.getElementById('auth-container').classList.add('hidden');
+            document.getElementById('complete-registration-container').classList.add('hidden');
+            document.getElementById('verification-container').classList.add('hidden');
+            document.getElementById('app-wrapper').classList.add('hidden');
+        }
+
+        async function fetchMatches() {
+            const snap = await getDocs(collection(db, "matches"));
+            if (snap.empty) {
+                for(let m of initialMatchesSeed) { await setDoc(doc(db, "matches", m.id), m); }
+                allMatchesData = initialMatchesSeed;
+            } else {
+                allMatchesData = [];
+                snap.forEach(doc => allMatchesData.push(doc.data()));
+                allMatchesData.sort((a,b) => {
+                    const numA = parseInt(a.id.replace('m','')) || 999;
+                    const numB = parseInt(b.id.replace('m','')) || 999;
+                    return numA - numB;
+                });
+            }
+            populateFaseSelector();
+        }
+
+        function populateFaseSelector() {
+            const selector = document.getElementById('fase-selector');
+            const fases = [...new Set(allMatchesData.map(m => m.fase))];
+            selector.innerHTML = `<option value="Todas">👉 Mostrar Todas las Fases</option>`;
+            fases.forEach(f => {
+                selector.innerHTML += `<option value="${f}">${f}</option>`;
+            });
+            selector.value = fases[0] || "Todas"; 
+        }
+
+        document.getElementById('fase-selector').addEventListener('change', () => { renderMatchesPredictionGrid(); });
+
+        function initAdminSelects() {
+            const homeSelect = document.getElementById('new-match-home');
+            const awaySelect = document.getElementById('new-match-away');
+            let optionsHTML = `<option value="">Seleccionar Equipo...</option>`;
+            let sortedCountries = Object.keys(COUNTRIES).map(key => ({code: key, name: COUNTRIES[key]})).sort((a,b) => a.name.localeCompare(b.name));
+            sortedCountries.forEach(c => { optionsHTML += `<option value="${c.code}">${c.name}</option>`; });
+            homeSelect.innerHTML = optionsHTML;
+            awaySelect.innerHTML = optionsHTML;
+        }
 
         onAuthStateChanged(auth, async (user) => {
             document.getElementById('main-loader').classList.remove('opacity-0');
             document.getElementById('main-loader').style.display = 'flex';
+            hideAllViews();
             
             if (user) {
                 currentUser = user;
                 const isAdmin = ADMIN_EMAILS.includes(user.email);
+                const userDocSnap = await getDoc(doc(db, "users", user.uid));
                 
-                const userDocRef = doc(db, "users", user.uid);
-                const userDocSnap = await getDoc(userDocRef);
-                
-                let userData = {
-                    uid: user.uid,
-                    email: user.email,
-                    name: user.displayName || 'Participante',
-                    phone: user.phoneNumber || 'No Registrado',
-                    totalPoints: 0,
-                    isAdmin: isAdmin
-                };
-
-                if (userDocSnap.exists()) {
-                    const existing = userDocSnap.data();
-                    userData.name = existing.name || userData.name;
-                    userData.phone = existing.phone || userData.phone;
-                    userData.totalPoints = existing.totalPoints ?? 0;
+                if (!userDocSnap.exists()) {
+                    document.getElementById('complete-registration-container').classList.remove('hidden');
                 } else {
-                    await setDoc(userDocRef, userData);
+                    userDataModel = userDocSnap.data();
+                    if(!isAdmin && userDataModel.status === 'pendiente') {
+                        const waBtn = document.getElementById('btn-whatsapp-pago');
+                        waBtn.onclick = () => window.open(`https://wa.me/${WHATSAPP_ADMIN}?text=Hola,%20ya%20me%20registré%20en%20la%20quiniela%20con%20el%20correo%20${user.email}%20y%20quiero%20realizar%20el%20pago%20de%20mi%20inscripción.`, '_blank');
+                        document.getElementById('verification-container').classList.remove('hidden');
+                    } else {
+                        document.getElementById('user-display-name').innerText = userDataModel.name;
+                        document.getElementById('user-display-email').innerText = userDataModel.email;
+                        document.getElementById('user-avatar').innerText = userDataModel.name.charAt(0).toUpperCase();
+                        document.getElementById('user-aside-points').innerText = userDataModel.totalPoints;
+
+                        if (isAdmin) {
+                            document.getElementById('btn-admin-tab').classList.remove('hidden');
+                            document.getElementById('leaderboard-header-row').innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
+                            initAdminSelects();
+                        }
+
+                        await fetchGlobalResults();
+                        await fetchUserPredictions();
+                        await fetchMatches();
+                        
+                        renderMatchesPredictionGrid();
+                        if(isAdmin) renderAdminMatchesGrid();
+
+                        document.getElementById('app-wrapper').classList.remove('hidden');
+                        switchTab('quiniela-tab');
+                    }
                 }
-
-                document.getElementById('user-display-name').innerText = userData.name;
-                document.getElementById('user-display-email').innerText = userData.email;
-                document.getElementById('user-avatar').innerText = userData.name.charAt(0).toUpperCase();
-                document.getElementById('user-aside-points').innerText = userData.totalPoints;
-
-                if (isAdmin) {
-                    document.getElementById('btn-admin-tab').classList.remove('hidden');
-                } else {
-                    document.getElementById('btn-admin-tab').classList.add('hidden');
-                }
-
-                await fetchGlobalResults();
-                await fetchUserPredictions();
-                
-                renderMatchesPredictionGrid();
-                if(isAdmin) renderAdminMatchesGrid();
-
-                document.getElementById('auth-container').classList.add('hidden');
-                document.getElementById('app-wrapper').classList.remove('hidden');
-                switchTab('quiniela-tab');
             } else {
                 currentUser = null;
-                document.getElementById('app-wrapper').classList.add('hidden');
                 document.getElementById('auth-container').classList.remove('hidden');
             }
             
@@ -513,347 +601,344 @@
             setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
         });
 
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                await setDoc(doc(db, "users", user.uid), {
-                    uid: user.uid,
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    totalPoints: 0,
-                    isAdmin: ADMIN_EMAILS.includes(email)
-                });
-                
-                showToast("Cuenta registrada exitosamente");
-                document.getElementById('register-form').reset();
-            } catch (error) {
-                showToast(error.message, 'error');
-            }
-        });
-
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                showToast("Sesión iniciada");
-                document.getElementById('login-form').reset();
-            } catch (error) {
-                showToast("Credenciales inválidas", 'error');
-            }
-        });
-
         document.getElementById('google-signin-btn').addEventListener('click', async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-                showToast("Autenticado con Google");
-            } catch (error) {
-                showToast(error.message, 'error');
-            }
+            try { await signInWithPopup(auth, googleProvider); } catch (e) { showToast(e.message, 'error'); }
         });
 
-        const logoutHandler = () => {
-            signOut(auth).then(() => showToast("Sesión cerrada"));
-        };
+        document.getElementById('complete-reg-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const phone = document.getElementById('reg-phone').value;
+            const isAdmin = ADMIN_EMAILS.includes(currentUser.email);
+            
+            await setDoc(doc(db, "users", currentUser.uid), {
+                uid: currentUser.uid,
+                email: currentUser.email,
+                name: currentUser.displayName || 'Participante',
+                phone: phone,
+                totalPoints: 0,
+                isAdmin: isAdmin,
+                status: isAdmin ? 'aprobado' : 'pendiente'
+            });
+            window.location.reload();
+        });
+
+        const logoutHandler = () => signOut(auth);
         document.getElementById('logout-btn').addEventListener('click', logoutHandler);
         document.getElementById('mobile-logout-btn').addEventListener('click', logoutHandler);
+        document.getElementById('logout-pending-btn').addEventListener('click', logoutHandler);
 
         async function fetchGlobalResults() {
-            try {
-                const docSnap = await getDoc(doc(db, "results", "global"));
-                globalResults = docSnap.exists() ? (docSnap.data().results || {}) : {};
-            } catch (e) {
-                console.error("Error global results", e);
-            }
+            const d = await getDoc(doc(db, "results", "global"));
+            globalResults = d.exists() ? (d.data().results || {}) : {};
         }
 
         async function fetchUserPredictions() {
             if (!currentUser) return;
-            try {
-                const docSnap = await getDoc(doc(db, "predictions", currentUser.uid));
-                userPredictions = docSnap.exists() ? (docSnap.data().predictions || {}) : {};
-            } catch (e) {
-                console.error("Error user preds", e);
-            }
+            const d = await getDoc(doc(db, "predictions", currentUser.uid));
+            userPredictions = d.exists() ? (d.data().predictions || {}) : {};
         }
 
         function renderMatchesPredictionGrid() {
             const container = document.getElementById('matches-prediction-container');
             container.innerHTML = '';
+            
+            const selectedFase = document.getElementById('fase-selector').value;
+            const filteredMatches = selectedFase === "Todas" ? allMatchesData : allMatchesData.filter(m => m.fase === selectedFase);
 
-            matchesData.forEach(match => {
+            if(filteredMatches.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-12 text-lg font-bold"><i class="fa-regular fa-calendar-xmark text-3xl mb-3 block"></i> No hay partidos en esta fase.</p>`;
+                return;
+            }
+
+            const now = new Date();
+
+            filteredMatches.forEach(match => {
                 const pred = userPredictions[match.id] || { home: '', away: '' };
                 const real = globalResults[match.id] || { home: null, away: null };
                 
-                let pointsBadgeHTML = '';
-                let statusBorder = 'border-slate-800/40';
+                const matchTime = new Date(match.time);
+                const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
+                const isLocked = now >= limitTime;
+                
+                let pBadge = '', sBorder = 'border-slate-700/50';
                 
                 if (real.home !== null && real.away !== null && real.home !== "" && real.away !== "") {
-                    const points = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
-                    if (points === 4) {
-                        pointsBadgeHTML = `<span class="bg-yellow-500 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black"><i class="fa-solid fa-star"></i> +4 Ptos</span>`;
-                        statusBorder = 'border-yellow-500/70 shadow-md shadow-yellow-500/10';
-                    } else if (points === 2) {
-                        pointsBadgeHTML = `<span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-check"></i> +2 Ptos</span>`;
-                        statusBorder = 'border-emerald-500/50';
-                    } else {
-                        pointsBadgeHTML = `<span class="bg-slate-700 text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">0 Ptos</span>`;
-                        statusBorder = 'border-slate-800';
-                    }
+                    const pts = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
+                    if (pts === 4) { pBadge = `<span class="bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg animate-pulse">+4 PTS</span>`; sBorder = 'border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]'; }
+                    else if (pts === 2) { pBadge = `<span class="bg-emerald-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg">+2 PTS</span>`; sBorder = 'border-emerald-500/60 shadow-[0_0_15px_rgba(16,185,129,0.1)]'; }
+                    else { pBadge = `<span class="bg-slate-700 text-slate-400 px-3 py-1 rounded-lg text-xs font-bold border border-slate-600">0 PTS</span>`; sBorder = 'border-slate-700'; }
                 }
 
-                const cardHTML = `
-                    <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between border ${statusBorder}">
-                        <div class="flex items-center justify-between text-[10px] sm:text-[11px] font-bold text-slate-400 mb-3 pb-2 border-b border-slate-800/40">
-                            <span class="text-yellow-500"><i class="fa-solid fa-layer-group mr-1"></i> ${match.group} - ${match.J}</span>
-                            ${pointsBadgeHTML}
-                        </div>
-                        
-                        <div class="flex items-center justify-between my-2 gap-2">
-                            <div class="flex flex-col items-center flex-1 text-center w-[30%]">
-                                <img src="flags/${match.flagHome}.png" alt="${match.teamHome}" class="w-10 sm:w-12 h-7 sm:h-8 object-cover mb-1.5 rounded-sm shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/40x28?text=?';">
-                                <span class="text-[11px] sm:text-xs font-bold text-slate-200 truncate w-full" title="${match.teamHome}">${match.teamHome}</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-center gap-1.5 sm:gap-2 flex-1">
-                                <input type="number" min="0" required name="pred-${match.id}-home" value="${pred.home}" 
-                                    class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-950/80 text-white font-extrabold text-center rounded-xl border border-slate-700 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all text-base sm:text-lg p-0" placeholder="-">
-                                <span class="text-slate-500 font-bold text-xs">vs</span>
-                                <input type="number" min="0" required name="pred-${match.id}-away" value="${pred.away}" 
-                                    class="w-10 h-10 sm:w-12 sm:h-12 bg-slate-950/80 text-white font-extrabold text-center rounded-xl border border-slate-700 focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500/20 transition-all text-base sm:text-lg p-0" placeholder="-">
-                            </div>
-                            
-                            <div class="flex flex-col items-center flex-1 text-center w-[30%]">
-                                <img src="flags/${match.flagAway}.png" alt="${match.teamAway}" class="w-10 sm:w-12 h-7 sm:h-8 object-cover mb-1.5 rounded-sm shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/40x28?text=?';">
-                                <span class="text-[11px] sm:text-xs font-bold text-slate-200 truncate w-full" title="${match.teamAway}">${match.teamAway}</span>
-                            </div>
-                        </div>
+                const displayDate = formatUIMatchDate(match.time);
+                const lockUI = isLocked 
+                    ? `<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px] z-10 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"><span class="bg-rose-500 text-white font-black px-4 py-2 rounded-xl text-sm shadow-xl flex items-center gap-2"><i class="fa-solid fa-lock"></i> CERRADO</span></div>` 
+                    : '';
+                const lockIcon = isLocked ? `<span class="text-rose-500 animate-pulse font-bold ml-2" title="Cerrado"><i class="fa-solid fa-lock"></i></span>` : `<span class="text-emerald-500 font-bold ml-2" title="Abierto"><i class="fa-solid fa-unlock"></i></span>`;
 
-                        <div class="text-[9px] sm:text-[10px] text-slate-400 text-center mt-3 pt-2 border-t border-slate-800/30 font-medium">
-                            <i class="fa-regular fa-clock"></i> ${match.time}
+                // Aquí van las correcciones de min-w-0, truncate, inline-block y flex-shrink-0
+                container.innerHTML += `
+                    <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between border ${sBorder} relative group ${isLocked ? 'locked-card' : ''}">
+                        ${lockUI}
+                        <div class="flex items-center justify-between text-xs font-black text-slate-400 mb-4 pb-3 border-b border-slate-700/50">
+                            <span class="text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded truncate"><i class="fa-solid fa-layer-group"></i> ${match.fase} ${match.group ? '• '+match.group : ''}</span>
+                            ${pBadge}
                         </div>
                         
-                        ${real.home !== null && real.home !== undefined && real.home !== "" ? `
-                            <div class="mt-2.5 px-2 py-1.5 bg-slate-950/50 rounded-lg text-center border border-slate-800 text-[10px] sm:text-[11px] font-semibold">
-                                <span class="text-slate-400">Marcador Oficial:</span> <strong class="text-yellow-500 ml-1">${real.home} - ${real.away}</strong>
+                        <div class="flex items-center justify-between my-3 gap-1 sm:gap-2 relative z-20">
+                            <div class="flex flex-col items-center flex-1 text-center min-w-0 overflow-hidden">
+                                <div class="p-1 bg-white/5 rounded-xl border border-white/10 mb-2 shadow-lg inline-block">
+                                    <img src="flags/${match.flagHome}.png" class="w-10 h-7 sm:w-14 sm:h-9 md:w-16 md:h-10 object-cover rounded-md max-w-full" onerror="this.onerror=null; this.src='https://placehold.co/60x40/1e293b/eab308?text=${match.flagHome.toUpperCase()}';">
+                                </div>
+                                <span class="text-xs sm:text-sm font-black text-white truncate w-full px-1" title="${match.teamHome}">${match.teamHome}</span>
                             </div>
-                        ` : ''}
+                            
+                            <div class="flex items-center justify-center gap-1 sm:gap-2 flex-shrink-0 px-2">
+                                <input type="number" min="0" required name="pred-${match.id}-home" value="${pred.home}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner">
+                                <span class="text-slate-500 font-black text-xs sm:text-sm">VS</span>
+                                <input type="number" min="0" required name="pred-${match.id}-away" value="${pred.away}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner">
+                            </div>
+                            
+                            <div class="flex flex-col items-center flex-1 text-center min-w-0 overflow-hidden">
+                                <div class="p-1 bg-white/5 rounded-xl border border-white/10 mb-2 shadow-lg inline-block">
+                                    <img src="flags/${match.flagAway}.png" class="w-10 h-7 sm:w-14 sm:h-9 md:w-16 md:h-10 object-cover rounded-md max-w-full" onerror="this.onerror=null; this.src='https://placehold.co/60x40/1e293b/eab308?text=${match.flagAway.toUpperCase()}';">
+                                </div>
+                                <span class="text-xs sm:text-sm font-black text-white truncate w-full px-1" title="${match.teamAway}">${match.teamAway}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-[11px] text-slate-300 text-center mt-4 pt-3 border-t border-slate-700/50 font-semibold bg-slate-950/30 rounded-b-xl -mx-4 sm:-mx-5 -mb-4 sm:-mb-5 pb-4 px-2">
+                            <i class="fa-regular fa-clock text-yellow-500 mr-1"></i> ${displayDate} ${lockIcon}
+                        </div>
+                        
+                        ${real.home !== null && real.home !== "" ? `<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-slate-900 rounded-full border border-yellow-500/50 text-center shadow-lg text-[11px] font-black z-30"><span class="text-slate-400">OFICIAL:</span> <span class="text-yellow-400 ml-1 text-sm">${real.home} - ${real.away}</span></div>` : ''}
                     </div>
                 `;
-                container.innerHTML += cardHTML;
             });
         }
 
         document.getElementById('predictions-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser) return;
-
             document.getElementById('main-loader').style.display = 'flex';
             document.getElementById('main-loader').classList.remove('opacity-0');
 
-            const formData = new FormData(e.target);
-            const newPredictions = {};
+            const fd = new FormData(e.target);
+            const newP = {};
+            const now = new Date();
+            let intentoTrampa = false;
 
-            matchesData.forEach(match => {
-                const homeVal = formData.get(`pred-${match.id}-home`);
-                const awayVal = formData.get(`pred-${match.id}-away`);
-                newPredictions[match.id] = {
-                    home: homeVal !== "" ? parseInt(homeVal) : "",
-                    away: awayVal !== "" ? parseInt(awayVal) : ""
-                };
+            allMatchesData.forEach(m => {
+                const matchTime = new Date(m.time);
+                const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
+                
+                if (now < limitTime) {
+                    const h = fd.get(`pred-${m.id}-home`);
+                    const a = fd.get(`pred-${m.id}-away`);
+                    if(h !== null && a !== null) { 
+                        newP[m.id] = { home: h!==""?parseInt(h):"", away: a!==""?parseInt(a):"" }; 
+                    }
+                } else {
+                    if(userPredictions[m.id]) {
+                        newP[m.id] = userPredictions[m.id];
+                    }
+                    const h = fd.get(`pred-${m.id}-home`);
+                    if(h !== null) intentoTrampa = true; 
+                }
             });
 
             try {
-                await setDoc(doc(db, "predictions", currentUser.uid), { predictions: newPredictions }, { merge: true });
-                userPredictions = newPredictions;
-                showToast("¡Pronósticos guardados correctamente!");
-                
-                await fetchGlobalResults();
-                const myPoints = calculateTotalUserScore(userPredictions, globalResults);
-                await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPoints });
-                document.getElementById('user-aside-points').innerText = myPoints;
-                
+                if(intentoTrampa) console.warn("Se ignoraron pronósticos de partidos bloqueados.");
+                await setDoc(doc(db, "predictions", currentUser.uid), { predictions: newP }, { merge: true });
+                userPredictions = Object.assign(userPredictions, newP);
+                showToast("¡Tus pronósticos están asegurados!");
+                const myPts = calculateTotalUserScore(userPredictions, globalResults);
+                await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPts });
+                document.getElementById('user-aside-points').innerText = myPts;
                 renderMatchesPredictionGrid();
-            } catch (error) {
-                showToast("Error al guardar: " + error.message, 'error');
-            } finally {
+            } catch (err) { showToast(err.message, 'error'); }
+            finally {
                 document.getElementById('main-loader').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
             }
         });
 
+        // --- FUNCIONES ADMIN ---
+        
+        async function loadPendingUsers() {
+            if(!userDataModel?.isAdmin) return;
+            const tb = document.getElementById('pending-users-tbody');
+            tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-spinner animate-spin text-emerald-500 mr-2 text-xl"></i> Buscando pagos pendientes...</td></tr>`;
+            const snap = await getDocs(query(collection(db, "users"), where("status", "==", "pendiente")));
+            tb.innerHTML = '';
+            if(snap.empty) { tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-check-double text-emerald-500 text-2xl mb-2 block"></i> Todo al día. No hay pendientes.</td></tr>`; return; }
+            
+            snap.forEach(d => {
+                const u = d.data();
+                tb.innerHTML += `
+                    <tr class="hover:bg-slate-800/30 transition-colors">
+                        <td class="px-5 py-4"><div class="font-black text-white text-base">${u.name}</div><div class="text-xs text-slate-400 font-medium">${u.email}</div></td>
+                        <td class="px-5 py-4 text-emerald-400 font-bold"><i class="fa-brands fa-whatsapp"></i> ${u.phone}</td>
+                        <td class="px-5 py-4 text-right"><button onclick="approveUser('${u.uid}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider shadow-lg hover:-translate-y-0.5 transition-all">Aprobar</button></td>
+                    </tr>`;
+            });
+        }
+
+        window.approveUser = async function(uid) {
+            try {
+                await updateDoc(doc(db, "users", uid), { status: 'aprobado' });
+                showToast("¡Usuario aprobado al 100%!");
+                loadPendingUsers();
+            } catch(e) { showToast(e.message, 'error'); }
+        }
+
+        document.getElementById('admin-create-match-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fase = document.getElementById('new-match-fase').value;
+            const group = document.getElementById('new-match-group').value; // NUEVO DATO GRUPO
+            const time = document.getElementById('new-match-time').value; 
+            const hSel = document.getElementById('new-match-home');
+            const aSel = document.getElementById('new-match-away');
+            
+            if(!time) { showToast("Selecciona una fecha válida", "error"); return; }
+
+            const newM = {
+                id: "m" + Date.now(),
+                fase: fase,
+                group: group,
+                teamHome: hSel.options[hSel.selectedIndex].text,
+                flagHome: hSel.value,
+                teamAway: aSel.options[aSel.selectedIndex].text,
+                flagAway: aSel.value,
+                time: time 
+            };
+            try {
+                await setDoc(doc(db, "matches", newM.id), newM);
+                showToast("Partido en agenda oficial.");
+                document.getElementById('admin-create-match-form').reset();
+                await fetchMatches();
+                renderAdminMatchesGrid();
+            } catch(err) { showToast(err.message, 'error'); }
+        });
+
         function renderAdminMatchesGrid() {
             const container = document.getElementById('admin-matches-container');
             container.innerHTML = '';
-
-            matchesData.forEach(match => {
-                const real = globalResults[match.id] || { home: '', away: '' };
-                const cardHTML = `
-                    <div class="glass-card rounded-xl p-3 border border-slate-700/50 bg-slate-900/40">
-                        <div class="text-[10px] font-bold text-rose-400 mb-2 pb-1 bg-rose-500/5 px-2 py-0.5 rounded">
-                            <i class="fa-solid fa-gamepad"></i> ${match.group}
-                        </div>
+            allMatchesData.forEach(match => {
+                const r = globalResults[match.id] || { home: '', away: '' };
+                container.innerHTML += `
+                    <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 hover:border-rose-500/50 transition-colors">
+                        <div class="text-[10px] font-black text-rose-400 mb-3 pb-2 border-b border-slate-800 truncate uppercase tracking-widest"><i class="fa-solid fa-gear"></i> ${match.fase} ${match.group ? ' - '+match.group : ''}</div>
                         <div class="flex items-center justify-between">
-                            <div class="text-[10px] font-bold text-slate-300 w-1/3 truncate text-right pr-2">${match.teamHome}</div>
-                            
-                            <div class="flex items-center justify-center gap-1 w-1/3">
-                                <input type="number" min="0" name="admin-${match.id}-home" value="${real.home ?? ''}" 
-                                    class="w-8 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:border-rose-400 p-0 text-xs">
-                                <span class="text-slate-600 font-bold text-xs">-</span>
-                                <input type="number" min="0" name="admin-${match.id}-away" value="${real.away ?? ''}" 
-                                    class="w-8 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:border-rose-400 p-0 text-xs">
+                            <div class="text-xs font-black text-white w-[35%] truncate text-right pr-3">${match.teamHome}</div>
+                            <div class="flex items-center justify-center gap-2 w-[30%]">
+                                <input type="number" min="0" name="admin-${match.id}-home" value="${r.home ?? ''}" class="w-10 h-10 bg-slate-950 text-rose-500 text-center font-black rounded-lg border border-slate-700 focus:border-rose-500 outline-none p-0 text-sm shadow-inner">
+                                <span class="text-slate-600 font-black text-xs">-</span>
+                                <input type="number" min="0" name="admin-${match.id}-away" value="${r.away ?? ''}" class="w-10 h-10 bg-slate-950 text-rose-500 text-center font-black rounded-lg border border-slate-700 focus:border-rose-500 outline-none p-0 text-sm shadow-inner">
                             </div>
-                            
-                            <div class="text-[10px] font-bold text-slate-300 w-1/3 truncate text-left pl-2">${match.teamAway}</div>
+                            <div class="text-xs font-black text-white w-[35%] truncate text-left pl-3">${match.teamAway}</div>
                         </div>
-                    </div>
-                `;
-                container.innerHTML += cardHTML;
+                    </div>`;
             });
         }
 
         document.getElementById('admin-results-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
-
             document.getElementById('main-loader').style.display = 'flex';
             document.getElementById('main-loader').classList.remove('opacity-0');
 
-            const formData = new FormData(e.target);
-            const newGlobalResults = {};
-
-            matchesData.forEach(match => {
-                const hVal = formData.get(`admin-${match.id}-home`);
-                const aVal = formData.get(`admin-${match.id}-away`);
-                newGlobalResults[match.id] = {
-                    home: (hVal !== null && hVal !== "") ? parseInt(hVal) : null,
-                    away: (aVal !== null && aVal !== "") ? parseInt(aVal) : null
-                };
+            const fd = new FormData(e.target);
+            const nGR = {};
+            allMatchesData.forEach(m => {
+                const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
+                nGR[m.id] = { home: (h!=="")?parseInt(h):null, away: (a!=="")?parseInt(a):null };
             });
 
             try {
-                await setDoc(doc(db, "results", "global"), { results: newGlobalResults });
-                globalResults = newGlobalResults;
-
-                const usersSnapshot = await getDocs(collection(db, "users"));
-                for (const userDoc of usersSnapshot.docs) {
-                    const uData = userDoc.data();
-                    const predSnap = await getDoc(doc(db, "predictions", uData.uid));
-                    let uPoints = 0;
-                    if (predSnap.exists()) {
-                        uPoints = calculateTotalUserScore(predSnap.data().predictions || {}, globalResults);
-                    }
-                    await updateDoc(doc(db, "users", uData.uid), { totalPoints: uPoints });
-                    
-                    if(userDoc.id === currentUser.uid) document.getElementById('user-aside-points').innerText = uPoints;
+                await setDoc(doc(db, "results", "global"), { results: nGR });
+                globalResults = nGR;
+                const uSnap = await getDocs(collection(db, "users"));
+                for (let ud of uSnap.docs) {
+                    const u = ud.data();
+                    const pSnap = await getDoc(doc(db, "predictions", u.uid));
+                    let pts = 0;
+                    if (pSnap.exists()) pts = calculateTotalUserScore(pSnap.data().predictions || {}, nGR);
+                    await updateDoc(doc(db, "users", u.uid), { totalPoints: pts });
+                    if(u.uid === currentUser.uid) document.getElementById('user-aside-points').innerText = pts;
                 }
-
-                showToast("¡Puntajes recalculados!");
+                showToast("¡Resultados Globales Actualizados!");
                 renderMatchesPredictionGrid();
-            } catch (err) {
-                showToast("Error: " + err.message, 'error');
-            } finally {
+            } catch (err) { showToast(err.message, 'error'); }
+            finally {
                 document.getElementById('main-loader').classList.add('opacity-0');
                 setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
             }
         });
 
         function calcSingleMatchPoints(pH, pA, rH, rA) {
-            if (rH === null || rA === null || rH === "" || rA === "") return 0;
-            if (pH === null || pA === null || pH === "" || pA === "") return 0;
-
-            pH = parseInt(pH); pA = parseInt(pA);
-            rH = parseInt(rH); rA = parseInt(rA);
-
-            if (isNaN(pH) || isNaN(pA) || isNaN(rH) || isNaN(rA)) return 0;
-            if (pH === rH && pA === rA) return 4;
-
-            const predSign = pH > pA ? 1 : (pH < pA ? -1 : 0);
-            const realSign = rH > rA ? 1 : (rH < rA ? -1 : 0);
-            if (predSign === realSign) return 2;
-
+            if (rH===null||rA===null||rH===""||rA==="") return 0;
+            if (pH===null||pA===null||pH===""||pA==="") return 0;
+            pH=parseInt(pH); pA=parseInt(pA); rH=parseInt(rH); rA=parseInt(rA);
+            if (isNaN(pH)||isNaN(pA)||isNaN(rH)||isNaN(rA)) return 0;
+            if (pH===rH && pA===rA) return 4;
+            const pS = pH>pA?1:(pH<pA?-1:0), rS = rH>rA?1:(rH<rA?-1:0);
+            if (pS===rS) return 2;
             return 0;
         }
 
         function calculateTotalUserScore(preds, reals) {
             let total = 0;
-            matchesData.forEach(match => {
-                const p = preds[match.id];
-                const r = reals[match.id];
+            allMatchesData.forEach(m => {
+                const p = preds[m.id], r = reals[m.id];
                 if (p && r) total += calcSingleMatchPoints(p.home, p.away, r.home, r.away);
             });
             return total;
         }
 
         async function loadLeaderboard() {
-            const tbody = document.getElementById('leaderboard-table-body');
-            tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Cargando...</td></tr>`;
-
+            const tb = document.getElementById('leaderboard-table-body');
+            tb.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-spinner animate-spin mr-3 text-yellow-500 text-2xl"></i> Calculando ranking...</td></tr>`;
             try {
-                const q = query(collection(db, "users"), orderBy("totalPoints", "desc"));
-                const querySnapshot = await getDocs(q);
+                const qRes = await getDocs(query(collection(db, "users"), where("status", "==", "aprobado")));
+                let uList = [];
+                qRes.forEach(d => uList.push(d.data()));
                 
-                tbody.innerHTML = '';
-                const usersList = [];
-                querySnapshot.forEach(doc => usersList.push(doc.data()));
+                uList.sort((a, b) => b.totalPoints - a.totalPoints);
 
-                document.getElementById('leaderboard-count').innerText = `${usersList.length} Participantes`;
+                tb.innerHTML = '';
+                document.getElementById('leaderboard-count').innerText = `${uList.length} Jugadores`;
 
-                for (let idx = 1; idx <= 3; idx++) {
-                    document.getElementById(`podium-name-${idx}`).innerText = "Sin aspirante";
-                    document.getElementById(`podium-pts-${idx}`).innerHTML = `0 <span class="text-[10px] font-semibold text-slate-400">pts</span>`;
+                for (let i = 1; i <= 3; i++) {
+                    const nameEl = document.getElementById(`podium-name-${i}`);
+                    const ptsEl = document.getElementById(`podium-pts-${i}`);
+                    if(nameEl) nameEl.innerText = "VACANTE";
+                    if(ptsEl) ptsEl.innerHTML = `0 <span class="text-xs font-semibold">PTS</span>`;
                 }
 
-                if(usersList[0]) {
-                    document.getElementById('podium-name-1').innerText = usersList[0].name;
-                    document.getElementById('podium-pts-1').innerHTML = `${usersList[0].totalPoints} <span class="text-[10px] font-black text-yellow-900/60">pts</span>`;
-                }
-                if(usersList[1]) {
-                    document.getElementById('podium-name-2').innerText = usersList[1].name;
-                    document.getElementById('podium-pts-2').innerHTML = `${usersList[1].totalPoints} <span class="text-[10px] font-semibold text-slate-300">pts</span>`;
-                }
-                if(usersList[2]) {
-                    document.getElementById('podium-name-3').innerText = usersList[2].name;
-                    document.getElementById('podium-pts-3').innerHTML = `${usersList[2].totalPoints} <span class="text-[10px] font-semibold text-amber-900">pts</span>`;
-                }
+                if(uList[0]) { document.getElementById('podium-name-1').innerText=uList[0].name; document.getElementById('podium-pts-1').innerHTML=`${uList[0].totalPoints} <span class="text-sm font-black text-yellow-600">PTS</span>`; }
+                if(uList[1]) { document.getElementById('podium-name-2').innerText=uList[1].name; document.getElementById('podium-pts-2').innerHTML=`${uList[1].totalPoints} <span class="text-xs font-bold text-slate-400">PTS</span>`; }
+                if(uList[2]) { document.getElementById('podium-name-3').innerText=uList[2].name; document.getElementById('podium-pts-3').innerHTML=`${uList[2].totalPoints} <span class="text-xs font-bold text-amber-700">PTS</span>`; }
 
-                usersList.forEach((user, index) => {
-                    const rank = index + 1;
-                    let rankBadge = `<span class="font-bold text-slate-400">${rank}</span>`;
-                    let rowHighlight = 'hover:bg-slate-800/20';
+                uList.forEach((u, idx) => {
+                    const r = idx + 1;
+                    let bg = r===1?'bg-gradient-to-r from-yellow-400 to-amber-500 shadow-md':r===2?'bg-slate-400':r===3?'bg-amber-700':'bg-slate-800';
+                    let rB = r<=3 ? `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-900 font-black text-sm">${r===1?'<i class="fa-solid fa-crown"></i>':r===2?'2':'3'}</span>` : `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-400 font-bold text-sm">${r}</span>`;
+                    let hL = currentUser && u.uid === currentUser.uid ? 'border-l-4 border-yellow-500 bg-yellow-500/10 hover:bg-yellow-500/20' : 'hover:bg-slate-800/40';
+                    let phoneTD = userDataModel?.isAdmin ? `<td class="px-6 py-4 hidden sm:table-cell text-slate-500 text-xs font-bold text-right">${u.phone||'N/A'}</td>` : '';
 
-                    if (rank === 1) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-yellow-500 text-slate-950 font-black text-xs shadow">🥇</span>`; rowHighlight = 'bg-yellow-500/5 hover:bg-yellow-500/10'; }
-                    else if (rank === 2) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-slate-400 text-slate-950 font-black text-xs shadow">🥈</span>`; rowHighlight = 'bg-slate-400/5 hover:bg-slate-400/10'; }
-                    else if (rank === 3) { rankBadge = `<span class="flex items-center justify-center w-6 h-6 mx-auto rounded-full bg-amber-700 text-white font-black text-xs shadow">🥉</span>`; rowHighlight = 'bg-amber-700/5 hover:bg-amber-700/10'; }
-
-                    if (currentUser && user.uid === currentUser.uid) rowHighlight += ' border-l-2 border-yellow-500 font-semibold text-yellow-400';
-
-                    tbody.innerHTML += `
-                        <tr class="transition-colors ${rowHighlight}">
-                            <td class="px-4 py-3 text-center">${rankBadge}</td>
-                            <td class="px-4 py-3">
-                                <div class="font-bold text-slate-200">${user.name} ${currentUser && user.uid === currentUser.uid ? '<span class="text-[9px] bg-yellow-500/20 text-yellow-400 px-1 py-0.5 rounded ml-1 uppercase font-black">Tú</span>' : ''}</div>
-                                <div class="text-[10px] sm:text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-phone mr-1"></i> ${user.phone || 'S/N'}</div>
+                    tb.innerHTML += `
+                        <tr class="transition-colors ${hL}">
+                            <td class="px-6 py-4 text-center">${rB}</td>
+                            <td class="px-6 py-4">
+                                <div class="font-black text-white text-base">${u.name} ${currentUser && u.uid === currentUser.uid ? '<span class="bg-yellow-500 text-slate-900 px-2 py-0.5 rounded text-[10px] ml-2 uppercase font-black tracking-widest relative -top-0.5">Tú</span>' : ''}</div>
                             </td>
-                            <td class="px-4 py-3 text-center font-black text-base text-white">${user.totalPoints}</td>
-                        </tr>
-                    `;
+                            <td class="px-6 py-4 text-center font-black text-xl text-yellow-500 drop-shadow-md">${u.totalPoints}</td>
+                            ${phoneTD}
+                        </tr>`;
                 });
-
-                if(usersList.length === 0) tbody.innerHTML = `<tr><td colspan="3" class="px-4 py-8 text-center text-slate-500">No hay participantes aún.</td></tr>`;
-
-            } catch (error) {
-                showToast("Error en posiciones", 'error');
+                
+                if(uList.length===0) tb.innerHTML=`<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500 font-bold">La cancha está vacía. ¡Sé el primero!</td></tr>`;
+            } catch (error) { 
+                showToast(error.message, 'error'); 
             }
         }
     </script>
