@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiniela Mundialista 2026</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(rgba(10, 25, 47, 0.85), rgba(16, 44, 87, 0.9)), url('fondo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f3f4f6;
+            min-height: 100vh;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(234, 179, 8, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.1), 0 8px 10px -6px rgba(234, 179, 8, 0.1);
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .active-tab {
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.2) 0%, rgba(234, 179, 8, 0.0) 100%);
+            border-left: 4px solid #eab308;
+            color: #eab308;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(234, 179, 8, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(234, 179, 8, 0.6);
+        }
+
+        .podium-1 {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.25) 0%, rgba(202, 138, 4, 0.05) 100%);
+            border: 2px solid #eab308;
+        }
+        .podium-2 {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.25) 0%, rgba(75, 85, 99, 0.05) 100%);
+            border: 2px solid #9ca3af;
+        }
+        .podium-3 {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(146, 64, 14, 0.05) 100%);
+            border: 2px solid #d97706;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
+
+    <!-- LOADING SPINNER MAIN -->
+    <div id="main-loader" class="fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-500 mb-4"></div>
+        <p class="text-yellow-500 font-bold tracking-widest text-lg animate-pulse">CARGANDO QUINIELA...</p>
+    </div>
+
+    <!-- AUTHENTICATION CONTAINER -->
+    <div id="auth-container" class="hidden min-height-screen w-full flex items-center justify-center p-4 py-12">
+        <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative overflow-hidden border border-slate-700/50">
+            <!-- Header Brand -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-500/10 text-yellow-500 mb-3 gold-glow">
+                    <i class="fa-solid font-black fa-trophy text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-white tracking-tight">QUINIELA MUNDIALISTA</h1>
+                <p class="text-yellow-500 font-bold tracking-widest text-sm uppercase">Edición 2026</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-box" class="space-y-5">
+                <h2 class="text-xl font-bold text-slate-200">Iniciar Sesión</h2>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="login-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="login-password" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-yellow-600/20 text-sm tracking-wide">
+                        Ingresar <i class="fa-solid fa-right-to-bracket ml-1"></i>
+                    </button>
+                </form>
+
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-slate-700/50"></div>
+                    <span class="flex-shrink mx-4 text-xs uppercase tracking-wider text-slate-500 font-semibold">O</span>
+                    <div class="flex-grow border-t border-slate-700/50"></div>
+                </div>
+
+                <button id="google-signin-btn" class="w-full bg-white hover:bg-slate-100 text-slate-900 font-bold py-2.5 px-4 rounded-lg transition-all flex items-center justify-center gap-3 text-sm shadow-md">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5">
+                    Acceder con Google
+                </button>
+
+                <p class="text-center text-sm text-slate-400 mt-6">
+                    ¿No tienes una cuenta? <button id="to-register-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Regístrate aquí</button>
+                </p>
+            </div>
+
+            <!-- Register Box -->
+            <div id="register-box" class="hidden space-y-5">
+                <h2 class="text-xl font-bold text-slate-200">Crear Cuenta Nueva</h2>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Nombre Completo</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="reg-name" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Juan Pérez">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Número de Teléfono</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-phone"></i></span>
+                            <input type="tel" id="reg-phone" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="55554444">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="reg-email" required class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="tu@correo.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contraseña</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="reg-password" required minlength="6" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-yellow-500 transition-colors" placeholder="Mínimo 6 caracteres">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-lg text-sm tracking-wide">
+                        Registrarme <i class="fa-solid fa-user-plus ml-1"></i>
+                    </button>
+                </form>
+                <p class="text-center text-sm text-slate-400 mt-6">
+                    ¿Ya posees una cuenta? <button id="to-login-btn" class="text-yellow-500 hover:underline font-semibold transition-all">Inicia Sesión</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app-wrapper" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="w-full md:w-64 lg:w-72 bg-slate-900/95 border-b md:border-b-0 md:border-r border-slate-800/80 flex flex-col justify-between z-40 relative">
+            <div>
+                <!-- Brand Profile info inside Sidebar Header -->
+                <div class="p-6 border-b border-slate-800/80 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 bg-gradient-to-tr from-yellow-500 to-amber-500 rounded-full flex items-center justify-center font-bold text-slate-950 text-xl shadow-lg border-2 border-slate-800 mb-3" id="user-avatar">
+                        U
+                    </div>
+                    <h3 class="font-bold text-slate-200 line-clamp-1 text-sm tracking-wide" id="user-display-name">Usuario</h3>
+                    <p class="text-xs text-slate-400 mt-1 flex items-center gap-1" id="user-display-email">correo@ejemplo.com</p>
+                    
+                    <!-- User personal points dashboard pill -->
+                    <div class="mt-4 px-4 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-yellow-500 font-extrabold text-xs tracking-wider uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-star animate-pulse"></i> Mi Punteo: <span id="user-aside-points" class="text-sm font-black text-white">0</span> pts
+                    </div>
+                </div>
+
+                <!-- Nav Menu Links -->
+                <nav class="p-4 space-y-1">
+                    <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group">
+                        <i class="fa-solid fa-futbol text-lg text-slate-400 group-hover:text-yellow-500 transition-colors"></i> Mi Quiniela
+                    </button>
+                    <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/50 hover:text-white transition-all group">
+                        <i class="fa-solid fa-ranking-star text-lg text-slate-400 group-hover:text-yellow-500 transition-colors"></i> Tabla de Posiciones
+                    </button>
+                    <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="hidden w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-all group border border-dashed border-rose-500/20">
+                        <i class="fa-solid fa-screwdriver-wrench text-lg text-rose-400"></i> Panel de Administrador
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Footer / Logout Section -->
+            <div class="p-4 border-t border-slate-800/80 bg-slate-950/40">
+                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold bg-slate-800 hover:bg-rose-600/20 hover:text-rose-400 text-slate-400 border border-slate-700/50 hover:border-rose-500/30 transition-all">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN APP CONTENT AREA -->
+        <main class="flex-1 flex flex-col overflow-y-auto max-h-screen">
+            <!-- Global Top Bar -->
+            <header class="glass-panel px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+                <div>
+                    <h2 class="text-lg font-black text-white tracking-wide uppercase" id="page-title">Mi Quiniela</h2>
+                    <p class="text-xs text-slate-400">Pronósticos de Partidos del Mundial 2026</p>
+                </div>
+                
+                <!-- Prizes Quick Banner Showcase -->
+                <div class="hidden sm:flex items-center gap-4 text-xs font-bold">
+                    <div class="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                        <span class="text-amber-500">🥇 1º</span> <span class="text-slate-200">Q1,000.00</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-3 py-1 bg-slate-400/10 border border-slate-400/30 rounded-lg">
+                        <span class="text-slate-300">🥈 2º</span> <span class="text-slate-200">Balón Mundial</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-3 py-1 bg-amber-700/10 border border-amber-700/30 rounded-lg">
+                        <span class="text-amber-700">🥉 3º</span> <span class="text-slate-200">Q200.00</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SUB-PAGES CONTAINER CONTENT -->
+            <div class="p-6 max-w-7xl w-full mx-auto space-y-8 pb-16">
+
+                <!-- TAB 1: MI QUINIELA -->
+                <section id="quiniela-tab" class="tab-content space-y-6">
+                    <!-- Rule Info Card -->
+                    <div class="glass-card p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-l-4 border-yellow-500">
+                        <div class="space-y-1">
+                            <h4 class="font-bold text-white flex items-center gap-2 text-sm md:text-base"><i class="fa-solid fa-circle-info text-yellow-500"></i> Sistema de Puntuación Obligatorio</h4>
+                            <p class="text-xs text-slate-300 max-w-2xl leading-relaxed">
+                                Gana <strong class="text-yellow-400">4 puntos</strong> por acertar el marcador exacto. Si aciertas el ganador o un empate con marcador distinto, sumas <strong class="text-yellow-400">2 puntos</strong>.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 bg-slate-900 rounded-lg text-xs font-semibold text-slate-300 border border-slate-700"><b class="text-yellow-500">Exacto:</b> 4 pts</span>
+                            <span class="px-3 py-1 bg-slate-900 rounded-lg text-xs font-semibold text-slate-300 border border-slate-700"><b class="text-yellow-500">Resultado:</b> 2 pts</span>
+                        </div>
+                    </div>
+
+                    <!-- Matches Prediction Grid -->
+                    <form id="predictions-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="matches-prediction-container">
+                            <!-- Injected Dynamically by JavaScript -->
+                        </div>
+                        
+                        <!-- Floating/Fixed Save Action Button -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-extrabold px-8 py-3.5 rounded-xl transition-all transform hover:scale-[1.02] shadow-xl shadow-yellow-500/10 flex items-center justify-center gap-2 text-sm tracking-wide">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Guardar Mis Pronósticos Guardados
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- TAB 2: LEADERBOARD / POSICIONES -->
+                <section id="leaderboard-tab" class="tab-content hidden space-y-8">
+                    <!-- Podium Graphic Showcase (Top 3 Places) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4" id="podium-container">
+                        <!-- Second Place -->
+                        <div class="glass-card podium-2 rounded-2xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-3 right-3 text-slate-400 text-2xl font-black opacity-30">#2</div>
+                            <div>
+                                <div class="w-12 h-12 mx-auto rounded-full bg-slate-500/20 text-slate-300 flex items-center justify-center mb-2 text-lg font-bold"><i class="fa-solid fa-medal"></i></div>
+                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-2">Cargando...</h4>
+                                <p class="text-xs text-slate-400 truncate" id="podium-email-2">-</p>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-2xl font-black text-slate-100" id="podium-pts-2">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-2 text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥈 Balón Mundial</div>
+                            </div>
+                        </div>
+
+                        <!-- First Place -->
+                        <div class="glass-card podium-1 rounded-2xl p-6 text-center order-1 sm:order-2 flex flex-col justify-between relative transform sm:scale-105 shadow-xl shadow-yellow-500/5 overflow-hidden">
+                            <div class="absolute top-3 right-3 text-yellow-500 text-3xl font-black opacity-30">#1</div>
+                            <div>
+                                <div class="w-14 h-14 mx-auto rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center mb-2 text-xl gold-glow border border-yellow-500/30"><i class="fa-solid fa-crown"></i></div>
+                                <h4 class="font-extrabold text-white text-base truncate" id="podium-name-1">Cargando...</h4>
+                                <p class="text-xs text-yellow-500 truncate font-semibold" id="podium-email-1">-</p>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-3xl font-black text-yellow-400" id="podium-pts-1">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-2 text-xs font-extrabold text-slate-950 px-3 py-1 bg-yellow-400 rounded-md inline-block uppercase tracking-wider">🏆 Gran Premio Q1,000.00</div>
+                            </div>
+                        </div>
+
+                        <!-- Third Place -->
+                        <div class="glass-card podium-3 rounded-2xl p-6 text-center order-3 sm:order-3 flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-3 right-3 text-amber-700 text-2xl font-black opacity-30">#3</div>
+                            <div>
+                                <div class="w-12 h-12 mx-auto rounded-full bg-amber-700/20 text-amber-600 flex items-center justify-center mb-2 text-lg font-bold"><i class="fa-solid fa-award"></i></div>
+                                <h4 class="font-bold text-slate-200 text-sm truncate" id="podium-name-3">Cargando...</h4>
+                                <p class="text-xs text-slate-400 truncate" id="podium-email-3">-</p>
+                            </div>
+                            <div class="mt-4">
+                                <div class="text-2xl font-black text-amber-600" id="podium-pts-3">0 <span class="text-xs font-semibold text-slate-400">pts</span></div>
+                                <div class="mt-2 text-xs font-bold text-slate-300 px-2 py-1 bg-slate-900/60 rounded-md border border-slate-700/40 inline-block">🥉 Premio Q200.00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Leaderboard Table -->
+                    <div class="glass-panel rounded-2xl overflow-hidden border border-slate-800">
+                        <div class="px-6 py-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+                            <h3 class="font-bold text-white text-sm uppercase tracking-wider">Clasificación General</h3>
+                            <span class="text-xs text-slate-400 font-semibold" id="leaderboard-count">0 Participantes</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-300">
+                                <thead class="bg-slate-950/40 text-xs font-bold text-slate-400 uppercase border-b border-slate-800">
+                                    <tr>
+                                        <th class="px-6 py-3.5 text-center w-16">Pos</th>
+                                        <th class="px-6 py-3.5">Nombre</th>
+                                        <th class="px-6 py-3.5 hidden sm:table-cell">Contacto</th>
+                                        <th class="px-6 py-3.5 text-center w-24">Puntos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/60">
+                                    <!-- Dynamic rows from Firestore -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: ADMIN CALIFICATION PANEL -->
+                <section id="admin-tab" class="tab-content hidden space-y-6">
+                    <div class="p-5 glass-card rounded-2xl bg-gradient-to-r from-rose-950/30 to-slate-900 border-l-4 border-rose-500">
+                        <h3 class="text-base font-bold text-rose-400 flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Panel de Control del Administrador</h3>
+                        <p class="text-xs text-slate-300 mt-1">
+                            Ingresa los marcadores oficiales de los partidos de la Copa Mundial. Al presionar el botón de abajo, el sistema actualizará los resultados generales y recalculará los puntos en tiempo real de todos los usuarios registrados.
+                        </p>
+                    </div>
+
+                    <form id="admin-results-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-matches-container">
+                            <!-- Injected Dynamically by JavaScript -->
+                        </div>
+
+                        <!-- Submit Results Action Button -->
+                        <div class="mt-8 flex justify-end">
+                            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-extrabold px-10 py-4 rounded-xl transition-all transform hover:scale-[1.02] shadow-xl shadow-rose-950/50 flex items-center justify-center gap-2 text-sm tracking-wide">
+                                <i class="fa-solid fa-calculator text-base animate-spin"></i> Publicar Resultados Oficiales y Recalcular Puntos
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- FIREBASE AND CORE APP SCRIPT MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your provided production Firebase configuration mapping
+        const firebaseConfig = {
+            apiKey: "AIzaSyAa2q0jJsl_PU7KBn9e2g1FlnRwYRA8qGE",
+            authDomain: "quinielamundialista-2026.firebaseapp.com",
+            projectId: "quinielamundialista-2026",
+            storageBucket: "quinielamundialista-2026.firebasestorage.app",
+            messagingSenderId: "312310430145",
+            appId: "1:312310430145:web:0906810aca57d90e089740",
+            measurementId: "G-HQ0QHG97QH"
+        };
+
+        // Initialize Core SDK Components
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Admin accounts access mapping whitelist
+        const ADMIN_EMAILS = ["workplaceqr@gmail.com", "chrishernandez2801@gmail.com"];
+
+        // 22 Matches Core Array Metadata Specification List
+        const matchesData = [
+            { id: "m1", group: "Grupo A", J: "Jornada 1", teamHome: "México", flagHome: "🇲🇽", teamAway: "Sudáfrica", flagAway: "🇿🇦", time: "Jueves 11/06/2026 1:00 PM" },
+            { id: "m2", group: "Grupo A", J: "Jornada 1", teamHome: "Corea del Sur", flagHome: "🇰🇷", teamAway: "República Checa", flagAway: "🇨🇿", time: "Jueves 11/06/2026 8:00 PM" },
+            { id: "m3", group: "Grupo B", J: "Jornada 1", teamHome: "Canadá", flagHome: "🇨🇦", teamAway: "Bosnia y Herzegovina", flagAway: "🇧🇦", time: "Viernes 12/06/2026 1:00 PM" },
+            { id: "m4", group: "Grupo D", J: "Jornada 1", teamHome: "Estados Unidos", flagHome: "🇺🇸", teamAway: "Paraguay", flagAway: "🇵🇾", time: "Viernes 12/06/2026 7:00 PM" },
+            { id: "m5", group: "Grupo B", J: "Jornada 1", teamHome: "Qatar", flagHome: "🇶🇦", teamAway: "Suiza", flagAway: "🇨🇭", time: "Sábado 13/06/2026 1:00 PM" },
+            { id: "m6", group: "Grupo C", J: "Jornada 1", teamHome: "Brasil", flagHome: "🇧🇷", teamAway: "Marruecos", flagAway: "🇲🇦", time: "Sábado 13/06/2026 4:00 PM" },
+            { id: "m7", group: "Grupo C", J: "Jornada 1", teamHome: "Haití", flagHome: "🇭🇹", teamAway: "Escocia", flagAway: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", time: "Sábado 13/06/2026 7:00 PM" },
+            { id: "m8", group: "Grupo D", J: "Jornada 1", teamHome: "Australia", flagHome: "🇦🇺", teamAway: "Turquía", flagAway: "🇹🇷", time: "Sábado 13/06/2026 10:00 PM" },
+            { id: "m9", group: "Grupo E", J: "Jornada 1", teamHome: "Alemania", flagHome: "🇩🇪", teamAway: "Curazao", flagAway: "🇨🇼", time: "Domingo 14/06/2026 11:00 AM" },
+            { id: "m10", group: "Grupo F", J: "Jornada 1", teamHome: "Países Bajos", flagHome: "🇳🇱", teamAway: "Japón", flagAway: "🇯🇵", time: "Domingo 14/06/2026 2:00 PM" },
+            { id: "m11", group: "Grupo E", J: "Jornada 1", teamHome: "Costa de Marfil", flagHome: "🇨🇮", teamAway: "Ecuador", flagAway: "🇪🇨", time: "Domingo 14/06/2026 5:00 PM" },
+            { id: "m12", group: "Grupo F", J: "Jornada 1", teamHome: "Suecia", flagHome: "🇸🇪", teamAway: "Túnez", flagAway: "🇹🇳", time: "Domingo 14/06/2026 8:00 PM" },
+            { id: "m13", group: "Grupo H", J: "Jornada 1", teamHome: "España", flagHome: "🇪🇸", teamAway: "Cabo Verde", flagAway: "🇨🇻", time: "Lunes 15/06/2026 10:00 AM" },
+            { id: "m14", group: "Grupo G", J: "Jornada 1", teamHome: "Bélgica", flagHome: "🇧🇪", teamAway: "Egipto", flagAway: "🇪🇬", time: "Lunes 15/06/2026 1:00 PM" },
+            { id: "m15", group: "Grupo H", J: "Jornada 1", teamHome: "Arabia Saudita", flagHome: "🇸🇦", teamAway: "Uruguay", flagAway: "🇺🇾", time: "Lunes 15/06/2026 4:00 PM" },
+            { id: "m16", group: "Grupo G", J: "Jornada 1", teamHome: "Irán", flagHome: "🇮🇷", teamAway: "Nueva Zelanda", flagAway: "🇳🇿", time: "Lunes 15/06/2026 7:00 PM" },
+            { id: "m17", group: "Grupo I", J: "Jornada 1", teamHome: "Francia", flagHome: "🇫🇷", teamAway: "Senegal", flagAway: "🇸🇳", time: "Martes 16/06/2026 1:00 PM" },
+            { id: "m18", group: "Grupo I", J: "Jornada 1", teamHome: "Irak", flagHome: "🇮🇶", teamAway: "Noruega", flagAway: "🇳🇴", time: "Martes 16/06/2026 4:00 PM" },
+            { id: "m19", group: "Grupo J", J: "Jornada 1", teamHome: "Argentina", flagHome: "🇦🇷", teamAway: "Argelia", flagAway: "🇩🇿", time: "Martes 16/06/2026 7:00 PM" },
+            { id: "m20", group: "Grupo J", J: "Jornada 1", teamHome: "Austria", flagHome: "🇦🇹", teamAway: "Jordania", flagAway: "🇯🇴", time: "Martes 16/06/2026 10:00 PM" },
+            { id: "m21", group: "Grupo K", J: "Jornada 1", teamHome: "Portugal", flagHome: "🇵🇹", teamAway: "RD Congo", flagAway: "🇨🇩", time: "Miércoles 17/06/2026 11:00 AM" },
+            { id: "m22", group: "Grupo L", J: "Jornada 1", teamHome: "Inglaterra", flagHome: "🏴 \󠁢󠁥󠁮󠁧󠁿", teamAway: "Croacia", flagAway: "🇭🇷", time: "Miércoles 17/06/2026 2:00 PM" }
+        ];
+
+        // State Tracking Data Variables
+        let currentUser = null;
+        let globalResults = {};
+        let userPredictions = {};
+
+        // Helper Notification Toast Handler
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-5 py-3 rounded-xl font-bold text-sm shadow-xl flex items-center gap-3 border transition-all duration-300 transform translate-y-2 opacity-0 glass-panel`;
+            
+            if(type === 'success') {
+                toast.classList.add('border-emerald-500', 'text-emerald-400');
+                toast.innerHTML = `<i class="fa-solid fa-circle-check text-base"></i> ${message}`;
+            } else {
+                toast.classList.add('border-rose-500', 'text-rose-400');
+                toast.innerHTML = `<i class="fa-solid fa-circle-exclamation text-base"></i> ${message}`;
+            }
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-5');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Authentication Toggle Views
+        document.getElementById('to-register-btn').addEventListener('click', () => {
+            document.getElementById('login-box').classList.add('hidden');
+            document.getElementById('register-box').classList.remove('hidden');
+        });
+        document.getElementById('to-login-btn').addEventListener('click', () => {
+            document.getElementById('register-box').classList.add('hidden');
+            document.getElementById('login-box').classList.remove('hidden');
+        });
+
+        // Dynamic Tab Switching Interface System
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
+            document.getElementById(`btn-${tabId}`).classList.add('active-tab');
+            
+            const titleMap = {
+                'quiniela-tab': 'Mi Quiniela',
+                'leaderboard-tab': 'Tabla de Posiciones',
+                'admin-tab': 'Panel de Control General'
+            };
+            document.getElementById('page-title').innerText = titleMap[tabId] || 'Panel';
+
+            if(tabId === 'leaderboard-tab') {
+                loadLeaderboard();
+            }
+        };
+
+        // Firebase Auth State Pipeline Listener
+        onAuthStateChanged(auth, async (user) => {
+            document.getElementById('main-loader').classList.remove('opacity-0');
+            document.getElementById('main-loader').style.display = 'flex';
+            
+            if (user) {
+                currentUser = user;
+                const isAdmin = ADMIN_EMAILS.includes(user.email);
+                
+                // Fetch or Sync complete metadata record layout inside firestore user object database
+                const userDocRef = doc(db, "users", user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+                
+                let userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName || 'Participante',
+                    phone: user.phoneNumber || 'No Registrado',
+                    totalPoints: 0,
+                    isAdmin: isAdmin
+                };
+
+                if (userDocSnap.exists()) {
+                    const existing = userDocSnap.data();
+                    userData.name = existing.name || userData.name;
+                    userData.phone = existing.phone || userData.phone;
+                    userData.totalPoints = existing.totalPoints ?? 0;
+                } else {
+                    await setDoc(userDocRef, userData);
+                }
+
+                // Inject profiles metadata layout interface view updates inside template sidebar metrics elements
+                document.getElementById('user-display-name').innerText = userData.name;
+                document.getElementById('user-display-email').innerText = userData.email;
+                document.getElementById('user-avatar').innerText = userData.name.charAt(0).toUpperCase();
+                document.getElementById('user-aside-points').innerText = userData.totalPoints;
+
+                if (isAdmin) {
+                    document.getElementById('btn-admin-tab').classList.remove('hidden');
+                } else {
+                    document.getElementById('btn-admin-tab').classList.add('hidden');
+                }
+
+                // Pull latest global matches results and user prediction values data records maps arrays layout
+                await fetchGlobalResults();
+                await fetchUserPredictions();
+                
+                renderMatchesPredictionGrid();
+                if(isAdmin) renderAdminMatchesGrid();
+
+                document.getElementById('auth-container').classList.add('hidden');
+                document.getElementById('app-wrapper').classList.remove('hidden');
+                switchTab('quiniela-tab');
+            } else {
+                currentUser = null;
+                document.getElementById('app-wrapper').classList.add('hidden');
+                document.getElementById('auth-container').classList.remove('hidden');
+            }
+            
+            document.getElementById('main-loader').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+        });
+
+        // Email and Password Manual Registration Process Handler 
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    totalPoints: 0,
+                    isAdmin: ADMIN_EMAILS.includes(email)
+                });
+                
+                showToast("Cuenta registrada exitosamente");
+                document.getElementById('register-form').reset();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        // Email and Password User Account Login Validation Submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast("Sesión iniciada correctamente");
+                document.getElementById('login-form').reset();
+            } catch (error) {
+                showToast("Credenciales inválidas. Revisa el correo y contraseña.", 'error');
+            }
+        });
+
+        // Google Federated Single Sign-On Access Routine
+        document.getElementById('google-signin-btn').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                showToast("Autenticado exitosamente con Google");
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        // Application Session Disconnection Sign Out Handler Routine
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                showToast("Sesión cerrada correctamente");
+            });
+        });
+
+        // Database Firestore Pull Fetch Global Real Matches Results Scores Metadata Maps
+        async function fetchGlobalResults() {
+            try {
+                const docRef = doc(db, "results", "global");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    globalResults = docSnap.data().results || {};
+                } else {
+                    globalResults = {};
+                }
+            } catch (e) {
+                console.error("Error fetching live scores data map", e);
+            }
+        }
+
+        // Database Firestore Pull Fetch Authenticated User Custom Match Predictions Document Map
+        async function fetchUserPredictions() {
+            if (!currentUser) return;
+            try {
+                const docRef = doc(db, "predictions", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    userPredictions = docSnap.data().predictions || {};
+                } else {
+                    userPredictions = {};
+                }
+            } catch (e) {
+                console.error("Error fetching user prediction scores data map", e);
+            }
+        }
+
+        // Render User Predictions Grid View Layout UI Elements Dashboard Injection Routine
+        function renderMatchesPredictionGrid() {
+            const container = document.getElementById('matches-prediction-container');
+            container.innerHTML = '';
+
+            matchesData.forEach(match => {
+                const pred = userPredictions[match.id] || { home: '', away: '' };
+                const real = globalResults[match.id] || { home: null, away: null };
+                
+                let pointsBadgeHTML = '';
+                let statusBorder = 'border-slate-800/40';
+                
+                // Verify calculation state matrix blocks elements layouts properties
+                if (real.home !== null && real.away !== null && real.home !== "" && real.away !== "") {
+                    const points = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
+                    if (points === 4) {
+                        pointsBadgeHTML = `<span class="bg-yellow-500 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black"><i class="fa-solid fa-star"></i> +4 Ptos Exacto</span>`;
+                        statusBorder = 'border-yellow-500/70 shadow-md shadow-yellow-500/5';
+                    } else if (points === 2) {
+                        pointsBadgeHTML = `<span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-circle-check"></i> +2 Ptos Acertado</span>`;
+                        statusBorder = 'border-emerald-500/50';
+                    } else {
+                        pointsBadgeHTML = `<span class="bg-slate-700 text-slate-400 px-2 py-0.5 rounded text-[10px] font-bold">0 Ptos</span>`;
+                        statusBorder = 'border-slate-800';
+                    }
+                }
+
+                const cardHTML = `
+                    <div class="glass-card rounded-2xl p-4 flex flex-col justify-between border ${statusBorder}">
+                        <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 mb-2 pb-1.5 border-b border-slate-800/40">
+                            <span class="text-yellow-500"><i class="fa-solid fa-layer-group mr-1"></i> ${match.group} - ${match.J}</span>
+                            ${pointsBadgeHTML}
+                        </div>
+                        
+                        <div class="flex items-center justify-between my-3 gap-2">
+                            <!-- Home Team -->
+                            <div class="flex flex-col items-center flex-1 text-center max-w-[38%]">
+                                <span class="text-2xl mb-1 filter drop-shadow-sm" title="${match.teamHome}">${match.flagHome}</span>
+                                <span class="text-xs font-bold text-slate-200 truncate w-full">${match.teamHome}</span>
+                            </div>
+                            
+                            <!-- Inputs Score Area -->
+                            <div class="flex items-center justify-center gap-1.5 flex-1">
+                                <input type="number" min="0" required name="pred-${match.id}-home" value="${pred.home}" 
+                                    class="w-11 h-10 bg-slate-950/80 text-white font-extrabold text-center rounded-lg border border-slate-700 focus:outline-none focus:border-yellow-500 transition-colors text-base p-0" placeholder="-">
+                                <span class="text-slate-500 font-bold text-xs">vs</span>
+                                <input type="number" min="0" required name="pred-${match.id}-away" value="${pred.away}" 
+                                    class="w-11 h-10 bg-slate-950/80 text-white font-extrabold text-center rounded-lg border border-slate-700 focus:outline-none focus:border-yellow-500 transition-colors text-base p-0" placeholder="-">
+                            </div>
+                            
+                            <!-- Away Team -->
+                            <div class="flex flex-col items-center flex-1 text-center max-w-[38%]">
+                                <span class="text-2xl mb-1 filter drop-shadow-sm" title="${match.teamAway}">${match.flagAway}</span>
+                                <span class="text-xs font-bold text-slate-200 truncate w-full">${match.teamAway}</span>
+                            </div>
+                        </div>
+
+                        <div class="text-[10px] text-slate-400 text-center mt-2 pt-1 border-t border-slate-800/30 flex items-center justify-center gap-1 font-medium">
+                            <i class="fa-regular fa-clock text-slate-500"></i> ${match.time}
+                        </div>
+                        
+                        ${real.home !== null && real.home !== undefined && real.home !== "" ? `
+                            <div class="mt-2.5 px-3 py-1 bg-slate-950/50 rounded-lg text-center border border-slate-800 text-[11px] font-semibold">
+                                <span class="text-slate-400">Resultado Oficial:</span> <strong class="text-yellow-500 ml-1">${real.home} - ${real.away}</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Save User Match Predictions Document Handler Routine
+        document.getElementById('predictions-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            document.getElementById('main-loader').style.display = 'flex';
+            document.getElementById('main-loader').classList.remove('opacity-0');
+
+            const formData = new FormData(e.target);
+            const newPredictions = {};
+
+            matchesData.forEach(match => {
+                const homeVal = formData.get(`pred-${match.id}-home`);
+                const awayVal = formData.get(`pred-${match.id}-away`);
+                newPredictions[match.id] = {
+                    home: homeVal !== "" ? parseInt(homeVal) : "",
+                    away: awayVal !== "" ? parseInt(awayVal) : ""
+                };
+            });
+
+            try {
+                await setDoc(doc(db, "predictions", currentUser.uid), {
+                    predictions: newPredictions
+                }, { merge: true });
+                
+                userPredictions = newPredictions;
+                showToast("¡Tus pronósticos han sido guardados exitosamente!");
+                
+                // Recalculate personal current view scorecard parameters
+                await fetchGlobalResults();
+                const myPoints = calculateTotalUserScore(userPredictions, globalResults);
+                await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPoints });
+                document.getElementById('user-aside-points').innerText = myPoints;
+                
+                renderMatchesPredictionGrid();
+            } catch (error) {
+                showToast("Error al guardar pronósticos: " + error.message, 'error');
+            } finally {
+                document.getElementById('main-loader').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+            }
+        });
+
+        // Render Admin Views Control Matches Board Parameters Injection Layouts Routine
+        function renderAdminMatchesGrid() {
+            const container = document.getElementById('admin-matches-container');
+            container.innerHTML = '';
+
+            matchesData.forEach(match => {
+                const real = globalResults[match.id] || { home: '', away: '' };
+                const cardHTML = `
+                    <div class="glass-card rounded-2xl p-4 border border-slate-700/50 bg-slate-900/40">
+                        <div class="text-[11px] font-bold text-rose-400 mb-2 pb-1 bg-rose-500/5 px-2 py-0.5 rounded border border-rose-500/10">
+                            <i class="fa-solid fa-gamepad"></i> ${match.group} • ${match.J}
+                        </div>
+                        <div class="flex items-center justify-between my-2">
+                            <div class="text-xs font-bold text-slate-300 w-1/3 truncate text-right pr-2">${match.teamHome} ${match.flagHome}</div>
+                            
+                            <div class="flex items-center justify-center gap-1 w-1/3">
+                                <input type="number" min="0" name="admin-${match.id}-home" value="${real.home ?? ''}" 
+                                    class="w-10 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:outline-none focus:border-rose-400 p-0 text-sm">
+                                <span class="text-slate-600 font-bold text-xs">-</span>
+                                <input type="number" min="0" name="admin-${match.id}-away" value="${real.away ?? ''}" 
+                                    class="w-10 h-8 bg-slate-950 text-white text-center font-bold rounded border border-rose-500/40 focus:outline-none focus:border-rose-400 p-0 text-sm">
+                            </div>
+                            
+                            <div class="text-xs font-bold text-slate-300 w-1/3 truncate text-left pl-2">${match.flagAway} ${match.teamAway}</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // Admin Actual Score Results Publishing and Global Real-time Point Recalculation Task Handler Pipeline
+        document.getElementById('admin-results-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
+
+            document.getElementById('main-loader').style.display = 'flex';
+            document.getElementById('main-loader').classList.remove('opacity-0');
+
+            const formData = new FormData(e.target);
+            const newGlobalResults = {};
+
+            matchesData.forEach(match => {
+                const hVal = formData.get(`admin-${match.id}-home`);
+                const aVal = formData.get(`admin-${match.id}-away`);
+                
+                newGlobalResults[match.id] = {
+                    home: (hVal !== null && hVal !== "") ? parseInt(hVal) : null,
+                    away: (aVal !== null && aVal !== "") ? parseInt(aVal) : null
+                };
+            });
+
+            try {
+                // Save central point verification document node collection master reference
+                await setDoc(doc(db, "results", "global"), { results: newGlobalResults });
+                globalResults = newGlobalResults;
+
+                // Loop through all users and update total scores inside batch system pipeline operations
+                const usersSnapshot = await getDocs(collection(db, "users"));
+                
+                for (const userDoc of usersSnapshot.docs) {
+                    const uData = userDoc.data();
+                    // Load individual data model
+                    const predSnap = await getDoc(doc(db, "predictions", uData.uid));
+                    let uPoints = 0;
+                    if (predSnap.exists()) {
+                        const uPreds = predSnap.data().predictions || {};
+                        uPoints = calculateTotalUserScore(uPreds, globalResults);
+                    }
+                    // Update matching user point tracking document parameters directly
+                    await updateDoc(doc(db, "users", uData.uid), { totalPoints: uPoints });
+                    
+                    if(userDoc.id === currentUser.uid) {
+                        document.getElementById('user-aside-points').innerText = uPoints;
+                    }
+                }
+
+                showToast("¡Resultados oficiales publicados y puntajes recalculados para todos los usuarios!");
+                renderMatchesPredictionGrid();
+            } catch (err) {
+                showToast("Error administrativo: " + err.message, 'error');
+            } finally {
+                document.getElementById('main-loader').classList.add('opacity-0');
+                setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+            }
+        });
+
+        // Core Calculation Matrix Logic Formulas for World Cup Matching Predictions System
+        function calcSingleMatchPoints(predHome, predAway, realHome, realAway) {
+            if (realHome === null || realAway === null || realHome === undefined || realAway === undefined || realHome === "" || realAway === "") return 0;
+            if (predHome === null || predAway === null || predHome === undefined || predAway === undefined || predHome === "" || predAway === "") return 0;
+
+            const pH = parseInt(predHome);
+            const pA = parseInt(predAway);
+            const rH = parseInt(realHome);
+            const rA = parseInt(realAway);
+
+            if (isNaN(pH) || isNaN(pA) || isNaN(rH) || isNaN(rA)) return 0;
+
+            // Scenario 1: Exact Score Match Condition Matrix Element mapping -> 4 Points
+            if (pH === rH && pA === rA) {
+                return 4;
+            }
+
+            // Scenario 2: Evaluate Winner Sign/Draw outcome alignment parameters -> 2 Points
+            const predSign = pH > pA ? 1 : (pH < pA ? -1 : 0);
+            const realSign = rH > rA ? 1 : (rH < rA ? -1 : 0);
+
+            if (predSign === realSign) {
+                return 2;
+            }
+
+            return 0;
+        }
+
+        // Accumulate entire profile scorecard values parameters summary metric matrix
+        function calculateTotalUserScore(preds, reals) {
+            let total = 0;
+            matchesData.forEach(match => {
+                const p = preds[match.id];
+                const r = reals[match.id];
+                if (p && r) {
+                    total += calcSingleMatchPoints(p.home, p.away, r.home, r.away);
+                }
+            });
+            return total;
+        }
+
+        // Load Leaderboard data rows list view layout rendering updates routine
+        async function loadLeaderboard() {
+            const tbody = document.getElementById('leaderboard-table-body');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="px-6 py-10 text-center text-slate-400 font-semibold">
+                        <i class="fa-solid fa-spinner animate-spin mr-2 text-yellow-500"></i> Generando tabla de posiciones actualizada...
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const q = query(collection(db, "users"), orderBy("totalPoints", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                tbody.innerHTML = '';
+                const usersList = [];
+                
+                querySnapshot.forEach(doc => {
+                    usersList.push(doc.data());
+                });
+
+                document.getElementById('leaderboard-count').innerText = `${usersList.length} Participantes`;
+
+                // Update Premium Display Podium Grid Components metrics values mappings
+                // Reset Podium UI values metrics fields fallbacks
+                for (let idx = 1; idx <= 3; idx++) {
+                    document.getElementById(`podium-name-${idx}`).innerText = "Sin aspirante";
+                    document.getElementById(`podium-email-${idx}`).innerText = "N/A";
+                    document.getElementById(`podium-pts-${idx}`).innerHTML = `0 <span class="text-xs font-semibold text-slate-400">pts</span>`;
+                }
+
+                // Populate Podium values parameters safely
+                if(usersList[0]) {
+                    document.getElementById('podium-name-1').innerText = usersList[0].name;
+                    document.getElementById('podium-email-1').innerText = usersList[0].email;
+                    document.getElementById('podium-pts-1').innerHTML = `${usersList[0].totalPoints} <span class="text-xs font-black text-yellow-900/60">pts</span>`;
+                }
+                if(usersList[1]) {
+                    document.getElementById('podium-name-2').innerText = usersList[1].name;
+                    document.getElementById('podium-email-2').innerText = usersList[1].email;
+                    document.getElementById('podium-pts-2').innerHTML = `${usersList[1].totalPoints} <span class="text-xs font-semibold text-slate-300">pts</span>`;
+                }
+                if(usersList[2]) {
+                    document.getElementById('podium-name-3').innerText = usersList[2].name;
+                    document.getElementById('podium-email-3').innerText = usersList[2].email;
+                    document.getElementById('podium-pts-3').innerHTML = `${usersList[2].totalPoints} <span class="text-xs font-semibold text-amber-900">pts</span>`;
+                }
+
+                // Append and Render All Table Body rows elements items fields safely
+                usersList.forEach((user, index) => {
+                    const rank = index + 1;
+                    let rankBadge = `<span class="font-bold text-slate-400">${rank}</span>`;
+                    let rowHighlight = 'hover:bg-slate-800/20';
+
+                    if (rank === 1) {
+                        rankBadge = `<span class="flex items-center justify-center w-6 h-6 rounded-full bg-yellow-500 text-slate-950 font-black text-xs shadow gold-glow">🥇</span>`;
+                        rowHighlight = 'bg-yellow-500/5 hover:bg-yellow-500/10';
+                    } else if (rank === 2) {
+                        rankBadge = `<span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-400 text-slate-950 font-black text-xs shadow">🥈</span>`;
+                        rowHighlight = 'bg-slate-400/5 hover:bg-slate-400/10';
+                    } else if (rank === 3) {
+                        rankBadge = `<span class="flex items-center justify-center w-6 h-6 rounded-full bg-amber-700 text-white font-black text-xs shadow">🥉</span>`;
+                        rowHighlight = 'bg-amber-700/5 hover:bg-amber-700/10';
+                    }
+
+                    // Highlight Current Active User profile inside the global layout leaderboard list
+                    if (currentUser && user.uid === currentUser.uid) {
+                        rowHighlight += ' border-l-2 border-yellow-500 font-semibold text-yellow-400';
+                    }
+
+                    const rowHTML = `
+                        <tr class="transition-colors ${rowHighlight}">
+                            <td class="px-6 py-3.5 text-center flex items-center justify-center">${rankBadge}</td>
+                            <td class="px-6 py-3.5">
+                                <div class="font-bold text-slate-200">${user.name} ${currentUser && user.uid === currentUser.uid ? '<span class="text-[10px] bg-yellow-500/20 text-yellow-400 px-1.5 py-0.5 rounded ml-1 uppercase font-black">Tú</span>' : ''}</div>
+                                <div class="text-xs text-slate-500 sm:hidden mt-0.5">${user.phone || 'S/N'}</div>
+                            </td>
+                            <td class="px-6 py-3.5 hidden sm:table-cell text-xs text-slate-400">
+                                <div><i class="fa-regular fa-envelope mr-1 text-slate-500"></i> ${user.email}</div>
+                                <div class="mt-0.5"><i class="fa-solid fa-phone mr-1 text-slate-500"></i> ${user.phone || 'S/N'}</div>
+                            </td>
+                            <td class="px-6 py-3.5 text-center font-black text-base text-white">${user.totalPoints}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += rowHTML;
+                });
+
+                if(usersList.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="px-6 py-8 text-center text-slate-500">
+                                No hay participantes registrados aún en la base de datos.
+                            </td>
+                        </tr>
+                    `;
+                }
+
+            } catch (error) {
+                console.error("Error creating rankings view matrix", error);
+                showToast("Error al cargar la tabla de posiciones", 'error');
+            }
+        }
+    </script>
+</body>
+</html>
