@@ -679,9 +679,9 @@ const initialMatchesSeed = [
                 
                 if (real.home !== null && real.away !== null && real.home !== "" && real.away !== "") {
                     const pts = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
-                    if (pts === 4) { pBadge = `<span class="bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg animate-pulse">+4 PTS</span>`; sBorder = 'border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]'; }
-                    else if (pts === 2) { pBadge = `<span class="bg-emerald-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg">+2 PTS</span>`; sBorder = 'border-emerald-500/60 shadow-[0_0_15px_rgba(16,185,129,0.1)]'; }
-                    else { pBadge = `<span class="bg-slate-700 text-slate-400 px-3 py-1 rounded-lg text-xs font-bold border border-slate-600">0 PTS</span>`; sBorder = 'border-slate-700'; }
+                    if (pts === 4) { pBadge = `<span class="bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg ">★ +4 PTS</span>`; sBorder = 'border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]'; }
+                    else if (pts === 2) { pBadge = `<span class="bg-emerald-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg">✓ +2 PTS</span>`; sBorder = 'border-emerald-500/60 shadow-[0_0_15px_rgba(16,185,129,0.1)]'; }
+                    else { pBadge = `<span class="bg-red-500 text-slate-100 px-3 py-1 rounded-lg text-xs font-bold border border-slate-600">✘ 0 PTS</span>`; sBorder = 'border-slate-700'; }
                 }
 
                 const displayDate = formatUIMatchDate(match.time);
