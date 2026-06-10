@@ -477,10 +477,12 @@
                                 <p
                                     class="text-slate-400 font-medium flex items-center justify-center md:justify-start gap-2">
                                     <i class="fa-solid fa-envelope"></i> <span
-                                        id="profile-email">correo@ejemplo.com</span></p>
+                                        id="profile-email">correo@ejemplo.com</span>
+                                </p>
                                 <p
                                     class="text-emerald-400 font-medium flex items-center justify-center md:justify-start gap-2">
-                                    <i class="fa-brands fa-whatsapp"></i> <span id="profile-phone">55554444</span></p>
+                                    <i class="fa-brands fa-whatsapp"></i> <span id="profile-phone">55554444</span>
+                                </p>
 
                                 <div
                                     class="inline-block mt-4 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-500 font-extrabold tracking-wider shadow-inner">
@@ -647,7 +649,8 @@
                                     id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
                                 <div
                                     class="text-xs font-black text-slate-950 px-4 py-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-lg inline-block uppercase tracking-widest shadow-md">
-                                    <i class="fa-solid fa-crown mr-1"></i>🏆 Q1,000.00</div>
+                                    <i class="fa-solid fa-crown mr-1"></i>🏆 Q1,000.00
+                                </div>
                             </div>
                         </div>
 
@@ -667,7 +670,8 @@
                                         class="text-xs font-bold text-amber-700/50">PTS</span></div>
                                 <div
                                     class="text-[11px] font-bold text-amber-200 px-3 py-1 bg-slate-950/60 border border-amber-900/60 rounded-lg inline-block shadow-inner">
-                                    <i class="fa-solid fa-circle mr-1 text-amber-600 text-[8px]"></i>🥉 Q200.00</div>
+                                    <i class="fa-solid fa-circle mr-1 text-amber-600 text-[8px]"></i>🥉 Q200.00
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -676,7 +680,8 @@
                         <div
                             class="px-6 py-4 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
                             <h3 class="font-black text-white text-sm uppercase tracking-widest flex items-center gap-2">
-                                <i class="fa-solid fa-list-ol text-yellow-500"></i> Tabla General</h3>
+                                <i class="fa-solid fa-list-ol text-yellow-500"></i> Tabla General
+                            </h3>
                             <span
                                 class="text-xs text-slate-400 font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700"
                                 id="leaderboard-count">0 Participantes</span>
@@ -704,7 +709,8 @@
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
                             <h3
                                 class="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-user-check"></i> Aprobar Pagos</h3>
+                                <i class="fa-solid fa-user-check"></i> Aprobar Pagos
+                            </h3>
                         </div>
                         <div class="p-0 overflow-x-auto">
                             <table class="w-full text-left text-sm text-slate-300">
@@ -726,7 +732,8 @@
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
                             <h3
                                 class="text-sm font-black text-blue-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-calendar-plus"></i> Nuevo Partido Oficial</h3>
+                                <i class="fa-solid fa-calendar-plus"></i> Nuevo Partido Oficial
+                            </h3>
                         </div>
                         <div class="p-6">
                             <form id="admin-create-match-form" class="space-y-5">
@@ -777,7 +784,8 @@
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center">
                             <h3
                                 class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales</h3>
+                                <i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales
+                            </h3>
                         </div>
                         <div class="p-6">
                             <form id="admin-results-form">
@@ -1035,6 +1043,23 @@
 
             document.getElementById('main-loader').classList.add('opacity-0');
             setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+            // Asegúrate de que esta lógica se ejecute después de obtener los pronósticos del usuario
+            function updateStats(userPronosticos) {
+                let aciertos4 = 0;
+                let aciertos2 = 0;
+                let fallos = 0;
+
+                userPronosticos.forEach(p => {
+                    if (p.puntos === 4) aciertos4++;
+                    else if (p.puntos === 2) aciertos2++;
+                    else fallos++;
+                });
+
+                // Actualizar el DOM con los IDs que creamos en el HTML
+                document.getElementById('stats-4').innerText = aciertos4;
+                document.getElementById('stats-2').innerText = aciertos2;
+                document.getElementById('stats-0').innerText = fallos;
+            }
         });
 
         // STYLISH LOGOUT MODAL MANAGEMENT
