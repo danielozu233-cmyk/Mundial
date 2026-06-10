@@ -505,7 +505,7 @@
                                 <p class="text-[9px] uppercase tracking-widest text-red-600 font-bold">Fallos</p>
                             </div>
                         </div>
-                        <div class="pt-6 border-t border-slate-700/50">
+                        <div class="pt-6 border-t border-slate-700/50 mt-6">
                             <p class="text-sm text-slate-400 mb-4"><i class="fa-solid fa-circle-info mr-1"></i> Haz clic
                                 en la foto para cambiarla. Se actualizará automáticamente en tu perfil.</p>
                             <div id="upload-progress-container"
@@ -521,6 +521,23 @@
                     <div class="glass-card p-8 rounded-3xl border border-slate-700/50">
                         <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i
                                 class="fa-solid fa-scroll text-yellow-500"></i> Reglamento Oficial</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700">
+                                <h4 class="text-emerald-400 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-coins"></i> Inscripción</h4>
+                                <p class="text-white text-3xl font-black">Q50.00 <span class="text-sm text-slate-400 font-medium">(Pago Único)</span></p>
+                            </div>
+                            
+                            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700">
+                                <h4 class="text-yellow-500 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Estructura de Premios</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center justify-between text-sm"><span class="text-yellow-400 font-bold"><i class="fa-solid fa-medal mr-1"></i> 1er Lugar</span> <span class="text-white font-black">Q1,000.00</span></li>
+                                    <li class="flex items-center justify-between text-sm"><span class="text-slate-300 font-bold"><i class="fa-solid fa-medal mr-1"></i> 2do Lugar</span> <span class="text-white font-black">Balón Oficial</span></li>
+                                    <li class="flex items-center justify-between text-sm"><span class="text-amber-600 font-bold"><i class="fa-solid fa-medal mr-1"></i> 3er Lugar</span> <span class="text-white font-black">Q200.00</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="space-y-4 text-slate-300 text-sm md:text-base font-medium leading-relaxed">
                             <p class="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                                 <i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> <strong>Regla de
@@ -544,44 +561,61 @@
                                         class="bg-slate-700 text-slate-300 font-black px-2 py-1 rounded text-xs">0
                                         PTS</span> Fallar completamente el resultado.</li>
                             </ul>
-                            <div class="mb-8">
-                                <h3
-                                    class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
-                                    <i class="fas fa-gavel mr-2"></i> ¿Empate en la cima?
+                            
+                            <div class="my-8 p-5 bg-slate-900/40 rounded-xl border border-slate-700">
+                                <h3 class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
+                                    <i class="fas fa-gavel mr-2"></i> Criterio de Desempate
                                 </h3>
                                 <p class="text-slate-300 text-sm leading-relaxed">
-                                    Si dos o más participantes terminan con la misma cantidad de puntos totales, el
-                                    criterio de desempate será el siguiente:
-                                    <span class="text-white font-bold">Gana quien tenga más partidos acertados con
-                                        puntuación perfecta (4 puntos).</span>
+                                    Si dos o más participantes terminan con la misma cantidad de puntos totales, el criterio de desempate será el siguiente: 
+                                    <span class="text-white font-bold block mt-1"><i class="fa-solid fa-arrow-right text-yellow-500 mr-1"></i> Gana quien tenga más partidos acertados con puntuación perfecta (4 puntos).</span>
                                 </p>
                             </div>
+                            
+                            <!-- Sección de Créditos Mejorada -->
                             <div class="mt-8 pt-6 border-t border-slate-700/50">
-                                <a href="https://whatsapp.com/channel/0029VbCOxJF5q08XX3QFRy1R" target="_blank"
-                                    class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20">
-                                    <i class="fa-brands fa-whatsapp text-2xl"></i> Únete al canal de WhatsApp
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mt-8 p-6 glass-panel rounded-2xl border border-slate-700/50">
-                            <div class="border-t border-slate-700/50 pt-6">
-                                <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">Créditos del Evento</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-blue-500">
-                                        <p class="text-blue-400 font-black text-xs uppercase">Organizador</p>
-                                        <p class="text-white font-bold text-lg">Bryan Hernandez</p>
-                                        <p class="text-slate-400 text-xs italic">"Liderazgo estratégico y gestión
-                                            operativa. Encargado de garantizar la integridad de la competencia y la
-                                            excelencia en cada fase del torneo."</p>
+                                <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 text-center">Gestión y Desarrollo</h3>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Organizador -->
+                                    <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-colors">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                                                <i class="fas fa-user-shield"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-tighter">Organizador Principal</p>
+                                                <p class="text-white font-bold text-sm">Bryan Hernandez</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
+                                            Liderazgo estratégico y gestión operativa. Encargado de garantizar la integridad de la competencia y la excelencia en cada fase del torneo.
+                                        </p>
                                     </div>
-                                    <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-emerald-500">
-                                        <p class="text-emerald-400 font-black text-xs uppercase">Desarrollador</p>
-                                        <p class="text-white font-bold text-lg">Daniel Galvez</p>
-                                        <p class="text-slate-400 text-xs italic">"Arquitectura de sistemas y desarrollo
-                                            de software. Responsable de la robustez, seguridad y fluidez de la
-                                            plataforma, optimizando cada interacción para el usuario final"</p>
+
+                                    <!-- Desarrollador -->
+                                    <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-colors">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                                                <i class="fas fa-code"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-emerald-400 font-black text-[10px] uppercase tracking-tighter">Desarrollo Web</p>
+                                                <p class="text-white font-bold text-sm">Daniel Galvez</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
+                                            Arquitectura de sistemas y desarrollo de software. Responsable de la robustez, seguridad y fluidez de la plataforma, optimizando cada interacción.
+                                        </p>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-slate-700/50">
+                                <a href="https://whatsapp.com/channel/0029VbCOxJF5q08XX3QFRy1R" target="_blank"
+                                    class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20 w-full sm:w-auto">
+                                    <i class="fa-brands fa-whatsapp text-2xl"></i> Únete al canal de WhatsApp
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -597,7 +631,7 @@
                                 antes de iniciar.</p>
                         </div>
                         <select id="fase-selector"
-                            class="bg-slate-900 border-2 border-slate-700 text-white font-bold text-sm rounded-xl focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:w-auto p-3 outline-none transition-colors cursor-pointer hover:border-slate-600">
+                            class="bg-slate-900 border-2 border-slate-700 text-white font-bold text-sm rounded-xl focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:w-auto p-3 outline-none transition-colors cursor-pointer hover:border-slate-600 shadow-inner">
                             <option value="Todas">Cargando fases...</option>
                         </select>
                     </div>
@@ -617,7 +651,6 @@
                 </section>
 
                 <section id="leaderboard-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
-                    <!-- NEW LUXURY PREMIUM PODIUM LAYOUT -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4" id="podium-container">
                         <!-- 2ND PLACE -->
                         <div
@@ -792,11 +825,14 @@
                     </div>
 
                     <div class="glass-card rounded-2xl border border-rose-500/30 overflow-hidden shadow-lg">
-                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center">
+                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-4">
                             <h3
                                 class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2">
                                 <i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales
                             </h3>
+                            <select id="admin-fase-selector" class="bg-slate-950 border border-slate-700 text-white font-bold text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 p-2 outline-none cursor-pointer">
+                                <option value="Todas">Todas las Fases</option>
+                            </select>
                         </div>
                         <div class="p-6">
                             <form id="admin-results-form">
@@ -867,7 +903,7 @@
             { id: "m17", fase: "Fase 1", group: "Grupo I", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "2026-06-16T13:00" },
             { id: "m18", fase: "Fase 1", group: "Grupo I", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "2026-06-16T16:00" },
             { id: "m19", fase: "Fase 1", group: "Grupo J", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "2026-06-16T19:00" },
-            { id: "m20", font: "Fase 1", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
+            { id: "m20", fase: "Fase 1", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
             { id: "m21", fase: "Fase 1", group: "Grupo K", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "2026-06-17T11:00" },
             { id: "m22", fase: "Fase 1", group: "Grupo L", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "2026-06-17T14:00" },
             { id: "m23", fase: "Fase 1", group: "Grupo L", teamHome: "Ghana", flagHome: "gh", teamAway: "Panamá", flagAway: "pa", time: "2026-06-17T17:00" },
@@ -957,19 +993,37 @@
 
         function populateFaseSelector() {
             const selector = document.getElementById('fase-selector');
-            if (!selector) return;
+            const adminSelector = document.getElementById('admin-fase-selector');
+            
             const fases = [...new Set(allMatchesData.map(m => m.fase))].filter(Boolean);
-            selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
-            fases.forEach(f => {
-                selector.innerHTML += `<option value="${f}">${f}</option>`;
-            });
-            if (fases.length > 0) selector.value = fases[0];
+            
+            if (selector) {
+                selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
+                fases.forEach(f => {
+                    selector.innerHTML += `<option value="${f}">${f}</option>`;
+                });
+                if (fases.length > 0) selector.value = fases[0];
+            }
+
+            if (adminSelector) {
+                adminSelector.innerHTML = `<option value="Todas">Todas las Fases</option>`;
+                fases.forEach(f => {
+                    adminSelector.innerHTML += `<option value="${f}">${f}</option>`;
+                });
+                if (fases.length > 0) adminSelector.value = fases[0];
+            }
         }
 
         const faseSelectorEl = document.getElementById('fase-selector');
         if (faseSelectorEl) {
             faseSelectorEl.addEventListener('change', () => { renderMatchesPredictionGrid(); });
         }
+
+        const adminFaseSelectorEl = document.getElementById('admin-fase-selector');
+        if (adminFaseSelectorEl) {
+            adminFaseSelectorEl.addEventListener('change', () => { renderAdminMatchesGrid(); });
+        }
+
 
         function initAdminSelects() {
             const homeSelect = document.getElementById('new-match-home');
@@ -997,6 +1051,29 @@
 
             document.getElementById('user-aside-points').innerText = userDataModel.totalPoints;
             document.getElementById('profile-points').innerText = userDataModel.totalPoints;
+            
+            updateStats(userPredictions);
+        }
+        
+        function updateStats(userPronosticos) {
+            let aciertos4 = 0;
+            let aciertos2 = 0;
+            let fallos = 0;
+
+            allMatchesData.forEach(m => {
+                const p = userPronosticos[m.id];
+                const r = globalResults[m.id];
+                if (p && r && r.home !== null && r.away !== null && r.home !== "" && r.away !== "") {
+                     const pts = calcSingleMatchPoints(p.home, p.away, r.home, r.away);
+                     if (pts === 4) aciertos4++;
+                     else if (pts === 2) aciertos2++;
+                     else if (pts === 0) fallos++;
+                }
+            });
+
+            document.getElementById('stats-4').innerText = aciertos4;
+            document.getElementById('stats-2').innerText = aciertos2;
+            document.getElementById('stats-0').innerText = fallos;
         }
 
         onAuthStateChanged(auth, async (user) => {
@@ -1024,6 +1101,10 @@
                         waBtn.onclick = () => window.open(`https://wa.me/${WHATSAPP_ADMIN}?text=Hola,%20ya%20me%20registré%20en%20la%20quiniela%20con%20el%20correo%20${user.email}%20y%20quiero%20realizar%20el%20pago%20de%20mi%20inscripción.`, '_blank');
                         document.getElementById('verification-container').classList.remove('hidden');
                     } else {
+                        await fetchGlobalResults();
+                        await fetchUserPredictions();
+                        await fetchMatches();
+
                         updateProfileUI();
 
                         if (isAdmin) {
@@ -1034,14 +1115,10 @@
                                 lHeader.innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
                             }
                             initAdminSelects();
+                            renderAdminMatchesGrid();
                         }
 
-                        await fetchGlobalResults();
-                        await fetchUserPredictions();
-                        await fetchMatches();
-
                         renderMatchesPredictionGrid();
-                        if (isAdmin) renderAdminMatchesGrid();
 
                         document.getElementById('app-wrapper').classList.remove('hidden');
                         switchTab('quiniela-tab');
@@ -1054,26 +1131,8 @@
 
             document.getElementById('main-loader').classList.add('opacity-0');
             setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
-            // Asegúrate de que esta lógica se ejecute después de obtener los pronósticos del usuario
-            function updateStats(userPronosticos) {
-                let aciertos4 = 0;
-                let aciertos2 = 0;
-                let fallos = 0;
-
-                userPronosticos.forEach(p => {
-                    if (p.puntos === 4) aciertos4++;
-                    else if (p.puntos === 2) aciertos2++;
-                    else fallos++;
-                });
-
-                // Actualizar el DOM con los IDs que creamos en el HTML
-                document.getElementById('stats-4').innerText = aciertos4;
-                document.getElementById('stats-2').innerText = aciertos2;
-                document.getElementById('stats-0').innerText = fallos;
-            }
         });
 
-        // STYLISH LOGOUT MODAL MANAGEMENT
         const logoutConfirmModal = document.getElementById('logout-confirm-modal');
 
         function triggerLogoutConfirmation() {
@@ -1095,7 +1154,6 @@
             signOut(auth);
         });
 
-        // HOW IT WORKS MODAL MANAGEMENT
         const howModal = document.getElementById('how-it-works-modal');
         document.getElementById('how-it-works-btn').addEventListener('click', () => {
             if (howModal) howModal.classList.remove('hidden');
@@ -1309,6 +1367,9 @@
                 const myPts = calculateTotalUserScore(userPredictions, globalResults);
                 await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPts });
                 document.getElementById('user-aside-points').innerText = myPts;
+                
+                updateStats(userPredictions);
+                
                 renderMatchesPredictionGrid();
             } catch (err) { showToast(err.message, 'error'); }
             finally {
@@ -1381,7 +1442,16 @@
             const container = document.getElementById('admin-matches-container');
             if (!container) return;
             container.innerHTML = '';
-            allMatchesData.forEach(match => {
+            
+            const selectedAdminFase = document.getElementById('admin-fase-selector')?.value || "Todas";
+            const filteredAdminMatches = selectedAdminFase === "Todas" ? allMatchesData : allMatchesData.filter(m => m.fase === selectedAdminFase);
+
+            if (filteredAdminMatches.length === 0) {
+                 container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-6 text-sm font-bold">No hay partidos en esta fase.</p>`;
+                 return;
+            }
+
+            filteredAdminMatches.forEach(match => {
                 const r = globalResults[match.id] || { home: '', away: '' };
                 container.innerHTML += `
                     <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 hover:border-rose-500/50 transition-colors">
@@ -1410,7 +1480,11 @@
                 const nGR = {};
                 allMatchesData.forEach(m => {
                     const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
-                    nGR[m.id] = { home: (h !== "") ? parseInt(h) : null, away: (a !== "") ? parseInt(a) : null };
+                    if(h !== null && a !== null) {
+                         nGR[m.id] = { home: (h !== "") ? parseInt(h) : null, away: (a !== "") ? parseInt(a) : null };
+                    } else if (globalResults[m.id]) {
+                         nGR[m.id] = globalResults[m.id]; 
+                    }
                 });
 
                 try {
@@ -1430,6 +1504,7 @@
                     }
                     showToast("¡Resultados Globales Actualizados!");
                     renderMatchesPredictionGrid();
+                    renderAdminMatchesGrid();
                 } catch (err) { showToast(err.message, 'error'); }
                 finally {
                     document.getElementById('main-loader').classList.add('opacity-0');
