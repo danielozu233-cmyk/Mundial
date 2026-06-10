@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quiniela Mundialista 2026</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -18,7 +20,7 @@
             min-height: 100vh;
             scroll-behavior: smooth;
         }
-        
+
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
@@ -45,14 +47,22 @@
             border-color: rgba(225, 29, 72, 0.3);
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
         }
-        
+
         .locked-overlay {
-             pointer-events: none;
+            pointer-events: none;
         }
 
-        .gold-glow { box-shadow: 0 0 25px rgba(234, 179, 8, 0.45); }
-        .silver-glow { box-shadow: 0 0 20px rgba(148, 163, 184, 0.25); }
-        .bronze-glow { box-shadow: 0 0 20px rgba(217, 119, 6, 0.25); }
+        .gold-glow {
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.45);
+        }
+
+        .silver-glow {
+            box-shadow: 0 0 20px rgba(148, 163, 184, 0.25);
+        }
+
+        .bronze-glow {
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.25);
+        }
 
         .active-tab {
             background: linear-gradient(90deg, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.0) 100%);
@@ -67,13 +77,18 @@
                 border-left: none;
                 border-top: 4px solid #eab308;
             }
+
             .nav-text {
                 display: none;
             }
-            .nav-btn:active .nav-text, .nav-btn:focus .nav-text, .active-tab .nav-text {
+
+            .nav-btn:active .nav-text,
+            .nav-btn:focus .nav-text,
+            .active-tab .nav-text {
                 display: inline-block;
                 margin-left: 0.5rem;
             }
+
             .nav-btn {
                 padding-left: 1rem;
                 padding-right: 1rem;
@@ -81,21 +96,36 @@
             }
         }
 
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(10, 15, 30, 0.8); }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ca8a04, #eab308); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #facc15; }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 15, 30, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ca8a04, #eab308);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #facc15;
+        }
 
         .podium-1-premium {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
             border: 2px solid #f59e0b;
             box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
+
         .podium-2-premium {
             background: linear-gradient(135deg, rgba(148, 163, 184, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
             border: 2px solid #94a3b8;
             box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
+
         .podium-3-premium {
             background: linear-gradient(135deg, rgba(180, 83, 9, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
             border: 2px solid #b45309;
@@ -103,9 +133,17 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .animate-fade-in-up {
             animation: fadeInUp 0.5s ease-out forwards;
         }
@@ -116,16 +154,16 @@
             border-color: rgba(225, 29, 72, 0.4);
             cursor: not-allowed;
         }
-        
+
         .profile-img-container {
             position: relative;
             cursor: pointer;
         }
-        
+
         .profile-img-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -133,67 +171,94 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        
+
         .profile-img-container:hover .profile-img-overlay {
             opacity: 1;
         }
     </style>
 </head>
+
 <body class="overflow-x-hidden">
 
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-72 max-w-[90vw]"></div>
 
-    <div id="main-loader" class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div id="main-loader"
+        class="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative w-24 h-24 mb-4">
             <div class="absolute inset-0 border-t-4 border-b-4 border-yellow-500 rounded-full animate-spin"></div>
-            <div class="absolute inset-2 border-l-4 border-r-4 border-white/30 rounded-full animate-spin direction-reverse" style="animation-direction: reverse;"></div>
-            <i class="fa-solid fa-futbol absolute inset-0 flex items-center justify-center text-3xl text-yellow-500 animate-pulse"></i>
+            <div class="absolute inset-2 border-l-4 border-r-4 border-white/30 rounded-full animate-spin direction-reverse"
+                style="animation-direction: reverse;"></div>
+            <i
+                class="fa-solid fa-futbol absolute inset-0 flex items-center justify-center text-3xl text-yellow-500 animate-pulse"></i>
         </div>
         <p class="text-yellow-500 font-black tracking-widest text-lg animate-pulse uppercase">Cargando Quiniela...</p>
     </div>
 
     <!-- MODAL LOGOUT CONFIRMATION -->
-    <div id="logout-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm p-6 rounded-2xl border border-slate-700/60 shadow-2xl text-center space-y-5 animate-fade-in-up">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/10 text-rose-500 text-2xl">
+    <div id="logout-confirm-modal"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="glass-panel w-full max-w-sm p-6 rounded-2xl border border-slate-700/60 shadow-2xl text-center space-y-5 animate-fade-in-up">
+            <div
+                class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/10 text-rose-500 text-2xl">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </div>
             <div>
                 <h3 class="text-lg font-black text-white">¿Cerrar Sesión?</h3>
-                <p class="text-xs font-semibold text-slate-400 mt-1">¿Estás seguro de que deseas salir de la plataforma?</p>
+                <p class="text-xs font-semibold text-slate-400 mt-1">¿Estás seguro de que deseas salir de la plataforma?
+                </p>
             </div>
             <div class="grid grid-cols-2 gap-3 pt-2">
-                <button id="confirm-logout-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-lg shadow-rose-600/20 uppercase tracking-wider">Sí, salir</button>
-                <button id="cancel-logout-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-black py-3 px-4 rounded-xl text-xs transition-all border border-slate-700 uppercase tracking-wider">Cancelar</button>
+                <button id="confirm-logout-btn"
+                    class="bg-rose-600 hover:bg-rose-500 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-lg shadow-rose-600/20 uppercase tracking-wider">Sí,
+                    salir</button>
+                <button id="cancel-logout-btn"
+                    class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-black py-3 px-4 rounded-xl text-xs transition-all border border-slate-700 uppercase tracking-wider">Cancelar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL COMO FUNCIONA -->
-    <div id="how-it-works-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 rounded-2xl border border-slate-700/60 shadow-2xl space-y-4 animate-fade-in-up">
+    <div id="how-it-works-modal"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="glass-panel w-full max-w-md p-6 rounded-2xl border border-slate-700/60 shadow-2xl space-y-4 animate-fade-in-up">
             <div class="flex items-center justify-between border-b border-slate-700/50 pb-3">
-                <h3 class="text-base font-black text-yellow-500 flex items-center gap-2 uppercase tracking-wider"><i class="fa-solid fa-circle-info"></i> ¿Cómo funciona?</h3>
-                <button id="close-how-modal" class="text-slate-400 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="text-base font-black text-yellow-500 flex items-center gap-2 uppercase tracking-wider"><i
+                        class="fa-solid fa-circle-info"></i> ¿Cómo funciona?</h3>
+                <button id="close-how-modal" class="text-slate-400 hover:text-white transition-colors"><i
+                        class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-4 text-xs font-medium text-slate-300 leading-relaxed max-h-[70vh] overflow-y-auto pr-1">
-                <p>La dinámica consiste en registrar sus pronósticos para cada partido del torneo. El sistema asigna puntos automáticamente según la precisión de sus resultados (marcador exacto o tendencia acertada).</p>
-                
+                <p>La dinámica consiste en registrar sus pronósticos para cada partido del torneo. El sistema asigna
+                    puntos automáticamente según la precisión de sus resultados (marcador exacto o tendencia acertada).
+                </p>
+
                 <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-1">
-                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Detalles de la participación:</span>
-                    <span class="text-white font-black text-sm block">Inscripción: <span class="text-emerald-400">Q50.00</span> (pago único)</span>
+                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Detalles de la
+                        participación:</span>
+                    <span class="text-white font-black text-sm block">Inscripción: <span
+                            class="text-emerald-400">Q50.00</span> (pago único)</span>
                 </div>
 
                 <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-2">
-                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Estructura de Premios:</span>
+                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Estructura de
+                        Premios:</span>
                     <div class="space-y-1.5 font-bold">
-                        <div class="flex items-center justify-between"><span class="text-yellow-400"><i class="fa-solid fa-trophy mr-1.5"></i> 1er Lugar:</span> <span class="text-white">Q1,000.00</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-300"><i class="fa-solid fa-medal mr-1.5"></i> 2do Lugar:</span> <span class="text-white">Balón oficial del mundial</span></div>
-                        <div class="flex items-center justify-between"><span class="text-amber-600"><i class="fa-solid fa-award mr-1.5"></i> 3er Lugar:</span> <span class="text-white">Q200.00</span></div>
+                        <div class="flex items-center justify-between"><span class="text-yellow-400"><i
+                                    class="fa-solid fa-trophy mr-1.5"></i> 1er Lugar:</span> <span
+                                class="text-white">Q1,000.00</span></div>
+                        <div class="flex items-center justify-between"><span class="text-slate-300"><i
+                                    class="fa-solid fa-medal mr-1.5"></i> 2do Lugar:</span> <span
+                                class="text-white">Balón oficial del mundial</span></div>
+                        <div class="flex items-center justify-between"><span class="text-amber-600"><i
+                                    class="fa-solid fa-award mr-1.5"></i> 3er Lugar:</span> <span
+                                class="text-white">Q200.00</span></div>
                     </div>
                 </div>
             </div>
-            <button id="close-how-modal-btn" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">Entendido</button>
+            <button id="close-how-modal-btn"
+                class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">Entendido</button>
         </div>
     </div>
 
@@ -201,20 +266,24 @@
         <div class="glass-panel w-full max-w-md p-10 rounded-3xl shadow-2xl text-center relative overflow-hidden group">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-yellow-500/10 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
-            
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-600 to-yellow-400 text-slate-900 mb-6 gold-glow transform transition-transform group-hover:scale-110">
+
+            <div
+                class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-600 to-yellow-400 text-slate-900 mb-6 gold-glow transform transition-transform group-hover:scale-110">
                 <i class="fa-solid fa-trophy text-5xl"></i>
             </div>
             <h1 class="text-3xl font-black text-white tracking-tight mb-1">QUINIELA MUNDIALISTA</h1>
             <p class="text-yellow-500 font-extrabold tracking-[0.2em] text-sm uppercase mb-8">Edición 2026</p>
-            
+
             <div class="space-y-3">
-                <button id="google-signin-btn" class="relative overflow-hidden w-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold py-4 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-base shadow-[0_10px_20px_-10px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 relative z-10">
+                <button id="google-signin-btn"
+                    class="relative overflow-hidden w-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold py-4 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-base shadow-[0_10px_20px_-10px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                        class="w-6 h-6 relative z-10">
                     <span class="relative z-10">Ingresar con Google</span>
                 </button>
-                
-                <button id="how-it-works-btn" type="button" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-300 font-bold py-3 px-4 rounded-xl transition-all border border-slate-700/50 text-sm flex items-center justify-center gap-2">
+
+                <button id="how-it-works-btn" type="button"
+                    class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-300 font-bold py-3 px-4 rounded-xl transition-all border border-slate-700/50 text-sm flex items-center justify-center gap-2">
                     <i class="fa-solid fa-circle-info text-yellow-500"></i> ¿Cómo funciona la quiniela?
                 </button>
             </div>
@@ -225,7 +294,8 @@
     <div id="complete-registration-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl">
             <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mb-4">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 mb-4">
                     <i class="fa-solid fa-user-plus text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-black text-white">Último Paso</h2>
@@ -233,16 +303,21 @@
             </div>
             <form id="complete-reg-form" class="space-y-5">
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Teléfono (WhatsApp)</label>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Teléfono
+                        (WhatsApp)</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-emerald-500"><i class="fa-brands fa-whatsapp text-lg"></i></span>
-                        <input type="tel" id="reg-phone" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-base text-white font-bold focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all" placeholder="Ej. 55554444">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-emerald-500"><i
+                                class="fa-brands fa-whatsapp text-lg"></i></span>
+                        <input type="tel" id="reg-phone" required
+                            class="w-full bg-slate-900/80 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-base text-white font-bold focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                            placeholder="Ej. 55554444">
                     </div>
                 </div>
                 <br>
                 <br>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 text-base tracking-wide mt-2 flex justify-center items-center gap-2">
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-emerald-500/30 hover:-translate-y-1 text-base tracking-wide mt-2 flex justify-center items-center gap-2">
                     Comenzar <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
@@ -250,73 +325,105 @@
     </div>
 
     <div id="verification-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
-            <i class="fa-solid fa-user-clock text-6xl text-yellow-500 mb-6 mt-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse"></i>
+        <div
+            class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600">
+            </div>
+            <i
+                class="fa-solid fa-user-clock text-6xl text-yellow-500 mb-6 mt-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse"></i>
             <h2 class="text-2xl font-black text-white mb-4">Cuenta Pendiente</h2>
             <p class="text-sm text-slate-300 leading-relaxed mb-8">
-                Para activar tu acceso a los pronósticos, debes realizar el pago de inscripción de <span class="text-yellow-400 font-black text-lg bg-yellow-400/10 px-2 py-1 rounded">Q50.00</span>.
+                Para activar tu acceso a los pronósticos, debes realizar el pago de inscripción de <span
+                    class="text-yellow-400 font-black text-lg bg-yellow-400/10 px-2 py-1 rounded">Q50.00</span>.
             </p>
-            <button id="btn-whatsapp-pago" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-[#25D366]/40 hover:-translate-y-1 text-base tracking-wide flex items-center justify-center gap-2 mb-6">
+            <button id="btn-whatsapp-pago"
+                class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-[#25D366]/40 hover:-translate-y-1 text-base tracking-wide flex items-center justify-center gap-2 mb-6">
                 <i class="fa-brands fa-whatsapp text-2xl"></i> Notificar Pago
             </button>
-            <button id="logout-pending-btn" class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider"><i class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión</button>
+            <button id="logout-pending-btn"
+                class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider"><i
+                    class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión</button>
         </div>
     </div>
 
     <div id="app-wrapper" class="hidden min-h-screen flex flex-col md:flex-row">
-        
-        <aside class="w-full md:w-64 lg:w-72 glass-panel border-r border-slate-700/50 flex flex-col z-40 relative flex-shrink-0 shadow-2xl">
+
+        <aside
+            class="w-full md:w-64 lg:w-72 glass-panel border-r border-slate-700/50 flex flex-col z-40 relative flex-shrink-0 shadow-2xl">
             <!-- UPDATED COMPACT ROW TOP PROFILE BLOCK -->
-            <div class="p-4 border-b border-slate-700/50 flex flex-row items-center justify-between gap-3 bg-slate-900/40 relative overflow-hidden w-full">
+            <div
+                class="p-4 border-b border-slate-700/50 flex flex-row items-center justify-between gap-3 bg-slate-900/40 relative overflow-hidden w-full">
                 <div class="absolute -top-10 -right-10 w-24 h-24 bg-yellow-500/5 rounded-full blur-xl"></div>
-                
+
                 <div class="flex flex-row items-center gap-2.5 min-w-0 flex-1">
-                    <div class="profile-img-container w-11 h-11 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-base shadow-md border-2 border-slate-800 flex-shrink-0 overflow-hidden" onclick="document.getElementById('file-upload').click()">
-                        <div id="user-avatar" class="w-full h-full flex items-center justify-center bg-slate-800 text-white font-bold text-sm">U</div>
+                    <div class="profile-img-container w-11 h-11 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-base shadow-md border-2 border-slate-800 flex-shrink-0 overflow-hidden"
+                        onclick="document.getElementById('file-upload').click()">
+                        <div id="user-avatar"
+                            class="w-full h-full flex items-center justify-center bg-slate-800 text-white font-bold text-sm">
+                            U</div>
                         <div class="profile-img-overlay">
                             <i class="fa-solid fa-camera text-white text-xs"></i>
                         </div>
                     </div>
                     <input type="file" id="file-upload" accept="image/*" class="hidden">
-                    
+
                     <div class="flex flex-col min-w-0 flex-1">
-                        <h3 class="font-black text-white text-xs sm:text-sm tracking-wide truncate" id="user-display-name">Usuario</h3>
-                        <p class="text-[10px] font-medium text-slate-400 truncate" id="user-display-email">correo@ejemplo.com</p>
+                        <h3 class="font-black text-white text-xs sm:text-sm tracking-wide truncate"
+                            id="user-display-name">Usuario</h3>
+                        <p class="text-[10px] font-medium text-slate-400 truncate" id="user-display-email">
+                            correo@ejemplo.com</p>
                     </div>
                 </div>
-                
-                <div class="flex-shrink-0 flex items-center gap-1 px-2 py-1.5 bg-slate-950/60 border border-yellow-500/30 rounded-xl text-yellow-500 font-black text-xs shadow-inner">
-                    <span id="user-aside-points" class="text-sm font-black text-white">0</span> 
+
+                <div
+                    class="flex-shrink-0 flex items-center gap-1 px-2 py-1.5 bg-slate-950/60 border border-yellow-500/30 rounded-xl text-yellow-500 font-black text-xs shadow-inner">
+                    <span id="user-aside-points" class="text-sm font-black text-white">0</span>
                     <span class="text-slate-500 text-[9px] font-bold">PTS</span>
                 </div>
             </div>
 
             <nav class="p-3 md:p-5 flex flex-row md:flex-col overflow-x-auto gap-2 md:gap-3 hide-scrollbar">
-                <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap active-tab">
-                    <i class="fa-solid fa-futbol text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Pronósticos</span>
+                <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab"
+                    class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap active-tab">
+                    <i
+                        class="fa-solid fa-futbol text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
+                    <span class="nav-text">Pronósticos</span>
                 </button>
-                <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-ranking-star text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Ranking Oficial</span>
+                <button onclick="switchTab('leaderboard-tab')" id="btn-leaderboard-tab"
+                    class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i
+                        class="fa-solid fa-ranking-star text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
+                    <span class="nav-text">Ranking Oficial</span>
                 </button>
-                <button onclick="switchTab('about-tab')" id="btn-about-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-circle-info text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Reglas</span>
+                <button onclick="switchTab('about-tab')" id="btn-about-tab"
+                    class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i
+                        class="fa-solid fa-circle-info text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
+                    <span class="nav-text">Reglas</span>
                 </button>
-                <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="nav-btn hidden flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all group border border-rose-500/20 whitespace-nowrap bg-rose-500/5">
-                    <i class="fa-solid fa-shield-halved text-lg text-rose-400"></i> <span class="nav-text">Panel Admin</span>
+                <button onclick="switchTab('admin-tab')" id="btn-admin-tab"
+                    class="nav-btn hidden flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all group border border-rose-500/20 whitespace-nowrap bg-rose-500/5">
+                    <i class="fa-solid fa-shield-halved text-lg text-rose-400"></i> <span class="nav-text">Panel
+                        Admin</span>
                 </button>
                 <!-- PROFILE TAB MOVED ALMOST LAST -->
-                <button onclick="switchTab('profile-tab')" id="btn-profile-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-user text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Mi Perfil</span>
+                <button onclick="switchTab('profile-tab')" id="btn-profile-tab"
+                    class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i
+                        class="fa-solid fa-user text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
+                    <span class="nav-text">Mi Perfil</span>
                 </button>
-                
-                <button id="mobile-logout-btn" class="nav-btn md:hidden flex-shrink-0 flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
+
+                <button id="mobile-logout-btn"
+                    class="nav-btn md:hidden flex-shrink-0 flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
                     <i class="fa-solid fa-power-off"></i> <span class="nav-text">Salir</span>
                 </button>
             </nav>
 
             <div class="mt-auto hidden md:block p-5 border-t border-slate-700/50 bg-slate-900/50">
-                <button id="logout-btn" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold bg-slate-800/80 hover:bg-rose-500 hover:text-white text-slate-300 border border-slate-700/50 transition-all group">
+                <button id="logout-btn"
+                    class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold bg-slate-800/80 hover:bg-rose-500 hover:text-white text-slate-300 border border-slate-700/50 transition-all group">
                     <i class="fa-solid fa-power-off group-hover:animate-pulse"></i> Cerrar Sesión
                 </button>
             </div>
@@ -325,53 +432,71 @@
         <main class="flex-1 flex flex-col overflow-y-auto w-full relative">
             <header class="glass-panel px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
                 <div>
-                    <h2 class="text-xl font-black text-white tracking-wider uppercase" id="page-title">Mis Pronósticos</h2>
+                    <h2 class="text-xl font-black text-white tracking-wider uppercase" id="page-title">Mis Pronósticos
+                    </h2>
                     <p class="text-xs font-bold text-yellow-500 tracking-widest uppercase mt-1">Mundial 2026</p>
                 </div>
-                
+
                 <div class="hidden sm:flex items-center gap-4 text-xs font-black">
-                    <div class="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/30 rounded-lg shadow-sm">
+                    <div
+                        class="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/30 rounded-lg shadow-sm">
                         <span class="text-yellow-400 text-lg">🥇</span> <span class="text-white">Q1,000.00</span>
                     </div>
-                    <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-400/10 border border-slate-400/30 rounded-lg shadow-sm">
+                    <div
+                        class="flex items-center gap-2 px-3 py-1.5 bg-slate-400/10 border border-slate-400/30 rounded-lg shadow-sm">
                         <span class="text-slate-300 text-lg">🥈</span> <span class="text-white">Balón Oficial</span>
                     </div>
-                    <div class="flex items-center gap-2 px-3 py-1.5 bg-amber-700/10 border border-amber-700/30 rounded-lg shadow-sm">
+                    <div
+                        class="flex items-center gap-2 px-3 py-1.5 bg-amber-700/10 border border-amber-700/30 rounded-lg shadow-sm">
                         <span class="text-amber-600 text-lg">🥉</span> <span class="text-white">Q200.00</span>
                     </div>
                 </div>
             </header>
 
             <div class="p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8 pb-24">
-            
+
                 <section id="profile-tab" class="tab-content hidden space-y-6 animate-fade-in-up">
                     <div class="glass-card p-8 rounded-3xl border border-slate-700/50 max-w-2xl mx-auto">
-                        <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i class="fa-solid fa-user-gear text-yellow-500"></i> Mi Perfil</h3>
-                        
+                        <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i
+                                class="fa-solid fa-user-gear text-yellow-500"></i> Mi Perfil</h3>
+
                         <div class="flex flex-col md:flex-row items-center gap-8 mb-8">
-                            <div class="profile-img-container w-32 h-32 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-5xl shadow-xl border-4 border-slate-800 gold-glow transform transition hover:scale-105 overflow-hidden" onclick="document.getElementById('profile-file-upload').click()">
-                                <div id="profile-large-avatar" class="w-full h-full flex items-center justify-center bg-slate-800 text-white">U</div>
+                            <div class="profile-img-container w-32 h-32 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-5xl shadow-xl border-4 border-slate-800 gold-glow transform transition hover:scale-105 overflow-hidden"
+                                onclick="document.getElementById('profile-file-upload').click()">
+                                <div id="profile-large-avatar"
+                                    class="w-full h-full flex items-center justify-center bg-slate-800 text-white">U
+                                </div>
                                 <div class="profile-img-overlay">
                                     <i class="fa-solid fa-camera text-white text-3xl"></i>
                                 </div>
                             </div>
                             <input type="file" id="profile-file-upload" accept="image/*" class="hidden">
-                            
+
                             <div class="text-center md:text-left space-y-2">
                                 <h4 class="text-2xl font-black text-white" id="profile-name">Usuario</h4>
-                                <p class="text-slate-400 font-medium flex items-center justify-center md:justify-start gap-2"><i class="fa-solid fa-envelope"></i> <span id="profile-email">correo@ejemplo.com</span></p>
-                                <p class="text-emerald-400 font-medium flex items-center justify-center md:justify-start gap-2"><i class="fa-brands fa-whatsapp"></i> <span id="profile-phone">55554444</span></p>
-                                
-                                <div class="inline-block mt-4 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-500 font-extrabold tracking-wider shadow-inner">
-                                    <i class="fa-solid fa-star text-yellow-400"></i> Puntos Totales: <span id="profile-points" class="text-xl text-white">0</span>
+                                <p
+                                    class="text-slate-400 font-medium flex items-center justify-center md:justify-start gap-2">
+                                    <i class="fa-solid fa-envelope"></i> <span
+                                        id="profile-email">correo@ejemplo.com</span></p>
+                                <p
+                                    class="text-emerald-400 font-medium flex items-center justify-center md:justify-start gap-2">
+                                    <i class="fa-brands fa-whatsapp"></i> <span id="profile-phone">55554444</span></p>
+
+                                <div
+                                    class="inline-block mt-4 px-4 py-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-500 font-extrabold tracking-wider shadow-inner">
+                                    <i class="fa-solid fa-star text-yellow-400"></i> Puntos Totales: <span
+                                        id="profile-points" class="text-xl text-white">0</span>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="pt-6 border-t border-slate-700/50">
-                            <p class="text-sm text-slate-400 mb-4"><i class="fa-solid fa-circle-info mr-1"></i> Haz clic en la foto para cambiarla. Se actualizará automáticamente en tu perfil.</p>
-                            <div id="upload-progress-container" class="hidden w-full bg-slate-800 rounded-full h-2.5 mb-4">
-                              <div id="upload-progress-bar" class="bg-yellow-500 h-2.5 rounded-full" style="width: 0%"></div>
+                            <p class="text-sm text-slate-400 mb-4"><i class="fa-solid fa-circle-info mr-1"></i> Haz clic
+                                en la foto para cambiarla. Se actualizará automáticamente en tu perfil.</p>
+                            <div id="upload-progress-container"
+                                class="hidden w-full bg-slate-800 rounded-full h-2.5 mb-4">
+                                <div id="upload-progress-bar" class="bg-yellow-500 h-2.5 rounded-full"
+                                    style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
@@ -379,49 +504,70 @@
 
                 <section id="about-tab" class="tab-content hidden space-y-5 animate-fade-in-up">
                     <div class="glass-card p-8 rounded-3xl border border-slate-700/50">
-                        <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i class="fa-solid fa-scroll text-yellow-500"></i> Reglamento Oficial</h3>
+                        <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i
+                                class="fa-solid fa-scroll text-yellow-500"></i> Reglamento Oficial</h3>
                         <div class="space-y-4 text-slate-300 text-sm md:text-base font-medium leading-relaxed">
                             <p class="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
-                                <i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> <strong>Regla de Oro:</strong> Tienes hasta exactamente <strong class="text-white">1 hora antes</strong> del inicio programado del partido para ingresar o modificar tu pronóstico. Pasado ese tiempo, el partido se bloquea automáticamente y ya no podrás guardar cambios para ese encuentro.
+                                <i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> <strong>Regla de
+                                    Oro:</strong> Tienes hasta exactamente <strong class="text-white">1 hora
+                                    antes</strong> del inicio programado del partido para ingresar o modificar tu
+                                pronóstico. Pasado ese tiempo, el partido se bloquea automáticamente y ya no podrás
+                                guardar cambios para ese encuentro.
                             </p>
                             <p>
                                 El sistema de puntuación está diseñado para premiar la exactitud:
                             </p>
                             <ul class="list-none space-y-3 pl-2">
-                                <li class="flex items-center gap-3"><span class="bg-yellow-500 text-slate-900 font-black px-2 py-1 rounded text-xs">4 PTS</span> Acertar el marcador exacto del partido.</li>
-                                <li class="flex items-center gap-3"><span class="bg-emerald-500 text-slate-900 font-black px-2 py-1 rounded text-xs">2 PTS</span> Acertar la tendencia (ganador o empate), pero no el marcador exacto.</li>
-                                <li class="flex items-center gap-3"><span class="bg-slate-700 text-slate-300 font-black px-2 py-1 rounded text-xs">0 PTS</span> Fallar completamente el resultado.</li>
+                                <li class="flex items-center gap-3"><span
+                                        class="bg-yellow-500 text-slate-900 font-black px-2 py-1 rounded text-xs">4
+                                        PTS</span> Acertar el marcador exacto del partido.</li>
+                                <li class="flex items-center gap-3"><span
+                                        class="bg-emerald-500 text-slate-900 font-black px-2 py-1 rounded text-xs">2
+                                        PTS</span> Acertar la tendencia (ganador o empate), pero no el marcador exacto.
+                                </li>
+                                <li class="flex items-center gap-3"><span
+                                        class="bg-slate-700 text-slate-300 font-black px-2 py-1 rounded text-xs">0
+                                        PTS</span> Fallar completamente el resultado.</li>
                             </ul>
                         </div>
                         <div class="mt-8 p-6 glass-panel rounded-2xl border border-slate-700/50">
-    <div class="mb-8">
-        <h3 class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
-            <i class="fas fa-gavel mr-2"></i> ¿Empate en la cima?
-        </h3>
-        <p class="text-slate-300 text-sm leading-relaxed">
-            Si dos o más participantes terminan con la misma cantidad de puntos totales, el criterio de desempate será el siguiente: 
-            <span class="text-white font-bold">Gana quien tenga más partidos acertados con puntuación perfecta (4 puntos).</span>
-        </p>
-    </div>
+                            <div class="mb-8">
+                                <h3
+                                    class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
+                                    <i class="fas fa-gavel mr-2"></i> ¿Empate en la cima?
+                                </h3>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    Si dos o más participantes terminan con la misma cantidad de puntos totales, el
+                                    criterio de desempate será el siguiente:
+                                    <span class="text-white font-bold">Gana quien tenga más partidos acertados con
+                                        puntuación perfecta (4 puntos).</span>
+                                </p>
+                            </div>
 
-    <div class="border-t border-slate-700/50 pt-6">
-        <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">Créditos de la Plataforma</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-blue-500">
-                <p class="text-blue-400 font-black text-xs uppercase">Organizador Maestro</p>
-                <p class="text-white font-bold text-lg">Bryan Hernandez</p>
-                <p class="text-slate-400 text-xs italic">"El cerebro detrás de la emoción y quien mantiene viva la competencia."</p>
-            </div>
-            <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-emerald-500">
-                <p class="text-emerald-400 font-black text-xs uppercase">Arquitecto Web</p>
-                <p class="text-white font-bold text-lg">Daniel Galvez</p>
-                <p class="text-slate-400 text-xs italic">"Codeando la experiencia para que cada acierto se sienta en grande."</p>
-            </div>
-        </div>
-    </div>
-</div>
+                            <div class="border-t border-slate-700/50 pt-6">
+                                <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-4">Créditos de
+                                    la Plataforma</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-blue-500">
+                                        <p class="text-blue-400 font-black text-xs uppercase">Organizador</p>
+                                        <p class="text-white font-bold text-lg">Bryan Hernandez</p>
+                                        <p class="text-slate-400 text-xs italic">"Liderazgo estratégico y gestión
+                                            operativa. Encargado de garantizar la integridad de la competencia y la
+                                            excelencia en cada fase del torneo."</p>
+                                    </div>
+                                    <div class="bg-slate-900/50 p-4 rounded-xl border-l-4 border-emerald-500">
+                                        <p class="text-emerald-400 font-black text-xs uppercase">Desarrollador</p>
+                                        <p class="text-white font-bold text-lg">Daniel Galvez</p>
+                                        <p class="text-slate-400 text-xs italic">"Arquitectura de sistemas y desarrollo
+                                            de software. Responsable de la robustez, seguridad y fluidez de la
+                                            plataforma, optimizando cada interacción para el usuario final"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mt-8 pt-6 border-t border-slate-700/50">
-                            <a href="https://whatsapp.com/channel/0029VbCOxJF5q08XX3QFRy1R" target="_blank" class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20">
+                            <a href="https://whatsapp.com/channel/0029VbCOxJF5q08XX3QFRy1R" target="_blank"
+                                class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20">
                                 <i class="fa-brands fa-whatsapp text-2xl"></i> Únete al canal de WhatsApp
                             </a>
                         </div>
@@ -429,21 +575,28 @@
                 </section>
 
                 <section id="quiniela-tab" class="tab-content space-y-6 animate-fade-in-up">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-panel p-5 rounded-2xl border-l-4 border-l-yellow-500 shadow-lg">
+                    <div
+                        class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-panel p-5 rounded-2xl border-l-4 border-l-yellow-500 shadow-lg">
                         <div class="space-y-1">
-                            <h4 class="font-black text-white flex items-center gap-2 text-base"><i class="fa-solid fa-filter text-yellow-500"></i> Partidos Disponibles</h4>
-                            <p class="text-xs font-semibold text-slate-400">Recuerda: Los partidos se bloquean 1 hora antes de iniciar.</p>
+                            <h4 class="font-black text-white flex items-center gap-2 text-base"><i
+                                    class="fa-solid fa-filter text-yellow-500"></i> Partidos Disponibles</h4>
+                            <p class="text-xs font-semibold text-slate-400">Recuerda: Los partidos se bloquean 1 hora
+                                antes de iniciar.</p>
                         </div>
-                        <select id="fase-selector" class="bg-slate-900 border-2 border-slate-700 text-white font-bold text-sm rounded-xl focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:w-auto p-3 outline-none transition-colors cursor-pointer hover:border-slate-600">
+                        <select id="fase-selector"
+                            class="bg-slate-900 border-2 border-slate-700 text-white font-bold text-sm rounded-xl focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:w-auto p-3 outline-none transition-colors cursor-pointer hover:border-slate-600">
                             <option value="Todas">Cargando fases...</option>
                         </select>
                     </div>
 
                     <form id="predictions-form" class="relative">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-32" id="matches-prediction-container"></div>
-                        
-                        <div class="fixed md:sticky bottom-6 right-6 left-6 md:left-auto md:right-auto md:mt-10 flex justify-center md:justify-end z-40 pointer-events-none">
-                            <button type="submit" class="pointer-events-auto w-full md:w-auto bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 hover:from-yellow-300 hover:to-yellow-500 text-slate-900 font-black px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.8)] flex items-center justify-center gap-3 text-sm md:text-base tracking-wide border border-yellow-300/50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-32"
+                            id="matches-prediction-container"></div>
+
+                        <div
+                            class="fixed md:sticky bottom-6 right-6 left-6 md:left-auto md:right-auto md:mt-10 flex justify-center md:justify-end z-40 pointer-events-none">
+                            <button type="submit"
+                                class="pointer-events-auto w-full md:w-auto bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 hover:from-yellow-300 hover:to-yellow-500 text-slate-900 font-black px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.8)] flex items-center justify-center gap-3 text-sm md:text-base tracking-wide border border-yellow-300/50">
                                 <i class="fa-solid fa-floppy-disk text-xl"></i> GUARDAR PRONÓSTICOS
                             </button>
                         </div>
@@ -454,122 +607,167 @@
                     <!-- NEW LUXURY PREMIUM PODIUM LAYOUT -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4" id="podium-container">
                         <!-- 2ND PLACE -->
-                        <div class="glass-card podium-2-premium rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
+                        <div
+                            class="glass-card podium-2-premium rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
                             <div class="absolute -top-4 -right-4 text-slate-400/10 text-7xl font-black">2</div>
                             <div class="relative z-10 space-y-3">
-                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xl font-bold border-2 border-slate-400 silver-glow overflow-hidden" id="podium-avatar-2">
+                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xl font-bold border-2 border-slate-400 silver-glow overflow-hidden"
+                                    id="podium-avatar-2">
                                     <i class="fa-solid fa-medal"></i>
                                 </div>
                                 <h4 class="font-black text-white text-base truncate" id="podium-name-2">Cargando...</h4>
                             </div>
                             <div class="mt-5 relative z-10 space-y-2">
-                                <div class="text-3xl font-black text-slate-300 tracking-tight" id="podium-pts-2">0 <span class="text-xs font-bold text-slate-500">PTS</span></div>
-                                <div class="text-[11px] font-bold text-slate-300 px-3 py-1 bg-slate-950/60 border border-slate-700 rounded-lg inline-block shadow-inner"><i class="fa-solid fa-circle mr-1 text-slate-400 text-[8px]"></i>🥈 Balón Oficial</div>
+                                <div class="text-3xl font-black text-slate-300 tracking-tight" id="podium-pts-2">0 <span
+                                        class="text-xs font-bold text-slate-500">PTS</span></div>
+                                <div
+                                    class="text-[11px] font-bold text-slate-300 px-3 py-1 bg-slate-950/60 border border-slate-700 rounded-lg inline-block shadow-inner">
+                                    <i class="fa-solid fa-circle mr-1 text-slate-400 text-[8px]"></i>🥈 Balón Oficial
+                                </div>
                             </div>
                         </div>
 
                         <!-- 1ST PLACE SUPERIOR PLATINUM/GOLD GLOW -->
-                        <div class="glass-card podium-1-premium rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative shadow-xl z-10 overflow-hidden group">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500"></div>
+                        <div
+                            class="glass-card podium-1-premium rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative shadow-xl z-10 overflow-hidden group">
+                            <div
+                                class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500">
+                            </div>
                             <div class="absolute -top-4 -right-4 text-yellow-500/10 text-9xl font-black">1</div>
                             <div class="relative z-10 space-y-3">
-                                <div class="w-20 h-20 mx-auto rounded-full bg-slate-800 text-yellow-400 flex items-center justify-center text-3xl border-4 border-yellow-500 gold-glow overflow-hidden" id="podium-avatar-1">
+                                <div class="w-20 h-20 mx-auto rounded-full bg-slate-800 text-yellow-400 flex items-center justify-center text-3xl border-4 border-yellow-500 gold-glow overflow-hidden"
+                                    id="podium-avatar-1">
                                     <i class="fa-solid fa-crown"></i>
                                 </div>
-                                <h4 class="font-black text-white text-lg tracking-wide truncate" id="podium-name-1">Cargando...</h4>
+                                <h4 class="font-black text-white text-lg tracking-wide truncate" id="podium-name-1">
+                                    Cargando...</h4>
                             </div>
                             <div class="mt-5 relative z-10 space-y-2">
-                                <div class="text-5xl font-black text-yellow-400 drop-shadow-[0_2px_10px_rgba(234,179,8,0.3)] tracking-tight" id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
-                                <div class="text-xs font-black text-slate-950 px-4 py-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-lg inline-block uppercase tracking-widest shadow-md"><i class="fa-solid fa-crown mr-1"></i>🏆 Q1,000.00</div>
+                                <div class="text-5xl font-black text-yellow-400 drop-shadow-[0_2px_10px_rgba(234,179,8,0.3)] tracking-tight"
+                                    id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
+                                <div
+                                    class="text-xs font-black text-slate-950 px-4 py-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-lg inline-block uppercase tracking-widest shadow-md">
+                                    <i class="fa-solid fa-crown mr-1"></i>🏆 Q1,000.00</div>
                             </div>
                         </div>
 
                         <!-- 3RD PLACE -->
-                        <div class="glass-card podium-3-premium rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
+                        <div
+                            class="glass-card podium-3-premium rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
                             <div class="absolute -top-4 -right-4 text-amber-700/10 text-7xl font-black">3</div>
                             <div class="relative z-10 space-y-3">
-                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-amber-600 flex items-center justify-center text-xl font-bold border-2 border-amber-700 bronze-glow overflow-hidden" id="podium-avatar-3">
+                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-amber-600 flex items-center justify-center text-xl font-bold border-2 border-amber-700 bronze-glow overflow-hidden"
+                                    id="podium-avatar-3">
                                     <i class="fa-solid fa-award"></i>
                                 </div>
                                 <h4 class="font-black text-white text-base truncate" id="podium-name-3">Cargando...</h4>
                             </div>
                             <div class="mt-5 relative z-10 space-y-2">
-                                <div class="text-3xl font-black text-amber-500 tracking-tight" id="podium-pts-3">0 <span class="text-xs font-bold text-amber-700/50">PTS</span></div>
-                                <div class="text-[11px] font-bold text-amber-200 px-3 py-1 bg-slate-950/60 border border-amber-900/60 rounded-lg inline-block shadow-inner"><i class="fa-solid fa-circle mr-1 text-amber-600 text-[8px]"></i>🥉 Q200.00</div>
+                                <div class="text-3xl font-black text-amber-500 tracking-tight" id="podium-pts-3">0 <span
+                                        class="text-xs font-bold text-amber-700/50">PTS</span></div>
+                                <div
+                                    class="text-[11px] font-bold text-amber-200 px-3 py-1 bg-slate-950/60 border border-amber-900/60 rounded-lg inline-block shadow-inner">
+                                    <i class="fa-solid fa-circle mr-1 text-amber-600 text-[8px]"></i>🥉 Q200.00</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="glass-panel rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
-                        <div class="px-6 py-4 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
-                            <h3 class="font-black text-white text-sm uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-list-ol text-yellow-500"></i> Tabla General</h3>
-                            <span class="text-xs text-slate-400 font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700" id="leaderboard-count">0 Participantes</span>
+                        <div
+                            class="px-6 py-4 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
+                            <h3 class="font-black text-white text-sm uppercase tracking-widest flex items-center gap-2">
+                                <i class="fa-solid fa-list-ol text-yellow-500"></i> Tabla General</h3>
+                            <span
+                                class="text-xs text-slate-400 font-bold bg-slate-800 px-3 py-1 rounded-full border border-slate-700"
+                                id="leaderboard-count">0 Participantes</span>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="bg-slate-950/80 text-xs font-black text-slate-400 uppercase tracking-wider border-b border-slate-700/50">
+                                <thead
+                                    class="bg-slate-950/80 text-xs font-black text-slate-400 uppercase tracking-wider border-b border-slate-700/50">
                                     <tr id="leaderboard-header-row">
                                         <th class="px-6 py-4 text-center w-16">Pos</th>
                                         <th class="px-6 py-4">Participante</th>
                                         <th class="px-6 py-4 text-center w-24">Puntos</th>
                                     </tr>
                                 </thead>
-                                <tbody id="leaderboard-table-body" class="divide-y divide-slate-800/80 text-sm font-medium"></tbody>
+                                <tbody id="leaderboard-table-body"
+                                    class="divide-y divide-slate-800/80 text-sm font-medium"></tbody>
                             </table>
                         </div>
                     </div>
                 </section>
 
                 <section id="admin-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
-                    
+
                     <div class="glass-card rounded-2xl border border-emerald-500/30 overflow-hidden shadow-lg">
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
-                            <h3 class="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-user-check"></i> Aprobar Pagos</h3>
+                            <h3
+                                class="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-user-check"></i> Aprobar Pagos</h3>
                         </div>
                         <div class="p-0 overflow-x-auto">
                             <table class="w-full text-left text-sm text-slate-300">
-                                <thead class="text-xs font-bold text-slate-500 uppercase bg-slate-950/50 border-b border-slate-800">
+                                <thead
+                                    class="text-xs font-bold text-slate-500 uppercase bg-slate-950/50 border-b border-slate-800">
                                     <tr>
                                         <th class="px-5 py-3">Nombre / Correo</th>
                                         <th class="px-5 py-3">Teléfono</th>
                                         <th class="px-5 py-3 text-right">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody id="pending-users-tbody" class="divide-y divide-slate-800/50 text-sm font-medium"></tbody>
+                                <tbody id="pending-users-tbody"
+                                    class="divide-y divide-slate-800/50 text-sm font-medium"></tbody>
                             </table>
                         </div>
                     </div>
 
                     <div class="glass-card rounded-2xl border border-blue-500/30 overflow-hidden shadow-lg">
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
-                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-calendar-plus"></i> Nuevo Partido Oficial</h3>
+                            <h3
+                                class="text-sm font-black text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-plus"></i> Nuevo Partido Oficial</h3>
                         </div>
                         <div class="p-6">
                             <form id="admin-create-match-form" class="space-y-5">
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fase del Torneo</label>
-                                        <input type="text" id="new-match-fase" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors" placeholder="Ej. Fase de Grupos">
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fase del
+                                            Torneo</label>
+                                        <input type="text" id="new-match-fase" required
+                                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
+                                            placeholder="Ej. Fase de Grupos">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Grupo (Opcional)</label>
-                                        <input type="text" id="new-match-group" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors" placeholder="Ej. Grupo A">
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Grupo
+                                            (Opcional)</label>
+                                        <input type="text" id="new-match-group"
+                                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
+                                            placeholder="Ej. Grupo A">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fecha y Hora (-1Hr)</label>
-                                        <input type="datetime-local" id="new-match-time" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
+                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Fecha y
+                                            Hora (-1Hr)</label>
+                                        <input type="datetime-local" id="new-match-time" required
+                                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
                                     </div>
                                     <div class="md:col-span-1 lg:col-span-1">
-                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Local</label>
-                                        <select id="new-match-home" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
+                                        <label
+                                            class="block text-xs font-bold text-slate-400 uppercase mb-2">Local</label>
+                                        <select id="new-match-home" required
+                                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
                                     </div>
                                     <div class="md:col-span-1 lg:col-span-1">
-                                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Visitante</label>
-                                        <select id="new-match-away" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
+                                        <label
+                                            class="block text-xs font-bold text-slate-400 uppercase mb-2">Visitante</label>
+                                        <select id="new-match-away" required
+                                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"></select>
                                     </div>
                                 </div>
                                 <div class="flex justify-end pt-4">
-                                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 px-8 rounded-xl text-sm transition-all hover:-translate-y-1 shadow-[0_5px_15px_rgba(37,99,235,0.4)]">Guardar Partido</button>
+                                    <button type="submit"
+                                        class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 px-8 rounded-xl text-sm transition-all hover:-translate-y-1 shadow-[0_5px_15px_rgba(37,99,235,0.4)]">Guardar
+                                        Partido</button>
                                 </div>
                             </form>
                         </div>
@@ -577,13 +775,17 @@
 
                     <div class="glass-card rounded-2xl border border-rose-500/30 overflow-hidden shadow-lg">
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center">
-                            <h3 class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales</h3>
+                            <h3
+                                class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales</h3>
                         </div>
                         <div class="p-6">
                             <form id="admin-results-form">
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-matches-container"></div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                                    id="admin-matches-container"></div>
                                 <div class="mt-8 flex justify-end border-t border-slate-700/50 pt-6">
-                                    <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-[0_10px_20px_-5px_rgba(225,29,72,0.5)] flex items-center justify-center gap-2 text-sm tracking-widest uppercase">
+                                    <button type="submit"
+                                        class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-[0_10px_20px_-5px_rgba(225,29,72,0.5)] flex items-center justify-center gap-2 text-sm tracking-widest uppercase">
                                         <i class="fa-solid fa-calculator"></i> Calcular Punteos Globales
                                     </button>
                                 </div>
@@ -663,7 +865,7 @@
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `px-5 py-4 rounded-xl font-bold text-sm shadow-2xl flex items-center gap-3 border transition-all duration-500 transform translate-y-4 opacity-0 glass-panel`;
-            if(type === 'success') {
+            if (type === 'success') {
                 toast.classList.add('border-emerald-500', 'text-emerald-400');
                 toast.innerHTML = `<i class="fa-solid fa-circle-check text-xl"></i> <span>${message}</span>`;
             } else {
@@ -681,10 +883,10 @@
                 const options = { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true };
                 return new Intl.DateTimeFormat('es-GT', options).format(d).replace(',', ' -');
             } catch (e) {
-                return isoString; 
+                return isoString;
             }
         }
-        
+
         function getAvatarHtml(photoUrl, name) {
             if (photoUrl) {
                 return `<img src="${photoUrl}" alt="Avatar" class="w-full h-full object-cover">`;
@@ -693,11 +895,11 @@
             }
         }
 
-        window.switchTab = function(tabId) {
+        window.switchTab = function (tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             const targetTab = document.getElementById(tabId);
             targetTab.classList.remove('hidden');
-            
+
             targetTab.classList.remove('animate-fade-in-up');
             void targetTab.offsetWidth;
             targetTab.classList.add('animate-fade-in-up');
@@ -706,8 +908,8 @@
             document.getElementById(`btn-${tabId}`).classList.add('active-tab');
             const titles = { 'quiniela-tab': 'Mis Pronósticos', 'leaderboard-tab': 'Ranking General', 'about-tab': 'Reglas del Juego', 'admin-tab': 'Centro de Mando', 'profile-tab': 'Mi Perfil' };
             document.getElementById('page-title').innerText = titles[tabId] || 'Panel';
-            if(tabId === 'leaderboard-tab') loadLeaderboard();
-            if(tabId === 'admin-tab') loadPendingUsers();
+            if (tabId === 'leaderboard-tab') loadLeaderboard();
+            if (tabId === 'admin-tab') loadPendingUsers();
         };
 
         function hideAllViews() {
@@ -720,14 +922,14 @@
         async function fetchMatches() {
             const snap = await getDocs(collection(db, "matches"));
             if (snap.empty) {
-                for(let m of initialMatchesSeed) { await setDoc(doc(db, "matches", m.id), m); }
+                for (let m of initialMatchesSeed) { await setDoc(doc(db, "matches", m.id), m); }
                 allMatchesData = initialMatchesSeed;
             } else {
                 allMatchesData = [];
                 snap.forEach(doc => allMatchesData.push(doc.data()));
-                allMatchesData.sort((a,b) => {
-                    const numA = parseInt(a.id.replace('m','')) || 999;
-                    const numB = parseInt(b.id.replace('m','')) || 999;
+                allMatchesData.sort((a, b) => {
+                    const numA = parseInt(a.id.replace('m', '')) || 999;
+                    const numB = parseInt(b.id.replace('m', '')) || 999;
                     return numA - numB;
                 });
             }
@@ -736,69 +938,69 @@
 
         function populateFaseSelector() {
             const selector = document.getElementById('fase-selector');
-            if(!selector) return;
+            if (!selector) return;
             const fases = [...new Set(allMatchesData.map(m => m.fase))].filter(Boolean);
             selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
             fases.forEach(f => {
                 selector.innerHTML += `<option value="${f}">${f}</option>`;
             });
-            if(fases.length > 0) selector.value = fases[0];
+            if (fases.length > 0) selector.value = fases[0];
         }
 
         const faseSelectorEl = document.getElementById('fase-selector');
-        if(faseSelectorEl) {
+        if (faseSelectorEl) {
             faseSelectorEl.addEventListener('change', () => { renderMatchesPredictionGrid(); });
         }
 
         function initAdminSelects() {
             const homeSelect = document.getElementById('new-match-home');
             const awaySelect = document.getElementById('new-match-away');
-            if(!homeSelect || !awaySelect) return;
+            if (!homeSelect || !awaySelect) return;
             let optionsHTML = `<option value="">Seleccionar Equipo...</option>`;
-            let sortedCountries = Object.keys(COUNTRIES).map(key => ({code: key, name: COUNTRIES[key]})).sort((a,b) => a.name.localeCompare(b.name));
+            let sortedCountries = Object.keys(COUNTRIES).map(key => ({ code: key, name: COUNTRIES[key] })).sort((a, b) => a.name.localeCompare(b.name));
             sortedCountries.forEach(c => { optionsHTML += `<option value="${c.code}">${c.name}</option>`; });
             homeSelect.innerHTML = optionsHTML;
             awaySelect.innerHTML = optionsHTML;
         }
 
         function updateProfileUI() {
-             const avatarHtml = getAvatarHtml(userDataModel.photoUrl || currentUser.photoURL, userDataModel.name);
-             document.getElementById('user-avatar').innerHTML = avatarHtml;
-             document.getElementById('profile-large-avatar').innerHTML = avatarHtml;
-             
-             document.getElementById('user-display-name').innerText = userDataModel.name;
-             document.getElementById('profile-name').innerText = userDataModel.name;
-             
-             document.getElementById('user-display-email').innerText = userDataModel.email;
-             document.getElementById('profile-email').innerText = userDataModel.email;
-             
-             document.getElementById('profile-phone').innerText = userDataModel.phone || 'No registrado';
-             
-             document.getElementById('user-aside-points').innerText = userDataModel.totalPoints;
-             document.getElementById('profile-points').innerText = userDataModel.totalPoints;
+            const avatarHtml = getAvatarHtml(userDataModel.photoUrl || currentUser.photoURL, userDataModel.name);
+            document.getElementById('user-avatar').innerHTML = avatarHtml;
+            document.getElementById('profile-large-avatar').innerHTML = avatarHtml;
+
+            document.getElementById('user-display-name').innerText = userDataModel.name;
+            document.getElementById('profile-name').innerText = userDataModel.name;
+
+            document.getElementById('user-display-email').innerText = userDataModel.email;
+            document.getElementById('profile-email').innerText = userDataModel.email;
+
+            document.getElementById('profile-phone').innerText = userDataModel.phone || 'No registrado';
+
+            document.getElementById('user-aside-points').innerText = userDataModel.totalPoints;
+            document.getElementById('profile-points').innerText = userDataModel.totalPoints;
         }
 
         onAuthStateChanged(auth, async (user) => {
             document.getElementById('main-loader').classList.remove('opacity-0');
             document.getElementById('main-loader').style.display = 'flex';
             hideAllViews();
-            
+
             if (user) {
                 currentUser = user;
                 const isAdmin = ADMIN_EMAILS.includes(user.email);
                 const userDocSnap = await getDoc(doc(db, "users", user.uid));
-                
+
                 if (!userDocSnap.exists()) {
                     document.getElementById('complete-registration-container').classList.remove('hidden');
                 } else {
                     userDataModel = userDocSnap.data();
-                    
+
                     if (!userDataModel.photoUrl && user.photoURL) {
                         userDataModel.photoUrl = user.photoURL;
                         await updateDoc(doc(db, "users", user.uid), { photoUrl: user.photoURL });
                     }
-                    
-                    if(!isAdmin && userDataModel.status === 'pendiente') {
+
+                    if (!isAdmin && userDataModel.status === 'pendiente') {
                         const waBtn = document.getElementById('btn-whatsapp-pago');
                         waBtn.onclick = () => window.open(`https://wa.me/${WHATSAPP_ADMIN}?text=Hola,%20ya%20me%20registré%20en%20la%20quiniela%20con%20el%20correo%20${user.email}%20y%20quiero%20realizar%20el%20pago%20de%20mi%20inscripción.`, '_blank');
                         document.getElementById('verification-container').classList.remove('hidden');
@@ -807,9 +1009,9 @@
 
                         if (isAdmin) {
                             const adminTabBtn = document.getElementById('btn-admin-tab');
-                            if(adminTabBtn) adminTabBtn.classList.remove('hidden');
+                            if (adminTabBtn) adminTabBtn.classList.remove('hidden');
                             const lHeader = document.getElementById('leaderboard-header-row');
-                            if(lHeader && !lHeader.innerHTML.includes('Teléfono')) {
+                            if (lHeader && !lHeader.innerHTML.includes('Teléfono')) {
                                 lHeader.innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
                             }
                             initAdminSelects();
@@ -818,9 +1020,9 @@
                         await fetchGlobalResults();
                         await fetchUserPredictions();
                         await fetchMatches();
-                        
+
                         renderMatchesPredictionGrid();
-                        if(isAdmin) renderAdminMatchesGrid();
+                        if (isAdmin) renderAdminMatchesGrid();
 
                         document.getElementById('app-wrapper').classList.remove('hidden');
                         switchTab('quiniela-tab');
@@ -830,49 +1032,49 @@
                 currentUser = null;
                 document.getElementById('auth-container').classList.remove('hidden');
             }
-            
+
             document.getElementById('main-loader').classList.add('opacity-0');
             setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
         });
 
         // STYLISH LOGOUT MODAL MANAGEMENT
         const logoutConfirmModal = document.getElementById('logout-confirm-modal');
-        
+
         function triggerLogoutConfirmation() {
-            if(logoutConfirmModal) {
+            if (logoutConfirmModal) {
                 logoutConfirmModal.classList.remove('hidden');
             }
         }
-        
+
         document.getElementById('logout-btn').addEventListener('click', triggerLogoutConfirmation);
         document.getElementById('mobile-logout-btn').addEventListener('click', triggerLogoutConfirmation);
         document.getElementById('logout-pending-btn').addEventListener('click', triggerLogoutConfirmation);
-        
+
         document.getElementById('cancel-logout-btn').addEventListener('click', () => {
-            if(logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
+            if (logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
         });
-        
+
         document.getElementById('confirm-logout-btn').addEventListener('click', () => {
-            if(logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
+            if (logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
             signOut(auth);
         });
 
         // HOW IT WORKS MODAL MANAGEMENT
         const howModal = document.getElementById('how-it-works-modal');
         document.getElementById('how-it-works-btn').addEventListener('click', () => {
-            if(howModal) howModal.classList.remove('hidden');
+            if (howModal) howModal.classList.remove('hidden');
         });
         document.getElementById('close-how-modal').addEventListener('click', () => {
-            if(howModal) howModal.classList.add('hidden');
+            if (howModal) howModal.classList.add('hidden');
         });
         document.getElementById('close-how-modal-btn').addEventListener('click', () => {
-            if(howModal) howModal.classList.add('hidden');
+            if (howModal) howModal.classList.add('hidden');
         });
 
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             if (!file.type.startsWith('image/')) {
                 showToast('Por favor selecciona una imagen', 'error');
                 return;
@@ -880,29 +1082,29 @@
 
             const storageRef = ref(storage, `avatars/${currentUser.uid}_${Date.now()}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
-            
+
             const progressContainer = document.getElementById('upload-progress-container');
             const progressBar = document.getElementById('upload-progress-bar');
             progressContainer.classList.remove('hidden');
 
-            uploadTask.on('state_changed', 
+            uploadTask.on('state_changed',
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     progressBar.style.width = progress + '%';
-                }, 
+                },
                 (error) => {
                     progressContainer.classList.add('hidden');
                     showToast('Error al subir imagen: ' + error.message, 'error');
-                }, 
+                },
                 async () => {
                     try {
                         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                         await updateDoc(doc(db, "users", currentUser.uid), { photoUrl: downloadURL });
                         await updateProfile(currentUser, { photoURL: downloadURL });
-                        
+
                         userDataModel.photoUrl = downloadURL;
                         updateProfileUI();
-                        
+
                         progressContainer.classList.add('hidden');
                         progressBar.style.width = '0%';
                         showToast('¡Foto de perfil actualizada!');
@@ -925,7 +1127,7 @@
             e.preventDefault();
             const phone = document.getElementById('reg-phone').value;
             const isAdmin = ADMIN_EMAILS.includes(currentUser.email);
-            
+
             await setDoc(doc(db, "users", currentUser.uid), {
                 uid: currentUser.uid,
                 email: currentUser.email,
@@ -952,13 +1154,13 @@
 
         function renderMatchesPredictionGrid() {
             const container = document.getElementById('matches-prediction-container');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = '';
-            
+
             const selectedFase = document.getElementById('fase-selector').value;
             const filteredMatches = selectedFase === "Todas" ? allMatchesData : allMatchesData.filter(m => m.fase === selectedFase);
 
-            if(filteredMatches.length === 0) {
+            if (filteredMatches.length === 0) {
                 container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-12 text-lg font-bold"><i class="fa-regular fa-calendar-xmark text-3xl mb-3 block"></i> No hay partidos en esta fase.</p>`;
                 return;
             }
@@ -968,13 +1170,13 @@
             filteredMatches.forEach(match => {
                 const pred = userPredictions[match.id] || { home: '', away: '' };
                 const real = globalResults[match.id] || { home: null, away: null };
-                
+
                 const matchTime = new Date(match.time);
                 const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
                 const isLocked = now >= limitTime;
-                
+
                 let pBadge = '', sBorder = 'border-slate-700/50';
-                
+
                 if (real.home !== null && real.away !== null && real.home !== "" && real.away !== "") {
                     const pts = calcSingleMatchPoints(pred.home, pred.away, real.home, real.away);
                     if (pts === 4) { pBadge = `<span class="bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-xs font-black shadow-lg z-30 relative">★ +4 PTS</span>`; sBorder = 'border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]'; }
@@ -983,13 +1185,13 @@
                 }
 
                 const displayDate = formatUIMatchDate(match.time);
-                
-                const lockUI = isLocked 
+
+                const lockUI = isLocked
                     ? `<div class="locked-overlay absolute inset-0 z-20 flex items-center justify-center bg-slate-900/60 backdrop-blur-[1px] rounded-2xl">
                         <span class="bg-rose-600/90 text-white font-black px-6 py-2 rounded-xl shadow-2xl rotate-[-5deg] text-lg border border-white/20 uppercase tracking-widest" style="pointer-events: auto;">
                             <i class="fa-solid fa-lock"></i> Cerrado
                         </span>
-                       </div>` 
+                       </div>`
                     : '';
                 const lockIcon = isLocked ? `<span class="text-rose-500 animate-pulse font-bold ml-2" title="Cerrado"><i class="fa-solid fa-lock"></i></span>` : `<span class="text-emerald-500 font-bold ml-2" title="Abierto"><i class="fa-solid fa-unlock"></i></span>`;
 
@@ -997,7 +1199,7 @@
                     <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between border ${sBorder} relative group ${isLocked ? 'locked-card' : ''}">
                         ${lockUI}
                         <div class="flex items-center justify-between text-xs font-black text-slate-400 mb-4 pb-3 border-b border-slate-700/50 relative z-30">
-                            <span class="text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded truncate"><i class="fa-solid fa-layer-group"></i> ${match.fase} ${match.group ? '• '+match.group : ''}</span>
+                            <span class="text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded truncate"><i class="fa-solid fa-layer-group"></i> ${match.fase} ${match.group ? '• ' + match.group : ''}</span>
                             ${pBadge}
                         </div>
                         
@@ -1047,24 +1249,24 @@
             allMatchesData.forEach(m => {
                 const matchTime = new Date(m.time);
                 const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
-                
+
                 if (now < limitTime) {
                     const h = fd.get(`pred-${m.id}-home`);
                     const a = fd.get(`pred-${m.id}-away`);
-                    if(h !== null && a !== null) { 
-                        newP[m.id] = { home: h!==""?parseInt(h):"", away: a!==""?parseInt(a):"" }; 
+                    if (h !== null && a !== null) {
+                        newP[m.id] = { home: h !== "" ? parseInt(h) : "", away: a !== "" ? parseInt(a) : "" };
                     }
                 } else {
-                    if(userPredictions[m.id]) {
+                    if (userPredictions[m.id]) {
                         newP[m.id] = userPredictions[m.id];
                     }
                     const h = fd.get(`pred-${m.id}-home`);
-                    if(h !== null) intentoTrampa = true; 
+                    if (h !== null) intentoTrampa = true;
                 }
             });
 
             try {
-                if(intentoTrampa) console.warn("Se ignoraron pronósticos de partidos bloqueados.");
+                if (intentoTrampa) console.warn("Se ignoraron pronósticos de partidos bloqueados.");
                 await setDoc(doc(db, "predictions", currentUser.uid), { predictions: newP }, { merge: true });
                 userPredictions = Object.assign(userPredictions, newP);
                 showToast("¡Tus pronósticos están asegurados!");
@@ -1080,14 +1282,14 @@
         });
 
         async function loadPendingUsers() {
-            if(!userDataModel?.isAdmin) return;
+            if (!userDataModel?.isAdmin) return;
             const tb = document.getElementById('pending-users-tbody');
-            if(!tb) return;
+            if (!tb) return;
             tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-spinner animate-spin text-emerald-500 mr-2 text-xl"></i> Buscando pagos pendientes...</td></tr>`;
             const snap = await getDocs(query(collection(db, "users"), where("status", "==", "pendiente")));
             tb.innerHTML = '';
-            if(snap.empty) { tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-check-double text-emerald-500 text-2xl mb-2 block"></i> Todo al día. No hay pendientes.</td></tr>`; return; }
-            
+            if (snap.empty) { tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-check-double text-emerald-500 text-2xl mb-2 block"></i> Todo al día. No hay pendientes.</td></tr>`; return; }
+
             snap.forEach(d => {
                 const u = d.data();
                 tb.innerHTML += `
@@ -1099,25 +1301,25 @@
             });
         }
 
-        window.approveUser = async function(uid) {
+        window.approveUser = async function (uid) {
             try {
                 await updateDoc(doc(db, "users", uid), { status: 'aprobado' });
                 showToast("¡Usuario aprobado al 100%!");
                 loadPendingUsers();
-            } catch(e) { showToast(e.message, 'error'); }
+            } catch (e) { showToast(e.message, 'error'); }
         }
 
         const createMatchForm = document.getElementById('admin-create-match-form');
-        if(createMatchForm) {
+        if (createMatchForm) {
             createMatchForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const fase = document.getElementById('new-match-fase').value;
                 const group = document.getElementById('new-match-group').value;
-                const time = document.getElementById('new-match-time').value; 
+                const time = document.getElementById('new-match-time').value;
                 const hSel = document.getElementById('new-match-home');
                 const aSel = document.getElementById('new-match-away');
-                
-                if(!time) { showToast("Selecciona una fecha válida", "error"); return; }
+
+                if (!time) { showToast("Selecciona una fecha válida", "error"); return; }
 
                 const newM = {
                     id: "m" + Date.now(),
@@ -1127,7 +1329,7 @@
                     flagHome: hSel.value,
                     teamAway: aSel.options[aSel.selectedIndex].text,
                     flagAway: aSel.value,
-                    time: time 
+                    time: time
                 };
                 try {
                     await setDoc(doc(db, "matches", newM.id), newM);
@@ -1135,19 +1337,19 @@
                     document.getElementById('admin-create-match-form').reset();
                     await fetchMatches();
                     renderAdminMatchesGrid();
-                } catch(err) { showToast(err.message, 'error'); }
+                } catch (err) { showToast(err.message, 'error'); }
             });
         }
 
         function renderAdminMatchesGrid() {
             const container = document.getElementById('admin-matches-container');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = '';
             allMatchesData.forEach(match => {
                 const r = globalResults[match.id] || { home: '', away: '' };
                 container.innerHTML += `
                     <div class="bg-slate-900 rounded-xl p-4 border border-slate-700 hover:border-rose-500/50 transition-colors">
-                        <div class="text-[10px] font-black text-rose-400 mb-3 pb-2 border-b border-slate-800 truncate uppercase tracking-widest"><i class="fa-solid fa-gear"></i> ${match.fase} ${match.group ? ' - '+match.group : ''}</div>
+                        <div class="text-[10px] font-black text-rose-400 mb-3 pb-2 border-b border-slate-800 truncate uppercase tracking-widest"><i class="fa-solid fa-gear"></i> ${match.fase} ${match.group ? ' - ' + match.group : ''}</div>
                         <div class="flex items-center justify-between">
                             <div class="text-xs font-black text-white w-[35%] truncate text-right pr-3">${match.teamHome}</div>
                             <div class="flex items-center justify-center gap-2 w-[30%]">
@@ -1162,7 +1364,7 @@
         }
 
         const resultsForm = document.getElementById('admin-results-form');
-        if(resultsForm) {
+        if (resultsForm) {
             resultsForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 document.getElementById('main-loader').style.display = 'flex';
@@ -1172,7 +1374,7 @@
                 const nGR = {};
                 allMatchesData.forEach(m => {
                     const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
-                    nGR[m.id] = { home: (h!=="")?parseInt(h):null, away: (a!=="")?parseInt(a):null };
+                    nGR[m.id] = { home: (h !== "") ? parseInt(h) : null, away: (a !== "") ? parseInt(a) : null };
                 });
 
                 try {
@@ -1185,7 +1387,7 @@
                         let pts = 0;
                         if (pSnap.exists()) pts = calculateTotalUserScore(pSnap.data().predictions || {}, nGR);
                         await updateDoc(doc(db, "users", u.uid), { totalPoints: pts });
-                        if(u.uid === currentUser.uid) {
+                        if (u.uid === currentUser.uid) {
                             userDataModel.totalPoints = pts;
                             updateProfileUI();
                         }
@@ -1201,13 +1403,13 @@
         }
 
         function calcSingleMatchPoints(pH, pA, rH, rA) {
-            if (rH===null||rA===null||rH===""||rA==="") return 0;
-            if (pH===null||pA===null||pH===""||pA==="") return 0;
-            pH=parseInt(pH); pA=parseInt(pA); rH=parseInt(rH); rA=parseInt(rA);
-            if (isNaN(pH)||isNaN(pA)||isNaN(rH)||isNaN(rA)) return 0;
-            if (pH===rH && pA===rA) return 4;
-            const pS = pH>pA?1:(pH<pA?-1:0), rS = rH>rA?1:(rH<rA?-1:0);
-            if (pS===rS) return 2;
+            if (rH === null || rA === null || rH === "" || rA === "") return 0;
+            if (pH === null || pA === null || pH === "" || pA === "") return 0;
+            pH = parseInt(pH); pA = parseInt(pA); rH = parseInt(rH); rA = parseInt(rA);
+            if (isNaN(pH) || isNaN(pA) || isNaN(rH) || isNaN(rA)) return 0;
+            if (pH === rH && pA === rA) return 4;
+            const pS = pH > pA ? 1 : (pH < pA ? -1 : 0), rS = rH > rA ? 1 : (rH < rA ? -1 : 0);
+            if (pS === rS) return 2;
             return 0;
         }
 
@@ -1222,13 +1424,13 @@
 
         async function loadLeaderboard() {
             const tb = document.getElementById('leaderboard-table-body');
-            if(!tb) return;
+            if (!tb) return;
             tb.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-spinner animate-spin mr-3 text-yellow-500 text-2xl"></i> Calculando ranking...</td></tr>`;
             try {
                 const qRes = await getDocs(query(collection(db, "users"), where("status", "==", "aprobado")));
                 let uList = [];
                 qRes.forEach(d => uList.push(d.data()));
-                
+
                 uList.sort((a, b) => b.totalPoints - a.totalPoints);
 
                 tb.innerHTML = '';
@@ -1238,37 +1440,37 @@
                     const nameEl = document.getElementById(`podium-name-${i}`);
                     const ptsEl = document.getElementById(`podium-pts-${i}`);
                     const avatarEl = document.getElementById(`podium-avatar-${i}`);
-                    if(nameEl) nameEl.innerText = "VACANTE";
-                    if(ptsEl) ptsEl.innerHTML = `0 <span class="text-xs font-semibold">PTS</span>`;
-                    if(avatarEl) {
+                    if (nameEl) nameEl.innerText = "VACANTE";
+                    if (ptsEl) ptsEl.innerHTML = `0 <span class="text-xs font-semibold">PTS</span>`;
+                    if (avatarEl) {
                         if (i === 1) avatarEl.innerHTML = '<i class="fa-solid fa-crown"></i>';
                         else if (i === 2) avatarEl.innerHTML = '<i class="fa-solid fa-medal"></i>';
                         else if (i === 3) avatarEl.innerHTML = '<i class="fa-solid fa-award"></i>';
                     }
                 }
 
-                if(uList[0]) { 
-                    document.getElementById('podium-name-1').innerText=uList[0].name; 
-                    document.getElementById('podium-pts-1').innerHTML=`${uList[0].totalPoints} <span class="text-sm font-black text-yellow-600">PTS</span>`; 
+                if (uList[0]) {
+                    document.getElementById('podium-name-1').innerText = uList[0].name;
+                    document.getElementById('podium-pts-1').innerHTML = `${uList[0].totalPoints} <span class="text-sm font-black text-yellow-600">PTS</span>`;
                     document.getElementById('podium-avatar-1').innerHTML = getAvatarHtml(uList[0].photoUrl, uList[0].name);
                 }
-                if(uList[1]) { 
-                    document.getElementById('podium-name-2').innerText=uList[1].name; 
-                    document.getElementById('podium-pts-2').innerHTML=`${uList[1].totalPoints} <span class="text-xs font-bold text-slate-400">PTS</span>`; 
+                if (uList[1]) {
+                    document.getElementById('podium-name-2').innerText = uList[1].name;
+                    document.getElementById('podium-pts-2').innerHTML = `${uList[1].totalPoints} <span class="text-xs font-bold text-slate-400">PTS</span>`;
                     document.getElementById('podium-avatar-2').innerHTML = getAvatarHtml(uList[1].photoUrl, uList[1].name);
                 }
-                if(uList[2]) { 
-                    document.getElementById('podium-name-3').innerText=uList[2].name; 
-                    document.getElementById('podium-pts-3').innerHTML=`${uList[2].totalPoints} <span class="text-xs font-bold text-amber-700">PTS</span>`; 
+                if (uList[2]) {
+                    document.getElementById('podium-name-3').innerText = uList[2].name;
+                    document.getElementById('podium-pts-3').innerHTML = `${uList[2].totalPoints} <span class="text-xs font-bold text-amber-700">PTS</span>`;
                     document.getElementById('podium-avatar-3').innerHTML = getAvatarHtml(uList[2].photoUrl, uList[2].name);
                 }
 
                 uList.forEach((u, idx) => {
                     const r = idx + 1;
-                    let bg = r===1?'bg-gradient-to-r from-yellow-400 to-amber-500 shadow-md':r===2?'bg-slate-400':r===3?'bg-amber-700':'bg-slate-800';
-                    let rB = r<=3 ? `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-900 font-black text-sm">${r===1?'<i class="fa-solid fa-crown"></i>':r===2?'2':'3'}</span>` : `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-400 font-bold text-sm">${r}</span>`;
+                    let bg = r === 1 ? 'bg-gradient-to-r from-yellow-400 to-amber-500 shadow-md' : r === 2 ? 'bg-slate-400' : r === 3 ? 'bg-amber-700' : 'bg-slate-800';
+                    let rB = r <= 3 ? `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-900 font-black text-sm">${r === 1 ? '<i class="fa-solid fa-crown"></i>' : r === 2 ? '2' : '3'}</span>` : `<span class="flex items-center justify-center w-8 h-8 mx-auto rounded-full ${bg} text-slate-400 font-bold text-sm">${r}</span>`;
                     let hL = currentUser && u.uid === currentUser.uid ? 'border-l-4 border-yellow-500 bg-yellow-500/10 hover:bg-yellow-500/20' : 'hover:bg-slate-800/40';
-                    let phoneTD = userDataModel?.isAdmin ? `<td class="px-6 py-4 hidden sm:table-cell text-slate-500 text-xs font-bold text-right">${u.phone||'N/A'}</td>` : '';
+                    let phoneTD = userDataModel?.isAdmin ? `<td class="px-6 py-4 hidden sm:table-cell text-slate-500 text-xs font-bold text-right">${u.phone || 'N/A'}</td>` : '';
                     let avatarStr = getAvatarHtml(u.photoUrl, u.name);
 
                     tb.innerHTML += `
@@ -1284,12 +1486,13 @@
                             ${phoneTD}
                         </tr>`;
                 });
-                
-                if(uList.length===0) tb.innerHTML=`<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500 font-bold">La cancha está vacía. ¡Sé el primero!</td></tr>`;
-            } catch (error) { 
-                showToast(error.message, 'error'); 
+
+                if (uList.length === 0) tb.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-slate-500 font-bold">La cancha está vacía. ¡Sé el primero!</td></tr>`;
+            } catch (error) {
+                showToast(error.message, 'error');
             }
         }
     </script>
 </body>
+
 </html>
