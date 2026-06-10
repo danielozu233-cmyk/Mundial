@@ -42,17 +42,17 @@
         }
 
         .locked-card {
-            /* Adjusted locked card style: removed grayscale and opacity to allow points/results to be visible clearly */
             border-color: rgba(225, 29, 72, 0.3);
             background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
         }
         
         .locked-overlay {
-             pointer-events: none; /* Allows interacting with elements underneath if needed, though inputs are disabled */
+             pointer-events: none;
         }
 
-        .gold-glow { box-shadow: 0 0 20px rgba(234, 179, 8, 0.4); }
-        .red-glow { box-shadow: 0 0 15px rgba(225, 29, 72, 0.5); }
+        .gold-glow { box-shadow: 0 0 25px rgba(234, 179, 8, 0.45); }
+        .silver-glow { box-shadow: 0 0 20px rgba(148, 163, 184, 0.25); }
+        .bronze-glow { box-shadow: 0 0 20px rgba(217, 119, 6, 0.25); }
 
         .active-tab {
             background: linear-gradient(90deg, rgba(234, 179, 8, 0.25) 0%, rgba(234, 179, 8, 0.0) 100%);
@@ -67,7 +67,6 @@
                 border-left: none;
                 border-top: 4px solid #eab308;
             }
-            /* Hide text in mobile nav, show on click/active or hover */
             .nav-text {
                 display: none;
             }
@@ -80,26 +79,6 @@
                 padding-right: 1rem;
                 justify-content: center;
             }
-            /* Adjust padding for top profile section on mobile to fit name and image */
-            .mobile-profile-header {
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-                text-align: left !important;
-                padding: 1rem !important;
-            }
-            .mobile-profile-info {
-                display: flex !important;
-                flex-direction: column;
-                margin-left: 1rem;
-            }
-            .mobile-profile-container {
-                display: flex;
-                align-items: center;
-            }
-            .mobile-points {
-                margin-top: 0 !important;
-            }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -107,11 +86,22 @@
         ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ca8a04, #eab308); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #facc15; }
 
-        .podium-1 { background: linear-gradient(135deg, rgba(250, 204, 21, 0.25) 0%, rgba(202, 138, 4, 0.05) 100%); border: 2px solid #eab308; }
-        .podium-2 { background: linear-gradient(135deg, rgba(156, 163, 175, 0.25) 0%, rgba(75, 85, 99, 0.05) 100%); border: 2px solid #9ca3af; }
-        .podium-3 { background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(146, 64, 14, 0.05) 100%); border: 2px solid #d97706; }
+        .podium-1-premium {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px solid #f59e0b;
+            box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .podium-2-premium {
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px solid #94a3b8;
+            box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .podium-3-premium {
+            background: linear-gradient(135deg, rgba(180, 83, 9, 0.12) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px solid #b45309;
+            box-shadow: 0 10px 25px -5px rgba(180, 83, 9, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
 
-        /* Animaciones para las tarjetas */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -120,7 +110,6 @@
             animation: fadeInUp 0.5s ease-out forwards;
         }
 
-        /* Inputs bloqueados */
         input:disabled {
             background-color: rgba(15, 23, 42, 0.7);
             color: #94a3b8;
@@ -163,6 +152,51 @@
         <p class="text-yellow-500 font-black tracking-widest text-lg animate-pulse uppercase">Cargando Quiniela...</p>
     </div>
 
+    <!-- MODAL LOGOUT CONFIRMATION -->
+    <div id="logout-confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm p-6 rounded-2xl border border-slate-700/60 shadow-2xl text-center space-y-5 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/10 text-rose-500 text-2xl">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-white">¿Cerrar Sesión?</h3>
+                <p class="text-xs font-semibold text-slate-400 mt-1">¿Estás seguro de que deseas salir de la plataforma?</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button id="confirm-logout-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-black py-3 px-4 rounded-xl text-xs transition-all shadow-lg shadow-rose-600/20 uppercase tracking-wider">Sí, salir</button>
+                <button id="cancel-logout-btn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-black py-3 px-4 rounded-xl text-xs transition-all border border-slate-700 uppercase tracking-wider">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMO FUNCIONA -->
+    <div id="how-it-works-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md p-6 rounded-2xl border border-slate-700/60 shadow-2xl space-y-4 animate-fade-in-up">
+            <div class="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <h3 class="text-base font-black text-yellow-500 flex items-center gap-2 uppercase tracking-wider"><i class="fa-solid fa-circle-info"></i> ¿Cómo funciona?</h3>
+                <button id="close-how-modal" class="text-slate-400 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-4 text-xs font-medium text-slate-300 leading-relaxed max-h-[70vh] overflow-y-auto pr-1">
+                <p>La dinámica consiste en registrar sus pronósticos para cada partido del torneo. El sistema asigna puntos automáticamente según la precisión de sus resultados (marcador exacto o tendencia acertada).</p>
+                
+                <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-1">
+                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Detalles de la participación:</span>
+                    <span class="text-white font-black text-sm block">Inscripción: <span class="text-emerald-400">Q50.00</span> (pago único)</span>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-2">
+                    <span class="text-slate-400 font-bold uppercase tracking-widest text-[10px] block">Estructura de Premios:</span>
+                    <div class="space-y-1.5 font-bold">
+                        <div class="flex items-center justify-between"><span class="text-yellow-400"><i class="fa-solid fa-trophy mr-1.5"></i> 1er Lugar:</span> <span class="text-white">Q1,000.00</span></div>
+                        <div class="flex items-center justify-between"><span class="text-slate-300"><i class="fa-solid fa-medal mr-1.5"></i> 2do Lugar:</span> <span class="text-white">Balón oficial del mundial</span></div>
+                        <div class="flex items-center justify-between"><span class="text-amber-600"><i class="fa-solid fa-award mr-1.5"></i> 3er Lugar:</span> <span class="text-white">Q200.00</span></div>
+                    </div>
+                </div>
+            </div>
+            <button id="close-how-modal-btn" class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">Entendido</button>
+        </div>
+    </div>
+
     <div id="auth-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-md p-10 rounded-3xl shadow-2xl text-center relative overflow-hidden group">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-yellow-500/10 rounded-full blur-3xl"></div>
@@ -172,12 +206,18 @@
                 <i class="fa-solid fa-trophy text-5xl"></i>
             </div>
             <h1 class="text-3xl font-black text-white tracking-tight mb-1">QUINIELA MUNDIALISTA</h1>
-            <p class="text-yellow-500 font-extrabold tracking-[0.2em] text-sm uppercase mb-10">Edición 2026</p>
+            <p class="text-yellow-500 font-extrabold tracking-[0.2em] text-sm uppercase mb-8">Edición 2026</p>
             
-            <button id="google-signin-btn" class="relative overflow-hidden w-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold py-4 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-base shadow-[0_10px_20px_-10px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 relative z-10">
-                <span class="relative z-10">Ingresar con Google</span>
-            </button>
+            <div class="space-y-3">
+                <button id="google-signin-btn" class="relative overflow-hidden w-full bg-white hover:bg-slate-50 text-slate-900 font-extrabold py-4 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-base shadow-[0_10px_20px_-10px_rgba(255,255,255,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(255,255,255,0.6)] hover:-translate-y-1">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6 relative z-10">
+                    <span class="relative z-10">Ingresar con Google</span>
+                </button>
+                
+                <button id="how-it-works-btn" type="button" class="w-full bg-slate-800/40 hover:bg-slate-800/80 text-slate-300 font-bold py-3 px-4 rounded-xl transition-all border border-slate-700/50 text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-info text-yellow-500"></i> ¿Cómo funciona la quiniela?
+                </button>
+            </div>
             <p class="text-xs text-slate-400 mt-8 font-medium">Plataforma segura vinculada a tu cuenta de Google.</p>
         </div>
     </div>
@@ -227,34 +267,32 @@
     <div id="app-wrapper" class="hidden min-h-screen flex flex-col md:flex-row">
         
         <aside class="w-full md:w-64 lg:w-72 glass-panel border-r border-slate-700/50 flex flex-col z-40 relative flex-shrink-0 shadow-2xl">
-            <div class="mobile-profile-header p-6 border-b border-slate-700/50 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center gap-4 relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
+            <!-- UPDATED COMPACT ROW TOP PROFILE BLOCK -->
+            <div class="p-4 border-b border-slate-700/50 flex flex-row items-center justify-between gap-3 bg-slate-900/40 relative overflow-hidden w-full">
+                <div class="absolute -top-10 -right-10 w-24 h-24 bg-yellow-500/5 rounded-full blur-xl"></div>
                 
-                <div class="mobile-profile-container flex flex-col md:flex-col items-center gap-3 relative z-10 w-full md:w-auto">
-                    <!-- Profile Image Container -->
-                    <div class="profile-img-container w-16 h-16 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-2xl shadow-lg border-4 border-slate-800 gold-glow transform transition hover:scale-105 overflow-hidden" onclick="document.getElementById('file-upload').click()">
-                        <div id="user-avatar" class="w-full h-full flex items-center justify-center bg-slate-800 text-white">U</div>
+                <div class="flex flex-row items-center gap-2.5 min-w-0 flex-1">
+                    <div class="profile-img-container w-11 h-11 bg-gradient-to-tr from-yellow-500 to-amber-600 rounded-full flex items-center justify-center font-black text-slate-950 text-base shadow-md border-2 border-slate-800 flex-shrink-0 overflow-hidden" onclick="document.getElementById('file-upload').click()">
+                        <div id="user-avatar" class="w-full h-full flex items-center justify-center bg-slate-800 text-white font-bold text-sm">U</div>
                         <div class="profile-img-overlay">
-                            <i class="fa-solid fa-camera text-white text-xl"></i>
+                            <i class="fa-solid fa-camera text-white text-xs"></i>
                         </div>
                     </div>
                     <input type="file" id="file-upload" accept="image/*" class="hidden">
                     
-                    <div class="mobile-profile-info md:block flex-1 overflow-hidden">
-                        <h3 class="font-black text-white text-base tracking-wide truncate md:w-48" id="user-display-name">Usuario</h3>
-                        <p class="text-[11px] font-semibold text-slate-400 mt-0.5 truncate md:w-48" id="user-display-email">correo@ejemplo.com</p>
+                    <div class="flex flex-col min-w-0 flex-1">
+                        <h3 class="font-black text-white text-xs sm:text-sm tracking-wide truncate" id="user-display-name">Usuario</h3>
+                        <p class="text-[10px] font-medium text-slate-400 truncate" id="user-display-email">correo@ejemplo.com</p>
                     </div>
                 </div>
-                <div class="mobile-points px-4 py-2 md:mt-2 bg-slate-900/80 border border-yellow-500/30 rounded-xl text-yellow-500 font-extrabold text-xs tracking-wider flex items-center gap-2 shadow-inner">
-                    <i class="fa-solid fa-star text-yellow-400 animate-pulse"></i> 
-                    <span id="user-aside-points" class="text-lg font-black text-white">0</span> <span class="text-slate-400">PTS</span>
+                
+                <div class="flex-shrink-0 flex items-center gap-1 px-2 py-1.5 bg-slate-950/60 border border-yellow-500/30 rounded-xl text-yellow-500 font-black text-xs shadow-inner">
+                    <span id="user-aside-points" class="text-sm font-black text-white">0</span> 
+                    <span class="text-slate-500 text-[9px] font-bold">PTS</span>
                 </div>
             </div>
 
             <nav class="p-3 md:p-5 flex flex-row md:flex-col overflow-x-auto gap-2 md:gap-3 hide-scrollbar">
-                <button onclick="switchTab('profile-tab')" id="btn-profile-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-user text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Mi Perfil</span>
-                </button>
                 <button onclick="switchTab('quiniela-tab')" id="btn-quiniela-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap active-tab">
                     <i class="fa-solid fa-futbol text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Pronósticos</span>
                 </button>
@@ -266,6 +304,10 @@
                 </button>
                 <button onclick="switchTab('admin-tab')" id="btn-admin-tab" class="nav-btn hidden flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all group border border-rose-500/20 whitespace-nowrap bg-rose-500/5">
                     <i class="fa-solid fa-shield-halved text-lg text-rose-400"></i> <span class="nav-text">Panel Admin</span>
+                </button>
+                <!-- PROFILE TAB MOVED ALMOST LAST -->
+                <button onclick="switchTab('profile-tab')" id="btn-profile-tab" class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
+                    <i class="fa-solid fa-user text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i> <span class="nav-text">Mi Perfil</span>
                 </button>
                 
                 <button id="mobile-logout-btn" class="nav-btn md:hidden flex-shrink-0 flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-400 hover:bg-rose-600/20 hover:text-rose-400 transition-all whitespace-nowrap">
@@ -302,7 +344,6 @@
 
             <div class="p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8 pb-24">
             
-                <!-- NEW: PROFILE TAB -->
                 <section id="profile-tab" class="tab-content hidden space-y-6 animate-fade-in-up">
                     <div class="glass-card p-8 rounded-3xl border border-slate-700/50 max-w-2xl mx-auto">
                         <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i class="fa-solid fa-user-gear text-yellow-500"></i> Mi Perfil</h3>
@@ -329,7 +370,6 @@
                         
                         <div class="pt-6 border-t border-slate-700/50">
                             <p class="text-sm text-slate-400 mb-4"><i class="fa-solid fa-circle-info mr-1"></i> Haz clic en la foto para cambiarla. Se actualizará automáticamente en tu perfil.</p>
-                            <!-- Progress bar for upload -->
                             <div id="upload-progress-container" class="hidden w-full bg-slate-800 rounded-full h-2.5 mb-4">
                               <div id="upload-progress-bar" class="bg-yellow-500 h-2.5 rounded-full" style="width: 0%"></div>
                             </div>
@@ -385,48 +425,51 @@
                 </section>
 
                 <section id="leaderboard-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 pt-4" id="podium-container">
-                        <div class="glass-card podium-2 rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
-                            <div class="absolute -top-4 -right-4 text-slate-400 text-6xl font-black opacity-10 group-hover:scale-110 transition-transform">2</div>
-                            <div class="relative z-10">
-                                <div class="w-14 h-14 mx-auto rounded-full bg-slate-400/20 text-slate-300 flex items-center justify-center mb-3 text-xl font-bold border border-slate-400/30 shadow-lg overflow-hidden" id="podium-avatar-2">
+                    <!-- NEW LUXURY PREMIUM PODIUM LAYOUT -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4" id="podium-container">
+                        <!-- 2ND PLACE -->
+                        <div class="glass-card podium-2-premium rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
+                            <div class="absolute -top-4 -right-4 text-slate-400/10 text-7xl font-black">2</div>
+                            <div class="relative z-10 space-y-3">
+                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xl font-bold border-2 border-slate-400 silver-glow overflow-hidden" id="podium-avatar-2">
                                     <i class="fa-solid fa-medal"></i>
                                 </div>
                                 <h4 class="font-black text-white text-base truncate" id="podium-name-2">Cargando...</h4>
                             </div>
-                            <div class="mt-4 relative z-10">
-                                <div class="text-3xl font-black text-slate-200" id="podium-pts-2">0 <span class="text-xs font-bold text-slate-400">PTS</span></div>
-                                <div class="mt-2 text-xs font-bold text-slate-300 px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-600 inline-block shadow-inner">🥈 Balón Oficial</div>
+                            <div class="mt-5 relative z-10 space-y-2">
+                                <div class="text-3xl font-black text-slate-300 tracking-tight" id="podium-pts-2">0 <span class="text-xs font-bold text-slate-500">PTS</span></div>
+                                <div class="text-[11px] font-bold text-slate-300 px-3 py-1 bg-slate-950/60 border border-slate-700 rounded-lg inline-block shadow-inner"><i class="fa-solid fa-circle mr-1 text-slate-400 text-[8px]"></i>🥈 Balón Oficial</div>
                             </div>
                         </div>
 
-                        <div class="glass-card podium-1 rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative transform sm:scale-110 sm:-translate-y-4 shadow-[0_20px_50px_-15px_rgba(234,179,8,0.3)] z-10 overflow-hidden group">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-amber-600"></div>
-                            <div class="absolute -top-4 -right-4 text-yellow-500 text-8xl font-black opacity-10 group-hover:scale-110 transition-transform">1</div>
-                            <div class="relative z-10">
-                                <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 text-slate-900 flex items-center justify-center mb-4 text-3xl gold-glow border-4 border-slate-900 shadow-xl overflow-hidden" id="podium-avatar-1" style="animation: bounce 3s infinite;">
+                        <!-- 1ST PLACE SUPERIOR PLATINUM/GOLD GLOW -->
+                        <div class="glass-card podium-1-premium rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative shadow-xl z-10 overflow-hidden group">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500"></div>
+                            <div class="absolute -top-4 -right-4 text-yellow-500/10 text-9xl font-black">1</div>
+                            <div class="relative z-10 space-y-3">
+                                <div class="w-20 h-20 mx-auto rounded-full bg-slate-800 text-yellow-400 flex items-center justify-center text-3xl border-4 border-yellow-500 gold-glow overflow-hidden" id="podium-avatar-1">
                                     <i class="fa-solid fa-crown"></i>
                                 </div>
-                                <h4 class="font-black text-white text-lg truncate" id="podium-name-1">Cargando...</h4>
+                                <h4 class="font-black text-white text-lg tracking-wide truncate" id="podium-name-1">Cargando...</h4>
                             </div>
-                            <div class="mt-4 relative z-10">
-                                <div class="text-5xl font-black text-yellow-400 drop-shadow-md" id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
-                                <div class="mt-3 text-xs font-black text-slate-900 px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg inline-block uppercase tracking-widest shadow-lg">🏆 Q1,000.00</div>
+                            <div class="mt-5 relative z-10 space-y-2">
+                                <div class="text-5xl font-black text-yellow-400 drop-shadow-[0_2px_10px_rgba(234,179,8,0.3)] tracking-tight" id="podium-pts-1">0 <span class="text-sm font-bold text-yellow-600">PTS</span></div>
+                                <div class="text-xs font-black text-slate-950 px-4 py-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-lg inline-block uppercase tracking-widest shadow-md"><i class="fa-solid fa-crown mr-1"></i>🏆 Q1,000.00</div>
                             </div>
                         </div>
 
-                        <div class="glass-card podium-3 rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
-                            <div class="absolute -top-4 -right-4 text-amber-700 text-6xl font-black opacity-10 group-hover:scale-110 transition-transform">3</div>
-                            <div class="relative z-10">
-                                <div class="w-14 h-14 mx-auto rounded-full bg-amber-700/20 text-amber-500 flex items-center justify-center mb-3 text-xl font-bold border border-amber-700/30 shadow-lg overflow-hidden" id="podium-avatar-3">
+                        <!-- 3RD PLACE -->
+                        <div class="glass-card podium-3-premium rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
+                            <div class="absolute -top-4 -right-4 text-amber-700/10 text-7xl font-black">3</div>
+                            <div class="relative z-10 space-y-3">
+                                <div class="w-16 h-16 mx-auto rounded-full bg-slate-800 text-amber-600 flex items-center justify-center text-xl font-bold border-2 border-amber-700 bronze-glow overflow-hidden" id="podium-avatar-3">
                                     <i class="fa-solid fa-award"></i>
                                 </div>
                                 <h4 class="font-black text-white text-base truncate" id="podium-name-3">Cargando...</h4>
                             </div>
-                            <div class="mt-4 relative z-10">
-                                <div class="text-3xl font-black text-amber-500" id="podium-pts-3">0 <span class="text-xs font-bold text-amber-700/50">PTS</span></div>
-                                <div class="mt-2 text-xs font-bold text-amber-200 px-3 py-1.5 bg-amber-900/40 rounded-lg border border-amber-700/50 inline-block shadow-inner">🥉 Q200.00</div>
+                            <div class="mt-5 relative z-10 space-y-2">
+                                <div class="text-3xl font-black text-amber-500 tracking-tight" id="podium-pts-3">0 <span class="text-xs font-bold text-amber-700/50">PTS</span></div>
+                                <div class="text-[11px] font-bold text-amber-200 px-3 py-1 bg-slate-950/60 border border-amber-900/60 rounded-lg inline-block shadow-inner"><i class="fa-solid fa-circle mr-1 text-amber-600 text-[8px]"></i>🥉 Q200.00</div>
                             </div>
                         </div>
                     </div>
@@ -577,7 +620,7 @@
             { id: "m17", fase: "Fase 1", group: "Grupo I", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "2026-06-16T13:00" },
             { id: "m18", fase: "Fase 1", group: "Grupo I", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "2026-06-16T16:00" },
             { id: "m19", fase: "Fase 1", group: "Grupo J", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "2026-06-16T19:00" },
-            { id: "m20", fase: "Fase 1", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
+            { id: "m20", font: "Fase 1", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
             { id: "m21", fase: "Fase 1", group: "Grupo K", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "2026-06-17T11:00" },
             { id: "m22", fase: "Fase 1", group: "Grupo L", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "2026-06-17T14:00" },
             { id: "m23", fase: "Fase 1", group: "Grupo L", teamHome: "Ghana", flagHome: "gh", teamAway: "Panamá", flagAway: "pa", time: "2026-06-17T17:00" },
@@ -667,19 +710,24 @@
 
         function populateFaseSelector() {
             const selector = document.getElementById('fase-selector');
-            const fases = [...new Set(allMatchesData.map(m => m.fase))];
+            if(!selector) return;
+            const fases = [...new Set(allMatchesData.map(m => m.fase))].filter(Boolean);
             selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
             fases.forEach(f => {
                 selector.innerHTML += `<option value="${f}">${f}</option>`;
             });
-            selector.value = fases[0] || "Todas"; 
+            if(fases.length > 0) selector.value = fases[0];
         }
 
-        document.getElementById('fase-selector').addEventListener('change', () => { renderMatchesPredictionGrid(); });
+        const faseSelectorEl = document.getElementById('fase-selector');
+        if(faseSelectorEl) {
+            faseSelectorEl.addEventListener('change', () => { renderMatchesPredictionGrid(); });
+        }
 
         function initAdminSelects() {
             const homeSelect = document.getElementById('new-match-home');
             const awaySelect = document.getElementById('new-match-away');
+            if(!homeSelect || !awaySelect) return;
             let optionsHTML = `<option value="">Seleccionar Equipo...</option>`;
             let sortedCountries = Object.keys(COUNTRIES).map(key => ({code: key, name: COUNTRIES[key]})).sort((a,b) => a.name.localeCompare(b.name));
             sortedCountries.forEach(c => { optionsHTML += `<option value="${c.code}">${c.name}</option>`; });
@@ -719,7 +767,6 @@
                 } else {
                     userDataModel = userDocSnap.data();
                     
-                    // Update photoURL in Firestore if not present but exists in Google auth
                     if (!userDataModel.photoUrl && user.photoURL) {
                         userDataModel.photoUrl = user.photoURL;
                         await updateDoc(doc(db, "users", user.uid), { photoUrl: user.photoURL });
@@ -733,8 +780,12 @@
                         updateProfileUI();
 
                         if (isAdmin) {
-                            document.getElementById('btn-admin-tab').classList.remove('hidden');
-                            document.getElementById('leaderboard-header-row').innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
+                            const adminTabBtn = document.getElementById('btn-admin-tab');
+                            if(adminTabBtn) adminTabBtn.classList.remove('hidden');
+                            const lHeader = document.getElementById('leaderboard-header-row');
+                            if(lHeader && !lHeader.innerHTML.includes('Teléfono')) {
+                                lHeader.innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
+                            }
                             initAdminSelects();
                         }
 
@@ -758,7 +809,40 @@
             setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
         });
 
-        // Image upload handlers
+        // STYLISH LOGOUT MODAL MANAGEMENT
+        const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+        
+        function triggerLogoutConfirmation() {
+            if(logoutConfirmModal) {
+                logoutConfirmModal.classList.remove('hidden');
+            }
+        }
+        
+        document.getElementById('logout-btn').addEventListener('click', triggerLogoutConfirmation);
+        document.getElementById('mobile-logout-btn').addEventListener('click', triggerLogoutConfirmation);
+        document.getElementById('logout-pending-btn').addEventListener('click', triggerLogoutConfirmation);
+        
+        document.getElementById('cancel-logout-btn').addEventListener('click', () => {
+            if(logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
+        });
+        
+        document.getElementById('confirm-logout-btn').addEventListener('click', () => {
+            if(logoutConfirmModal) logoutConfirmModal.classList.add('hidden');
+            signOut(auth);
+        });
+
+        // HOW IT WORKS MODAL MANAGEMENT
+        const howModal = document.getElementById('how-it-works-modal');
+        document.getElementById('how-it-works-btn').addEventListener('click', () => {
+            if(howModal) howModal.classList.remove('hidden');
+        });
+        document.getElementById('close-how-modal').addEventListener('click', () => {
+            if(howModal) howModal.classList.add('hidden');
+        });
+        document.getElementById('close-how-modal-btn').addEventListener('click', () => {
+            if(howModal) howModal.classList.add('hidden');
+        });
+
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -829,11 +913,6 @@
             window.location.reload();
         });
 
-        const logoutHandler = () => signOut(auth);
-        document.getElementById('logout-btn').addEventListener('click', logoutHandler);
-        document.getElementById('mobile-logout-btn').addEventListener('click', logoutHandler);
-        document.getElementById('logout-pending-btn').addEventListener('click', logoutHandler);
-
         async function fetchGlobalResults() {
             const d = await getDoc(doc(db, "results", "global"));
             globalResults = d.exists() ? (d.data().results || {}) : {};
@@ -847,6 +926,7 @@
 
         function renderMatchesPredictionGrid() {
             const container = document.getElementById('matches-prediction-container');
+            if(!container) return;
             container.innerHTML = '';
             
             const selectedFase = document.getElementById('fase-selector').value;
@@ -878,8 +958,6 @@
 
                 const displayDate = formatUIMatchDate(match.time);
                 
-                // Overlay for locked matches. We use pointer-events-none so inputs underneath can't be clicked
-                // but the banner itself will be visible
                 const lockUI = isLocked 
                     ? `<div class="locked-overlay absolute inset-0 z-20 flex items-center justify-center bg-slate-900/60 backdrop-blur-[1px] rounded-2xl">
                         <span class="bg-rose-600/90 text-white font-black px-6 py-2 rounded-xl shadow-2xl rotate-[-5deg] text-lg border border-white/20 uppercase tracking-widest" style="pointer-events: auto;">
@@ -975,11 +1053,10 @@
             }
         });
 
-        // --- FUNCIONES ADMIN ---
-        
         async function loadPendingUsers() {
             if(!userDataModel?.isAdmin) return;
             const tb = document.getElementById('pending-users-tbody');
+            if(!tb) return;
             tb.innerHTML = `<tr><td colspan="3" class="p-6 text-slate-500 text-center font-bold"><i class="fa-solid fa-spinner animate-spin text-emerald-500 mr-2 text-xl"></i> Buscando pagos pendientes...</td></tr>`;
             const snap = await getDocs(query(collection(db, "users"), where("status", "==", "pendiente")));
             tb.innerHTML = '';
@@ -1004,37 +1081,41 @@
             } catch(e) { showToast(e.message, 'error'); }
         }
 
-        document.getElementById('admin-create-match-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const fase = document.getElementById('new-match-fase').value;
-            const group = document.getElementById('new-match-group').value; // NUEVO DATO GRUPO
-            const time = document.getElementById('new-match-time').value; 
-            const hSel = document.getElementById('new-match-home');
-            const aSel = document.getElementById('new-match-away');
-            
-            if(!time) { showToast("Selecciona una fecha válida", "error"); return; }
+        const createMatchForm = document.getElementById('admin-create-match-form');
+        if(createMatchForm) {
+            createMatchForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fase = document.getElementById('new-match-fase').value;
+                const group = document.getElementById('new-match-group').value;
+                const time = document.getElementById('new-match-time').value; 
+                const hSel = document.getElementById('new-match-home');
+                const aSel = document.getElementById('new-match-away');
+                
+                if(!time) { showToast("Selecciona una fecha válida", "error"); return; }
 
-            const newM = {
-                id: "m" + Date.now(),
-                fase: fase,
-                group: group,
-                teamHome: hSel.options[hSel.selectedIndex].text,
-                flagHome: hSel.value,
-                teamAway: aSel.options[aSel.selectedIndex].text,
-                flagAway: aSel.value,
-                time: time 
-            };
-            try {
-                await setDoc(doc(db, "matches", newM.id), newM);
-                showToast("Partido en agenda oficial.");
-                document.getElementById('admin-create-match-form').reset();
-                await fetchMatches();
-                renderAdminMatchesGrid();
-            } catch(err) { showToast(err.message, 'error'); }
-        });
+                const newM = {
+                    id: "m" + Date.now(),
+                    fase: fase,
+                    group: group,
+                    teamHome: hSel.options[hSel.selectedIndex].text,
+                    flagHome: hSel.value,
+                    teamAway: aSel.options[aSel.selectedIndex].text,
+                    flagAway: aSel.value,
+                    time: time 
+                };
+                try {
+                    await setDoc(doc(db, "matches", newM.id), newM);
+                    showToast("Partido en agenda oficial.");
+                    document.getElementById('admin-create-match-form').reset();
+                    await fetchMatches();
+                    renderAdminMatchesGrid();
+                } catch(err) { showToast(err.message, 'error'); }
+            });
+        }
 
         function renderAdminMatchesGrid() {
             const container = document.getElementById('admin-matches-container');
+            if(!container) return;
             container.innerHTML = '';
             allMatchesData.forEach(match => {
                 const r = globalResults[match.id] || { home: '', away: '' };
@@ -1054,41 +1135,44 @@
             });
         }
 
-        document.getElementById('admin-results-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            document.getElementById('main-loader').style.display = 'flex';
-            document.getElementById('main-loader').classList.remove('opacity-0');
+        const resultsForm = document.getElementById('admin-results-form');
+        if(resultsForm) {
+            resultsForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                document.getElementById('main-loader').style.display = 'flex';
+                document.getElementById('main-loader').classList.remove('opacity-0');
 
-            const fd = new FormData(e.target);
-            const nGR = {};
-            allMatchesData.forEach(m => {
-                const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
-                nGR[m.id] = { home: (h!=="")?parseInt(h):null, away: (a!=="")?parseInt(a):null };
-            });
+                const fd = new FormData(e.target);
+                const nGR = {};
+                allMatchesData.forEach(m => {
+                    const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
+                    nGR[m.id] = { home: (h!=="")?parseInt(h):null, away: (a!=="")?parseInt(a):null };
+                });
 
-            try {
-                await setDoc(doc(db, "results", "global"), { results: nGR });
-                globalResults = nGR;
-                const uSnap = await getDocs(collection(db, "users"));
-                for (let ud of uSnap.docs) {
-                    const u = ud.data();
-                    const pSnap = await getDoc(doc(db, "predictions", u.uid));
-                    let pts = 0;
-                    if (pSnap.exists()) pts = calculateTotalUserScore(pSnap.data().predictions || {}, nGR);
-                    await updateDoc(doc(db, "users", u.uid), { totalPoints: pts });
-                    if(u.uid === currentUser.uid) {
-                        userDataModel.totalPoints = pts;
-                        updateProfileUI();
+                try {
+                    await setDoc(doc(db, "results", "global"), { results: nGR });
+                    globalResults = nGR;
+                    const uSnap = await getDocs(collection(db, "users"));
+                    for (let ud of uSnap.docs) {
+                        const u = ud.data();
+                        const pSnap = await getDoc(doc(db, "predictions", u.uid));
+                        let pts = 0;
+                        if (pSnap.exists()) pts = calculateTotalUserScore(pSnap.data().predictions || {}, nGR);
+                        await updateDoc(doc(db, "users", u.uid), { totalPoints: pts });
+                        if(u.uid === currentUser.uid) {
+                            userDataModel.totalPoints = pts;
+                            updateProfileUI();
+                        }
                     }
+                    showToast("¡Resultados Globales Actualizados!");
+                    renderMatchesPredictionGrid();
+                } catch (err) { showToast(err.message, 'error'); }
+                finally {
+                    document.getElementById('main-loader').classList.add('opacity-0');
+                    setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
                 }
-                showToast("¡Resultados Globales Actualizados!");
-                renderMatchesPredictionGrid();
-            } catch (err) { showToast(err.message, 'error'); }
-            finally {
-                document.getElementById('main-loader').classList.add('opacity-0');
-                setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
-            }
-        });
+            });
+        }
 
         function calcSingleMatchPoints(pH, pA, rH, rA) {
             if (rH===null||rA===null||rH===""||rA==="") return 0;
@@ -1112,6 +1196,7 @@
 
         async function loadLeaderboard() {
             const tb = document.getElementById('leaderboard-table-body');
+            if(!tb) return;
             tb.innerHTML = `<tr><td colspan="4" class="px-6 py-12 text-center text-slate-400 font-bold"><i class="fa-solid fa-spinner animate-spin mr-3 text-yellow-500 text-2xl"></i> Calculando ranking...</td></tr>`;
             try {
                 const qRes = await getDocs(query(collection(db, "users"), where("status", "==", "aprobado")));
