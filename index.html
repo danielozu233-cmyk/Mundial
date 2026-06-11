@@ -323,37 +323,45 @@
     </div>
 
     <div id="verification-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
-            
-            <div class="mb-4 mt-2 inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 border-2 border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+        <div
+            class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600">
+            </div>
+
+            <div
+                class="mb-4 mt-2 inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 border-2 border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
                 <i class="fa-solid fa-file-invoice-dollar text-2xl text-yellow-500"></i>
             </div>
-            
+
             <h2 class="text-2xl font-black text-white mb-3">Pago Requerido</h2>
-            <p class="text-slate-300 mb-6 text-sm">Para poder ingresar es necesario que realices el pago a la siguiente cuenta:</p>
-            
+            <p class="text-slate-300 mb-6 text-sm">Para poder ingresar es necesario que realices el pago a la siguiente
+                cuenta:</p>
+
             <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-700 text-left mb-6 shadow-inner">
                 <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Banco</p>
                 <p class="text-white font-black mb-4 text-lg">Banco Industrial (BI)</p>
-                
+
                 <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Tipo de Cuenta</p>
                 <p class="text-white font-bold mb-4 text-base">Monetaria</p>
-                
+
                 <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">No. de Cuenta</p>
                 <p class="text-yellow-500 font-black mb-4 text-xl tracking-widest">0120385893</p>
-                
+
                 <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">A nombre de</p>
                 <p class="text-white font-bold text-base">Bryan Christopher Hernandez Cruz</p>
             </div>
 
-            <p class="text-slate-400 text-xs mb-5 font-medium">Realiza la confirmación y el envío del comprobante en el siguiente botón:</p>
-            
-            <button id="btn-whatsapp-pago" class="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:shadow-[0_0_25px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 mb-6 flex items-center justify-center gap-2">
+            <p class="text-slate-400 text-xs mb-5 font-medium">Realiza la confirmación y el envío del comprobante en el
+                siguiente botón:</p>
+
+            <button id="btn-whatsapp-pago"
+                class="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:shadow-[0_0_25px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 mb-6 flex items-center justify-center gap-2">
                 <i class="fa-brands fa-whatsapp text-2xl"></i> Confirmar por WhatsApp
             </button>
-            
-            <button id="logout-pending-btn" class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider">
+
+            <button id="logout-pending-btn"
+                class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider">
                 <i class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión
             </button>
         </div>
@@ -531,19 +539,30 @@
                     <div class="glass-card p-8 rounded-3xl border border-slate-700/50">
                         <h3 class="text-2xl font-black text-white mb-6 flex items-center gap-3"><i
                                 class="fa-solid fa-scroll text-yellow-500"></i> Reglamento Oficial</h3>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700">
-                                <h4 class="text-emerald-400 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-coins"></i> Inscripción</h4>
-                                <p class="text-white text-3xl font-black">Q50.00 <span class="text-sm text-slate-400 font-medium">(Pago Único)</span></p>
+                                <h4
+                                    class="text-emerald-400 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-coins"></i> Inscripción</h4>
+                                <p class="text-white text-3xl font-black">Q50.00 <span
+                                        class="text-sm text-slate-400 font-medium">(Pago Único)</span></p>
                             </div>
-                            
+
                             <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700">
-                                <h4 class="text-yellow-500 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Estructura de Premios</h4>
+                                <h4
+                                    class="text-yellow-500 font-black uppercase tracking-wider text-sm mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-trophy"></i> Estructura de Premios</h4>
                                 <ul class="space-y-2">
-                                    <li class="flex items-center justify-between text-sm"><span class="text-yellow-400 font-bold"><i class="fa-solid fa-medal mr-1"></i> 1er Lugar</span> <span class="text-white font-black">Q1,000.00</span></li>
-                                    <li class="flex items-center justify-between text-sm"><span class="text-slate-300 font-bold"><i class="fa-solid fa-medal mr-1"></i> 2do Lugar</span> <span class="text-white font-black">Balón Oficial</span></li>
-                                    <li class="flex items-center justify-between text-sm"><span class="text-amber-600 font-bold"><i class="fa-solid fa-medal mr-1"></i> 3er Lugar</span> <span class="text-white font-black">Q200.00</span></li>
+                                    <li class="flex items-center justify-between text-sm"><span
+                                            class="text-yellow-400 font-bold"><i class="fa-solid fa-medal mr-1"></i> 1er
+                                            Lugar</span> <span class="text-white font-black">Q1,000.00</span></li>
+                                    <li class="flex items-center justify-between text-sm"><span
+                                            class="text-slate-300 font-bold"><i class="fa-solid fa-medal mr-1"></i> 2do
+                                            Lugar</span> <span class="text-white font-black">Balón Oficial</span></li>
+                                    <li class="flex items-center justify-between text-sm"><span
+                                            class="text-amber-600 font-bold"><i class="fa-solid fa-medal mr-1"></i> 3er
+                                            Lugar</span> <span class="text-white font-black">Q200.00</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -571,53 +590,93 @@
                                         class="bg-slate-700 text-slate-300 font-black px-2 py-1 rounded text-xs">0
                                         PTS</span> Fallar completamente el resultado.</li>
                             </ul>
-                            
+
                             <div class="my-8 p-5 bg-slate-900/40 rounded-xl border border-slate-700">
-                                <h3 class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
+                                <h3
+                                    class="text-yellow-500 font-black text-lg mb-2 uppercase tracking-wider flex items-center">
                                     <i class="fas fa-gavel mr-2"></i> Criterio de Desempate
                                 </h3>
                                 <p class="text-slate-300 text-sm leading-relaxed">
-                                    Si dos o más participantes terminan con la misma cantidad de puntos totales, el criterio de desempate será el siguiente: 
-                                    <span class="text-white font-bold block mt-1"><i class="fa-solid fa-arrow-right text-yellow-500 mr-1"></i> Gana quien tenga más partidos acertados con puntuación perfecta (4 puntos).</span>
+                                    Si dos o más participantes terminan con la misma cantidad de puntos totales, el
+                                    criterio de desempate será el siguiente:
+                                    <span class="text-white font-bold block mt-1"><i
+                                            class="fa-solid fa-arrow-right text-yellow-500 mr-1"></i> Gana quien tenga
+                                        más partidos acertados con puntuación perfecta (4 puntos).</span>
                                 </p>
                             </div>
-                            
+
                             <div class="mt-8 pt-6 border-t border-slate-700/50">
-                                <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 text-center">Gestión y Desarrollo</h3>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-colors">
+                                <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 text-center">
+                                    Gestión y Desarrollo</h3>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div
+                                        class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-colors">
                                         <div class="flex items-center gap-3 mb-3">
-                                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                                                 <i class="fas fa-user-shield"></i>
                                             </div>
                                             <div>
-                                                <p class="text-blue-400 font-black text-[10px] uppercase tracking-tighter">Organizador Principal</p>
+                                                <p
+                                                    class="text-blue-400 font-black text-[10px] uppercase tracking-tighter">
+                                                    Organizador Principal</p>
                                                 <p class="text-white font-bold text-sm">Bryan Hernandez</p>
                                             </div>
                                         </div>
-                                        <p class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
-                                            Liderazgo estratégico y gestión operativa. Encargado de garantizar la integridad de la competencia y la excelencia en cada fase del torneo.
+                                        <p
+                                            class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
+                                            Liderazgo estratégico y gestión operativa. Encargado de garantizar la
+                                            integridad de la competencia y la excelencia en cada fase del torneo.
                                         </p>
                                     </div>
 
-                                    <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-colors">
+                                    <div
+                                        class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-colors">
                                         <div class="flex items-center gap-3 mb-3">
-                                            <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                                                 <i class="fas fa-code"></i>
                                             </div>
                                             <div>
-                                                <p class="text-emerald-400 font-black text-[10px] uppercase tracking-tighter">Desarrollo Web</p>
+                                                <p
+                                                    class="text-emerald-400 font-black text-[10px] uppercase tracking-tighter">
+                                                    Desarrollo Web</p>
                                                 <p class="text-white font-bold text-sm">Daniel Galvez</p>
                                             </div>
                                         </div>
-                                        <p class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
-                                            Arquitectura de sistemas y desarrollo de software. Responsable de la robustez, seguridad y fluidez de la plataforma, optimizando cada interacción.
+                                        <p
+                                            class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
+                                            Arquitectura de sistemas y desarrollo de software. Responsable de la
+                                            robustez, seguridad y fluidez de la plataforma, optimizando cada
+                                            interacción.
+                                        </p>
+                                    </div>
+                                    <!-- Tarjeta de Diego Chiche -->
+                                    <div
+                                        class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-purple-500/50 transition-colors">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/20">
+                                                <i class="fas fa-share-alt"></i>
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="text-purple-400 font-black text-[10px] uppercase tracking-tighter">
+                                                    Difusión y Marketing</p>
+                                                <p class="text-white font-bold text-sm">Diego Chiche</p>
+                                            </div>
+                                        </div>
+                                        <p
+                                            class="text-slate-400 text-xs leading-relaxed border-l-2 border-slate-700 pl-3">
+                                            Estrategia de comunicación y despliegue en redes sociales. Encargado de
+                                            potenciar el alcance del torneo, gestionar la comunidad digital y amplificar
+                                            cada momento clave.
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="mt-8 pt-6 border-t border-slate-700/50">
                                 <a href="https://whatsapp.com/channel/0029VbCOxJF5q08XX3QFRy1R" target="_blank"
                                     class="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-8 rounded-xl transition-all hover:-translate-y-1 shadow-lg shadow-[#25D366]/20 w-full sm:w-auto">
@@ -829,12 +888,14 @@
                     </div>
 
                     <div class="glass-card rounded-2xl border border-rose-500/30 overflow-hidden shadow-lg">
-                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-4">
+                        <div
+                            class="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center flex-wrap gap-4">
                             <h3
                                 class="text-sm font-black text-rose-400 uppercase tracking-wider flex items-center gap-2">
                                 <i class="fa-solid fa-flag-checkered"></i> Resultados Oficiales
                             </h3>
-                            <select id="admin-fase-selector" class="bg-slate-950 border border-slate-700 text-white font-bold text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 p-2 outline-none cursor-pointer">
+                            <select id="admin-fase-selector"
+                                class="bg-slate-950 border border-slate-700 text-white font-bold text-xs rounded-lg focus:ring-rose-500 focus:border-rose-500 p-2 outline-none cursor-pointer">
                                 <option value="Todas">Todas las Fases</option>
                             </select>
                         </div>
@@ -998,9 +1059,9 @@
         function populateFaseSelector() {
             const selector = document.getElementById('fase-selector');
             const adminSelector = document.getElementById('admin-fase-selector');
-            
+
             const fases = [...new Set(allMatchesData.map(m => m.fase))].filter(Boolean);
-            
+
             if (selector) {
                 selector.innerHTML = `<option value="Todas">Mostrar Todas las Fases</option>`;
                 fases.forEach(f => {
@@ -1055,10 +1116,10 @@
 
             document.getElementById('user-aside-points').innerText = userDataModel.totalPoints;
             document.getElementById('profile-points').innerText = userDataModel.totalPoints;
-            
+
             updateStats(userPredictions);
         }
-        
+
         function updateStats(userPronosticos) {
             let aciertos4 = 0;
             let aciertos2 = 0;
@@ -1068,10 +1129,10 @@
                 const p = userPronosticos[m.id];
                 const r = globalResults[m.id];
                 if (p && r && r.home !== null && r.away !== null && r.home !== "" && r.away !== "") {
-                     const pts = calcSingleMatchPoints(p.home, p.away, r.home, r.away);
-                     if (pts === 4) aciertos4++;
-                     else if (pts === 2) aciertos2++;
-                     else if (pts === 0) fallos++;
+                    const pts = calcSingleMatchPoints(p.home, p.away, r.home, r.away);
+                    if (pts === 4) aciertos4++;
+                    else if (pts === 2) aciertos2++;
+                    else if (pts === 0) fallos++;
                 }
             });
 
@@ -1365,9 +1426,9 @@
                 const myPts = calculateTotalUserScore(userPredictions, globalResults);
                 await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPts });
                 document.getElementById('user-aside-points').innerText = myPts;
-                
+
                 updateStats(userPredictions);
-                
+
                 renderMatchesPredictionGrid();
             } catch (err) { showToast(err.message, 'error'); }
             finally {
@@ -1440,13 +1501,13 @@
             const container = document.getElementById('admin-matches-container');
             if (!container) return;
             container.innerHTML = '';
-            
+
             const selectedAdminFase = document.getElementById('admin-fase-selector')?.value || "Todas";
             const filteredAdminMatches = selectedAdminFase === "Todas" ? allMatchesData : allMatchesData.filter(m => m.fase === selectedAdminFase);
 
             if (filteredAdminMatches.length === 0) {
-                 container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-6 text-sm font-bold">No hay partidos en esta fase.</p>`;
-                 return;
+                container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-6 text-sm font-bold">No hay partidos en esta fase.</p>`;
+                return;
             }
 
             filteredAdminMatches.forEach(match => {
@@ -1478,10 +1539,10 @@
                 const nGR = {};
                 allMatchesData.forEach(m => {
                     const h = fd.get(`admin-${m.id}-home`), a = fd.get(`admin-${m.id}-away`);
-                    if(h !== null && a !== null) {
-                         nGR[m.id] = { home: (h !== "") ? parseInt(h) : null, away: (a !== "") ? parseInt(a) : null };
+                    if (h !== null && a !== null) {
+                        nGR[m.id] = { home: (h !== "") ? parseInt(h) : null, away: (a !== "") ? parseInt(a) : null };
                     } else if (globalResults[m.id]) {
-                         nGR[m.id] = globalResults[m.id]; 
+                        nGR[m.id] = globalResults[m.id];
                     }
                 });
 
