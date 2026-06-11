@@ -194,6 +194,7 @@
         <p class="text-yellow-500 font-black tracking-widest text-lg animate-pulse uppercase">Cargando Quiniela...</p>
     </div>
 
+    <!-- MODAL LOGOUT CONFIRMATION -->
     <div id="logout-confirm-modal"
         class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div
@@ -217,6 +218,7 @@
         </div>
     </div>
 
+    <!-- MODAL COMO FUNCIONA -->
     <div id="how-it-works-modal"
         class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div
@@ -323,39 +325,25 @@
     </div>
 
     <div id="verification-container" class="hidden min-h-screen w-full flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600"></div>
-            
-            <div class="mb-4 mt-2 inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 border-2 border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
-                <i class="fa-solid fa-file-invoice-dollar text-2xl text-yellow-500"></i>
+        <div
+            class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border border-yellow-500/30 relative overflow-hidden">
+            <div
+                class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600">
             </div>
-            
-            <h2 class="text-2xl font-black text-white mb-3">Pago Requerido</h2>
-            <p class="text-slate-300 mb-6 text-sm">Para poder ingresar es necesario que realices el pago a la siguiente cuenta:</p>
-            
-            <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-700 text-left mb-6 shadow-inner">
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Banco</p>
-                <p class="text-white font-black mb-4 text-lg">Banco Industrial</p>
-                
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Tipo de Cuenta</p>
-                <p class="text-white font-bold mb-4 text-base">Monetaria</p>
-                
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">No. de Cuenta</p>
-                <p class="text-yellow-500 font-black mb-4 text-xl tracking-widest">0120385893</p>
-                
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">A nombre de</p>
-                <p class="text-white font-bold text-base">Bryan Christopher Hernandez Cruz</p>
-            </div>
-
-            <p class="text-slate-400 text-xs mb-5 font-medium">Realiza la confirmación y el envío del comprobante en el siguiente botón:</p>
-            
-            <button id="btn-whatsapp-pago" class="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold py-4 px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(37,211,102,0.3)] hover:shadow-[0_0_25px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 mb-6 flex items-center justify-center">
-                <i class="fa-brands fa-whatsapp text-2xl mr-3"></i> Confirmar por WhatsApp
+            <i
+                class="fa-solid fa-user-clock text-6xl text-yellow-500 mb-6 mt-4 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-pulse"></i>
+            <h2 class="text-2xl font-black text-white mb-4">Cuenta Pendiente</h2>
+            <p class="text-sm text-slate-300 leading-relaxed mb-8">
+                Para activar tu acceso a los pronósticos, debes realizar el pago de inscripción de <span
+                    class="text-yellow-400 font-black text-lg bg-yellow-400/10 px-2 py-1 rounded">Q50.00</span>.
+            </p>
+            <button id="btn-whatsapp-pago"
+                class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-4 px-4 rounded-xl transition-all shadow-lg hover:shadow-[#25D366]/40 hover:-translate-y-1 text-base tracking-wide flex items-center justify-center gap-2 mb-6">
+                <i class="fa-brands fa-whatsapp text-2xl"></i> Notificar Pago
             </button>
-            
-            <button id="logout-pending-btn" class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión
-            </button>
+            <button id="logout-pending-btn"
+                class="text-xs font-bold text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider"><i
+                    class="fa-solid fa-arrow-left mr-1"></i> Cerrar sesión</button>
         </div>
     </div>
 
@@ -363,6 +351,7 @@
 
         <aside
             class="w-full md:w-64 lg:w-72 glass-panel border-r border-slate-700/50 flex flex-col z-40 relative flex-shrink-0 shadow-2xl">
+            <!-- UPDATED COMPACT ROW TOP PROFILE BLOCK -->
             <div
                 class="p-4 border-b border-slate-700/50 flex flex-row items-center justify-between gap-3 bg-slate-900/40 relative overflow-hidden w-full">
                 <div class="absolute -top-10 -right-10 w-24 h-24 bg-yellow-500/5 rounded-full blur-xl"></div>
@@ -418,6 +407,7 @@
                     <i class="fa-solid fa-shield-halved text-lg text-rose-400"></i> <span class="nav-text">Panel
                         Admin</span>
                 </button>
+                <!-- PROFILE TAB MOVED ALMOST LAST -->
                 <button onclick="switchTab('profile-tab')" id="btn-profile-tab"
                     class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
                     <i
@@ -582,10 +572,12 @@
                                 </p>
                             </div>
                             
+                            <!-- Sección de Créditos Mejorada -->
                             <div class="mt-8 pt-6 border-t border-slate-700/50">
                                 <h3 class="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 text-center">Gestión y Desarrollo</h3>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Organizador -->
                                     <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-blue-500/50 transition-colors">
                                         <div class="flex items-center gap-3 mb-3">
                                             <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
@@ -601,6 +593,7 @@
                                         </p>
                                     </div>
 
+                                    <!-- Desarrollador -->
                                     <div class="bg-slate-950/40 p-5 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-colors">
                                         <div class="flex items-center gap-3 mb-3">
                                             <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
@@ -659,6 +652,7 @@
 
                 <section id="leaderboard-tab" class="tab-content hidden space-y-8 animate-fade-in-up">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4" id="podium-container">
+                        <!-- 2ND PLACE -->
                         <div
                             class="glass-card podium-2-premium rounded-3xl p-6 text-center order-2 sm:order-1 flex flex-col justify-between relative overflow-hidden group">
                             <div class="absolute -top-4 -right-4 text-slate-400/10 text-7xl font-black">2</div>
@@ -679,6 +673,7 @@
                             </div>
                         </div>
 
+                        <!-- 1ST PLACE SUPERIOR PLATINUM/GOLD GLOW -->
                         <div
                             class="glass-card podium-1-premium rounded-3xl p-8 text-center order-1 sm:order-2 flex flex-col justify-between relative shadow-xl z-10 overflow-hidden group">
                             <div
@@ -703,6 +698,7 @@
                             </div>
                         </div>
 
+                        <!-- 3RD PLACE -->
                         <div
                             class="glass-card podium-3-premium rounded-3xl p-6 text-center order-3 flex flex-col justify-between relative overflow-hidden group">
                             <div class="absolute -top-4 -right-4 text-amber-700/10 text-7xl font-black">3</div>
@@ -888,30 +884,30 @@
         };
 
         const initialMatchesSeed = [
-            { id: "m1", fase: "Fase de Grupos", group: "Grupo A", teamHome: "México", flagHome: "mx", teamAway: "Sudáfrica", flagAway: "za", time: "2026-06-11T13:00" },
-            { id: "m2", fase: "Fase de Grupos", group: "Grupo A", teamHome: "Corea del Sur", flagHome: "kr", teamAway: "República Checa", flagAway: "cz", time: "2026-06-11T20:00" },
-            { id: "m3", fase: "Fase de Grupos", group: "Grupo B", teamHome: "Canadá", flagHome: "ca", teamAway: "Bosnia y Herzegovina", flagAway: "ba", time: "2026-06-12T13:00" },
-            { id: "m4", fase: "Fase de Grupos", group: "Grupo D", teamHome: "Estados Unidos", flagHome: "us", teamAway: "Paraguay", flagAway: "py", time: "2026-06-12T19:00" },
-            { id: "m5", fase: "Fase de Grupos", group: "Grupo B", teamHome: "Qatar", flagHome: "qa", teamAway: "Suiza", flagAway: "ch", time: "2026-06-13T13:00" },
-            { id: "m6", fase: "Fase de Grupos", group: "Grupo C", teamHome: "Brasil", flagHome: "br", teamAway: "Marruecos", flagAway: "ma", time: "2026-06-13T16:00" },
-            { id: "m7", fase: "Fase de Grupos", group: "Grupo C", teamHome: "Haití", flagHome: "ht", teamAway: "Escocia", flagAway: "gb-sct", time: "2026-06-13T19:00" },
-            { id: "m8", fase: "Fase de Grupos", group: "Grupo D", teamHome: "Australia", flagHome: "au", teamAway: "Turquía", flagAway: "tr", time: "2026-06-13T22:00" },
-            { id: "m9", fase: "Fase de Grupos", group: "Grupo E", teamHome: "Alemania", flagHome: "de", teamAway: "Curazao", flagAway: "cw", time: "2026-06-14T11:00" },
-            { id: "m10", fase: "Fase de Grupos", group: "Grupo F", teamHome: "Países Bajos", flagHome: "nl", teamAway: "Japón", flagAway: "jp", time: "2026-06-14T14:00" },
-            { id: "m11", fase: "Fase de Grupos", group: "Grupo E", teamHome: "Costa de Marfil", flagHome: "ci", teamAway: "Ecuador", flagAway: "ec", time: "2026-06-14T17:00" },
-            { id: "m12", fase: "Fase de Grupos", group: "Grupo F", teamHome: "Suecia", flagHome: "se", teamAway: "Túnez", flagAway: "tn", time: "2026-06-14T20:00" },
-            { id: "m13", fase: "Fase de Grupos", group: "Grupo H", teamHome: "España", flagHome: "es", teamAway: "Cabo Verde", flagAway: "cv", time: "2026-06-15T10:00" },
-            { id: "m14", fase: "Fase de Grupos", group: "Grupo G", teamHome: "Bélgica", flagHome: "be", teamAway: "Egipto", flagAway: "eg", time: "2026-06-15T13:00" },
-            { id: "m15", fase: "Fase de Grupos", group: "Grupo H", teamHome: "Arabia Saudita", flagHome: "sa", teamAway: "Uruguay", flagAway: "uy", time: "2026-06-15T16:00" },
-            { id: "m16", fase: "Fase de Grupos", group: "Grupo G", teamHome: "Irán", flagHome: "ir", teamAway: "Nueva Zelanda", flagAway: "nz", time: "2026-06-15T19:00" },
-            { id: "m17", fase: "Fase de Grupos", group: "Grupo I", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "2026-06-16T13:00" },
-            { id: "m18", fase: "Fase de Grupos", group: "Grupo I", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "2026-06-16T16:00" },
-            { id: "m19", fase: "Fase de Grupos", group: "Grupo J", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "2026-06-16T19:00" },
-            { id: "m20", fase: "Fase de Grupos", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
-            { id: "m21", fase: "Fase de Grupos", group: "Grupo K", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "2026-06-17T11:00" },
-            { id: "m22", fase: "Fase de Grupos", group: "Grupo L", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "2026-06-17T14:00" },
-            { id: "m23", fase: "Fase de Grupos", group: "Grupo L", teamHome: "Ghana", flagHome: "gh", teamAway: "Panamá", flagAway: "pa", time: "2026-06-17T17:00" },
-            { id: "m24", fase: "Fase de Grupos", group: "Grupo K", teamHome: "Uzbekistán", flagHome: "uz", teamAway: "Colombia", flagAway: "co", time: "2026-06-17T20:00" }
+            { id: "m1", fase: "Fase 1", group: "Grupo A", teamHome: "México", flagHome: "mx", teamAway: "Sudáfrica", flagAway: "za", time: "2026-06-11T13:00" },
+            { id: "m2", fase: "Fase 1", group: "Grupo A", teamHome: "Corea del Sur", flagHome: "kr", teamAway: "República Checa", flagAway: "cz", time: "2026-06-11T20:00" },
+            { id: "m3", fase: "Fase 1", group: "Grupo B", teamHome: "Canadá", flagHome: "ca", teamAway: "Bosnia y Herzegovina", flagAway: "ba", time: "2026-06-12T13:00" },
+            { id: "m4", fase: "Fase 1", group: "Grupo D", teamHome: "Estados Unidos", flagHome: "us", teamAway: "Paraguay", flagAway: "py", time: "2026-06-12T19:00" },
+            { id: "m5", fase: "Fase 1", group: "Grupo B", teamHome: "Qatar", flagHome: "qa", teamAway: "Suiza", flagAway: "ch", time: "2026-06-13T13:00" },
+            { id: "m6", fase: "Fase 1", group: "Grupo C", teamHome: "Brasil", flagHome: "br", teamAway: "Marruecos", flagAway: "ma", time: "2026-06-13T16:00" },
+            { id: "m7", fase: "Fase 1", group: "Grupo C", teamHome: "Haití", flagHome: "ht", teamAway: "Escocia", flagAway: "gb-sct", time: "2026-06-13T19:00" },
+            { id: "m8", fase: "Fase 1", group: "Grupo D", teamHome: "Australia", flagHome: "au", teamAway: "Turquía", flagAway: "tr", time: "2026-06-13T22:00" },
+            { id: "m9", fase: "Fase 1", group: "Grupo E", teamHome: "Alemania", flagHome: "de", teamAway: "Curazao", flagAway: "cw", time: "2026-06-14T11:00" },
+            { id: "m10", fase: "Fase 1", group: "Grupo F", teamHome: "Países Bajos", flagHome: "nl", teamAway: "Japón", flagAway: "jp", time: "2026-06-14T14:00" },
+            { id: "m11", fase: "Fase 1", group: "Grupo E", teamHome: "Costa de Marfil", flagHome: "ci", teamAway: "Ecuador", flagAway: "ec", time: "2026-06-14T17:00" },
+            { id: "m12", fase: "Fase 1", group: "Grupo F", teamHome: "Suecia", flagHome: "se", teamAway: "Túnez", flagAway: "tn", time: "2026-06-14T20:00" },
+            { id: "m13", fase: "Fase 1", group: "Grupo H", teamHome: "España", flagHome: "es", teamAway: "Cabo Verde", flagAway: "cv", time: "2026-06-15T10:00" },
+            { id: "m14", fase: "Fase 1", group: "Grupo G", teamHome: "Bélgica", flagHome: "be", teamAway: "Egipto", flagAway: "eg", time: "2026-06-15T13:00" },
+            { id: "m15", fase: "Fase 1", group: "Grupo H", teamHome: "Arabia Saudita", flagHome: "sa", teamAway: "Uruguay", flagAway: "uy", time: "2026-06-15T16:00" },
+            { id: "m16", fase: "Fase 1", group: "Grupo G", teamHome: "Irán", flagHome: "ir", teamAway: "Nueva Zelanda", flagAway: "nz", time: "2026-06-15T19:00" },
+            { id: "m17", fase: "Fase 1", group: "Grupo I", teamHome: "Francia", flagHome: "fr", teamAway: "Senegal", flagAway: "sn", time: "2026-06-16T13:00" },
+            { id: "m18", fase: "Fase 1", group: "Grupo I", teamHome: "Irak", flagHome: "iq", teamAway: "Noruega", flagAway: "no", time: "2026-06-16T16:00" },
+            { id: "m19", fase: "Fase 1", group: "Grupo J", teamHome: "Argentina", flagHome: "ar", teamAway: "Argelia", flagAway: "dz", time: "2026-06-16T19:00" },
+            { id: "m20", fase: "Fase 1", group: "Grupo J", teamHome: "Austria", flagHome: "at", teamAway: "Jordania", flagAway: "jo", time: "2026-06-16T22:00" },
+            { id: "m21", fase: "Fase 1", group: "Grupo K", teamHome: "Portugal", flagHome: "pt", teamAway: "RD Congo", flagAway: "cd", time: "2026-06-17T11:00" },
+            { id: "m22", fase: "Fase 1", group: "Grupo L", teamHome: "Inglaterra", flagHome: "gb-eng", teamAway: "Croacia", flagAway: "hr", time: "2026-06-17T14:00" },
+            { id: "m23", fase: "Fase 1", group: "Grupo L", teamHome: "Ghana", flagHome: "gh", teamAway: "Panamá", flagAway: "pa", time: "2026-06-17T17:00" },
+            { id: "m24", fase: "Fase 1", group: "Grupo K", teamHome: "Uzbekistán", flagHome: "uz", teamAway: "Colombia", flagAway: "co", time: "2026-06-17T20:00" }
         ];
 
         let currentUser = null;
@@ -1102,7 +1098,7 @@
 
                     if (!isAdmin && userDataModel.status === 'pendiente') {
                         const waBtn = document.getElementById('btn-whatsapp-pago');
-                        waBtn.onclick = () => window.open(`https://wa.me/${WHATSAPP_ADMIN}?text=Hola,%20Ya%20realice%20mi%20pago%20te%20enviare%20el%20comprobante,%20podrias%20darme%20acceso%20a%20la%20plataforma.`, '_blank');
+                        waBtn.onclick = () => window.open(`https://wa.me/${WHATSAPP_ADMIN}?text=Hola,%20ya%20me%20registré%20en%20la%20quiniela%20con%20el%20correo%20${user.email}%20y%20quiero%20realizar%20el%20pago%20de%20mi%20inscripción.`, '_blank');
                         document.getElementById('verification-container').classList.remove('hidden');
                     } else {
                         await fetchGlobalResults();
@@ -1284,14 +1280,8 @@
 
                 const displayDate = formatUIMatchDate(match.time);
 
-                const lockUI = isLocked
-                    ? `<div class="absolute inset-0 z-[9999] flex items-center justify-center bg-slate-900/80 backdrop-blur-[2px] rounded-2xl">
-                        <span class="bg-rose-600 text-white font-black px-6 py-3 rounded-xl shadow-2xl rotate-[-5deg] text-lg border-2 border-white/20 uppercase tracking-widest">
-                            <i class="fa-solid fa-lock mr-2"></i> CERRADO
-                        </span>
-                       </div>`
-                    : '';
-                const lockIcon = isLocked ? `<span class="text-rose-500 animate-pulse font-bold ml-2" title="Cerrado"><i class="fa-solid fa-lock"></i></span>` : `<span class="text-emerald-500 font-bold ml-2" title="Abierto"><i class="fa-solid fa-unlock"></i></span>`;
+                const lockUI = '';
+                const lockIcon = isLocked ? `<span class="ml-2 text-[10px] bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded border border-rose-500/30 uppercase tracking-widest"><i class="fa-solid fa-lock"></i> Cerrado</span>` : `<span class="ml-2 text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/30 uppercase tracking-widest"><i class="fa-solid fa-unlock"></i> Abierto</span>`;
 
                 container.innerHTML += `
                     <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between border ${sBorder} relative group ${isLocked ? 'locked-card' : ''}">
@@ -1310,9 +1300,9 @@
                             </div>
                             
                             <div class="flex items-center justify-center gap-1 sm:gap-2 flex-shrink-0 px-2 relative z-30">
-                                <input type="number" min="0" name="pred-${match.id}-home" value="${pred.home}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner">
+                                <input type="number" min="0" name="pred-${match.id}-home" value="${pred.home}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}">
                                 <span class="text-slate-500 font-black text-xs sm:text-sm">VS</span>
-                                <input type="number" min="0" name="pred-${match.id}-away" value="${pred.away}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner">
+                                <input type="number" min="0" name="pred-${match.id}-away" value="${pred.away}" ${isLocked ? 'disabled' : ''} class="w-10 h-12 sm:w-12 sm:h-14 bg-slate-900 text-white font-black text-center rounded-xl border-2 border-slate-700 focus:outline-none focus:border-yellow-500 focus:bg-slate-800 transition-all text-lg sm:text-xl p-0 shadow-inner ${isLocked ? 'opacity-50 cursor-not-allowed' : ''}">
                             </div>
                             
                             <div class="flex flex-col items-center flex-1 text-center min-w-0 overflow-hidden">
