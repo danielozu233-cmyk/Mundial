@@ -1002,7 +1002,7 @@
 
         // LÓGICA DE LA TABLA DE POSICIONES
         const API_KEY_FD = 'c2b0de348af44d57bfce6fc5ad937239';
-        const API_URL_FD = 'https://corsproxy.io/?https://api.football-data.org/v4/competitions/WC/standings';
+        const API_URL_FD = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.football-data.org/v4/competitions/WC/standings');
 
         window.forceRefreshStandings = function() {
             localStorage.removeItem('wc_standings_cache');
