@@ -415,11 +415,6 @@
                         class="fa-solid fa-ranking-star text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
                     <span class="nav-text">Ranking Oficial</span>
                 </button>
-                <button onclick="switchTab('standings-tab')" id="btn-standings-tab"
-                    class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
-                    <i class="fa-solid fa-table-list text-lg text-slate-500 group-hover:text-yellow-500 transition-colors"></i>
-                    <span class="nav-text">Posiciones</span>
-                </button>
                 <button onclick="switchTab('about-tab')" id="btn-about-tab"
                     class="nav-btn flex-shrink-0 md:w-full flex items-center gap-3 px-5 py-3.5 rounded-xl font-bold text-sm text-slate-300 hover:bg-slate-800/80 hover:text-white transition-all group whitespace-nowrap">
                     <i
@@ -711,9 +706,9 @@
                             id="matches-prediction-container"></div>
 
                         <div
-                            class="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:bottom-8 flex justify-center md:justify-end z-[90] pointer-events-none">
+                            class="fixed md:sticky bottom-6 right-6 left-6 md:left-auto md:right-auto md:mt-10 flex justify-center md:justify-end z-40 pointer-events-none">
                             <button type="submit"
-                                class="pointer-events-auto w-full md:w-auto bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 hover:from-yellow-300 hover:to-yellow-500 text-slate-900 font-black px-8 py-4 rounded-2xl md:rounded-full transition-all hover:scale-105 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.8)] flex items-center justify-center gap-3 text-sm md:text-base tracking-wide border border-yellow-300/50">
+                                class="pointer-events-auto w-full md:w-auto bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 hover:from-yellow-300 hover:to-yellow-500 text-slate-900 font-black px-8 py-4 rounded-2xl transition-all hover:scale-105 shadow-[0_10px_40px_-10px_rgba(234,179,8,0.8)] flex items-center justify-center gap-3 text-sm md:text-base tracking-wide border border-yellow-300/50">
                                 <i class="fa-solid fa-floppy-disk text-xl"></i> GUARDAR PRONÓSTICOS
                             </button>
                         </div>
@@ -811,20 +806,6 @@
                                     class="divide-y divide-slate-800/80 text-sm font-medium"></tbody>
                             </table>
                         </div>
-                    </div>
-                </section>
-
-                
-                <section id="standings-tab" class="tab-content hidden space-y-6 animate-fade-in-up">
-                    <div class="glass-card p-4 sm:p-8 rounded-3xl border border-slate-700/50">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-2xl font-black text-white flex items-center gap-3"><i class="fa-solid fa-earth-americas text-yellow-500"></i> Fase de Grupos</h3>
-                            <button onclick="forceRefreshStandings()" class="text-[10px] sm:text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg transition-colors border border-slate-600 flex items-center gap-2 font-bold uppercase tracking-wider"><i class="fa-solid fa-rotate-right"></i> Actualizar</button>
-                        </div>
-                        <div id="standings-loader" class="text-center py-12 text-slate-400 font-bold"><i class="fa-solid fa-spinner animate-spin text-yellow-500 text-3xl mb-3 block"></i> Conectando con la API...</div>
-                        <div id="standings-error" class="hidden text-center py-8 text-rose-400 font-bold bg-rose-500/10 rounded-xl border border-rose-500/20 text-sm"></div>
-                        <div id="standings-container" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                            </div>
                     </div>
                 </section>
 
@@ -999,149 +980,6 @@
         let userPredictions = {};
         let allMatchesData = [];
 
-        // LÓGICA DE LA TABLA DE POSICIONES
-        const API_KEY_FD = 'c2b0de348af44d57bfce6fc5ad937239';
-        
-        window.forceRefreshStandings = function() {
-            localStorage.removeItem('wc_standings_cache');
-            localStorage.removeItem('wc_standings_time');
-            window.loadStandings();
-        };
-
-        window.loadStandings = async function() {
-            const container = document.getElementById('standings-container');
-            const loader = document.getElementById('standings-loader');
-            const errorEl = document.getElementById('standings-error');
-
-            // Usamos proxies que SÍ respetan el envío de Headers (AllOrigins los bloqueaba)
-            const proxies = [
-                'https://corsproxy.io/?',
-                'https://api.codetabs.com/v1/proxy/?quest='
-            ];
-
-            container.classList.add('hidden');
-            errorEl.classList.add('hidden');
-            loader.classList.remove('hidden');
-
-            const cacheGuardado = localStorage.getItem('wc_standings_cache');
-            const tiempoGuardado = localStorage.getItem('wc_standings_time');
-            const ahora = new Date().getTime();
-
-            if (cacheGuardado && tiempoGuardado && (ahora - parseInt(tiempoGuardado) < 3600000)) {
-                renderStandings(JSON.parse(cacheGuardado));
-                return;
-            }
-
-            for (let proxy of proxies) {
-                try {
-                    console.log("Intentando con proxy:", proxy);
-                    const targetUrl = 'https://api.football-data.org/v4/competitions/WC/standings';
-                    
-                    // Corsproxy recomienda encodeURIComponent, codetabs no.
-                    const fetchUrl = proxy.includes('corsproxy.io') ? proxy + encodeURIComponent(targetUrl) : proxy + targetUrl;
-                    
-                    // AQUÍ ESTÁ LA CORRECCIÓN: Enviamos la llave en el Header explícitamente
-                    const response = await fetch(fetchUrl, {
-                        method: 'GET',
-                        headers: {
-                            'X-Auth-Token': API_KEY_FD
-                        }
-                    });
-                    
-                    if (!response.ok) {
-                        console.warn("Fallo en proxy:", response.status);
-                        continue;
-                    }
-
-                    const data = await response.json();
-
-                    localStorage.setItem('wc_standings_cache', JSON.stringify(data));
-                    localStorage.setItem('wc_standings_time', ahora.toString());
-                    
-                    renderStandings(data);
-                    return; // Éxito!
-                } catch (err) {
-                    console.warn("Proxy falló, intentando siguiente...", err);
-                }
-            }
-
-            // Si todos los proxies fallan
-            loader.classList.add('hidden');
-            if (cacheGuardado) {
-                renderStandings(JSON.parse(cacheGuardado));
-            } else {
-                errorEl.innerHTML = "No pudimos conectar con los servidores de FIFA. Intenta más tarde.";
-                errorEl.classList.remove('hidden');
-            }
-        }
-
-        function renderStandings(data) {
-            const container = document.getElementById('standings-container');
-            const loader = document.getElementById('standings-loader');
-            container.innerHTML = '';
-
-            if (!data.standings || data.standings.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-slate-400 py-6">No hay datos de posiciones disponibles en este momento.</p>`;
-                loader.classList.add('hidden');
-                container.classList.remove('hidden');
-                return;
-            }
-
-            // Filtrar solo los standings del tipo 'TOTAL' que agrupan a los equipos por grupo
-            const groups = data.standings.filter(s => s.type === 'TOTAL');
-
-            groups.forEach(group => {
-                let groupName = group.group ? group.group.replace('GROUP_', 'GRUPO ') : 'GRUPO';
-                
-                let rowsHtml = group.table.map(e => `
-                    <tr class="border-b border-slate-700/50 hover:bg-slate-800/50 transition-colors text-xs sm:text-sm">
-                        <td class="py-2.5 text-center font-black ${e.position <= 2 ? 'text-emerald-400' : 'text-slate-500'}">${e.position}</td>
-                        <td class="py-2.5 flex items-center gap-2 font-bold text-white">
-                            <img src="${e.team.crest}" class="w-5 h-5 rounded-sm object-contain bg-white/10" alt="${e.team.tla}" onerror="this.src='https://placehold.co/20x20/1e293b/eab308?text=WC'">
-                            <span class="truncate max-w-[100px] sm:max-w-[150px]">${e.team.shortName || e.team.name}</span>
-                        </td>
-                        <td class="py-2.5 text-center text-slate-300 font-bold">${e.playedGames}</td>
-                        <td class="py-2.5 text-center text-slate-400 hidden sm:table-cell">${e.won}</td>
-                        <td class="py-2.5 text-center text-slate-400 hidden sm:table-cell">${e.draw}</td>
-                        <td class="py-2.5 text-center text-slate-400 hidden sm:table-cell">${e.lost}</td>
-                        <td class="py-2.5 text-center text-slate-300 font-medium">${e.goalDifference > 0 ? '+'+e.goalDifference : e.goalDifference}</td>
-                        <td class="py-2.5 text-center font-black text-yellow-500 text-sm bg-yellow-500/5 rounded-r-md">${e.points}</td>
-                    </tr>
-                `).join('');
-
-                container.innerHTML += `
-                    <div class="bg-slate-900/60 rounded-xl border border-slate-700 overflow-hidden shadow-lg h-fit">
-                        <div class="bg-slate-950 px-4 py-3 border-b border-slate-700">
-                            <h4 class="font-black text-slate-300 uppercase tracking-widest text-sm flex items-center gap-2"><i class="fa-solid fa-layer-group text-yellow-500"></i> ${groupName}</h4>
-                        </div>
-                        <div class="p-0 overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-slate-900/80 text-[10px] sm:text-xs font-black text-slate-500 uppercase tracking-wider">
-                                    <tr>
-                                        <th class="py-2.5 w-8 text-center">#</th>
-                                        <th class="py-2.5">Equipo</th>
-                                        <th class="py-2.5 w-8 text-center" title="Partidos Jugados">PJ</th>
-                                        <th class="py-2.5 w-8 text-center hidden sm:table-cell" title="Ganados">G</th>
-                                        <th class="py-2.5 w-8 text-center hidden sm:table-cell" title="Empatados">E</th>
-                                        <th class="py-2.5 w-8 text-center hidden sm:table-cell" title="Perdidos">P</th>
-                                        <th class="py-2.5 w-8 text-center" title="Diferencia de Goles">DG</th>
-                                        <th class="py-2.5 w-12 text-center text-yellow-500">PTS</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${rowsHtml}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                `;
-            });
-
-            loader.classList.add('hidden');
-            container.classList.remove('hidden');
-        }
-
-
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -1187,10 +1025,9 @@
 
             document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active-tab'));
             document.getElementById(`btn-${tabId}`).classList.add('active-tab');
-            const titles = { 'quiniela-tab': 'Mis Pronósticos', 'standings-tab': 'Posiciones del Mundial', 'leaderboard-tab': 'Ranking General', 'about-tab': 'Reglas del Juego', 'admin-tab': 'Centro de Mando', 'profile-tab': 'Mi Perfil' };
+            const titles = { 'quiniela-tab': 'Mis Pronósticos', 'leaderboard-tab': 'Ranking General', 'about-tab': 'Reglas del Juego', 'admin-tab': 'Centro de Mando', 'profile-tab': 'Mi Perfil' };
             document.getElementById('page-title').innerText = titles[tabId] || 'Panel';
             if (tabId === 'leaderboard-tab') loadLeaderboard();
-            if (tabId === 'standings-tab') loadStandings();
             if (tabId === 'admin-tab') loadPendingUsers();
         };
 
