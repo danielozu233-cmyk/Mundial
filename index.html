@@ -1001,68 +1001,79 @@
 
         // LÓGICA DE LA TABLA DE POSICIONES
         const API_KEY_FD = 'c2b0de348af44d57bfce6fc5ad937239';
-       const API_URL_FD = 'https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.football-data.org/v4/competitions/WC/standings');
+        
         window.forceRefreshStandings = function() {
             localStorage.removeItem('wc_standings_cache');
             localStorage.removeItem('wc_standings_time');
             window.loadStandings();
         };
 
-window.loadStandings = async function() {
-    const container = document.getElementById('standings-container');
-    const loader = document.getElementById('standings-loader');
-    const errorEl = document.getElementById('standings-error');
+        window.loadStandings = async function() {
+            const container = document.getElementById('standings-container');
+            const loader = document.getElementById('standings-loader');
+            const errorEl = document.getElementById('standings-error');
 
-    // Lista de proxies (si uno falla, saltamos al siguiente)
-    const proxies = [
-        'https://api.allorigins.win/get?url=',
-        'https://corsproxy.io/?'
-    ];
+            // Usamos proxies que SÍ respetan el envío de Headers (AllOrigins los bloqueaba)
+            const proxies = [
+                'https://corsproxy.io/?',
+                'https://api.codetabs.com/v1/proxy/?quest='
+            ];
 
-    container.classList.add('hidden');
-    errorEl.classList.add('hidden');
-    loader.classList.remove('hidden');
+            container.classList.add('hidden');
+            errorEl.classList.add('hidden');
+            loader.classList.remove('hidden');
 
-    const cacheGuardado = localStorage.getItem('wc_standings_cache');
-    const tiempoGuardado = localStorage.getItem('wc_standings_time');
-    const ahora = new Date().getTime();
+            const cacheGuardado = localStorage.getItem('wc_standings_cache');
+            const tiempoGuardado = localStorage.getItem('wc_standings_time');
+            const ahora = new Date().getTime();
 
-    // 1. Usar caché si existe
-    if (cacheGuardado && tiempoGuardado && (ahora - parseInt(tiempoGuardado) < 3600000)) {
-        renderStandings(JSON.parse(cacheGuardado));
-        return;
-    }
+            if (cacheGuardado && tiempoGuardado && (ahora - parseInt(tiempoGuardado) < 3600000)) {
+                renderStandings(JSON.parse(cacheGuardado));
+                return;
+            }
 
-    // 2. Intentar con proxies
-    for (let proxy of proxies) {
-        try {
-            console.log("Intentando con proxy:", proxy);
-            const response = await fetch(proxy + encodeURIComponent('https://api.football-data.org/v4/competitions/WC/standings'));
-            
-            if (!response.ok) continue; // Si falla, intenta con el siguiente proxy
+            for (let proxy of proxies) {
+                try {
+                    console.log("Intentando con proxy:", proxy);
+                    const targetUrl = 'https://api.football-data.org/v4/competitions/WC/standings';
+                    
+                    // Corsproxy recomienda encodeURIComponent, codetabs no.
+                    const fetchUrl = proxy.includes('corsproxy.io') ? proxy + encodeURIComponent(targetUrl) : proxy + targetUrl;
+                    
+                    // AQUÍ ESTÁ LA CORRECCIÓN: Enviamos la llave en el Header explícitamente
+                    const response = await fetch(fetchUrl, {
+                        method: 'GET',
+                        headers: {
+                            'X-Auth-Token': API_KEY_FD
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        console.warn("Fallo en proxy:", response.status);
+                        continue;
+                    }
 
-            const wrapper = await response.json();
-            const data = proxy.includes('allorigins') ? JSON.parse(wrapper.contents) : wrapper;
+                    const data = await response.json();
 
-            localStorage.setItem('wc_standings_cache', JSON.stringify(data));
-            localStorage.setItem('wc_standings_time', ahora.toString());
-            
-            renderStandings(data);
-            return; // Éxito!
-        } catch (err) {
-            console.warn("Proxy falló, intentando siguiente...");
+                    localStorage.setItem('wc_standings_cache', JSON.stringify(data));
+                    localStorage.setItem('wc_standings_time', ahora.toString());
+                    
+                    renderStandings(data);
+                    return; // Éxito!
+                } catch (err) {
+                    console.warn("Proxy falló, intentando siguiente...", err);
+                }
+            }
+
+            // Si todos los proxies fallan
+            loader.classList.add('hidden');
+            if (cacheGuardado) {
+                renderStandings(JSON.parse(cacheGuardado));
+            } else {
+                errorEl.innerHTML = "No pudimos conectar con los servidores de FIFA. Intenta más tarde.";
+                errorEl.classList.remove('hidden');
+            }
         }
-    }
-
-    // 3. Fallback final
-    loader.classList.add('hidden');
-    if (cacheGuardado) {
-        renderStandings(JSON.parse(cacheGuardado));
-    } else {
-        errorEl.innerHTML = "No pudimos conectar con los servidores. Intenta más tarde.";
-        errorEl.classList.remove('hidden');
-    }
-}
 
         function renderStandings(data) {
             const container = document.getElementById('standings-container');
