@@ -1009,45 +1009,61 @@
             window.loadStandings();
         };
 
-        window.loadStandings = async function() {
-            const container = document.getElementById('standings-container');
-            const loader = document.getElementById('standings-loader');
-            const errorEl = document.getElementById('standings-error');
+window.loadStandings = async function() {
+    const container = document.getElementById('standings-container');
+    const loader = document.getElementById('standings-loader');
+    const errorEl = document.getElementById('standings-error');
 
-            container.classList.add('hidden');
-            errorEl.classList.add('hidden');
-            loader.classList.remove('hidden');
+    // Lista de proxies (si uno falla, saltamos al siguiente)
+    const proxies = [
+        'https://api.allorigins.win/get?url=',
+        'https://corsproxy.io/?'
+    ];
 
-            const ahora = new Date().getTime();
-            const cacheGuardado = localStorage.getItem('wc_standings_cache');
-            const tiempoGuardado = localStorage.getItem('wc_standings_time');
+    container.classList.add('hidden');
+    errorEl.classList.add('hidden');
+    loader.classList.remove('hidden');
 
-            try {
-                let data;
-                // Cache válido por 1 hora (3600000 ms)
-                if (cacheGuardado && tiempoGuardado && (ahora - parseInt(tiempoGuardado) < 3600000)) {
-                    data = JSON.parse(cacheGuardado);
-                    console.log("Cargando posiciones desde el caché local.");
-                } else {
-// Dentro de tu función loadStandings, cambia la parte del fetch:
+    const cacheGuardado = localStorage.getItem('wc_standings_cache');
+    const tiempoGuardado = localStorage.getItem('wc_standings_time');
+    const ahora = new Date().getTime();
 
-console.log("Consultando API externa para posiciones...");
-const response = await fetch(API_URL_FD); // Ya no necesitas los headers aquí
-if (!response.ok) throw new Error("No se pudo conectar con la API.");
+    // 1. Usar caché si existe
+    if (cacheGuardado && tiempoGuardado && (ahora - parseInt(tiempoGuardado) < 3600000)) {
+        renderStandings(JSON.parse(cacheGuardado));
+        return;
+    }
 
-const wrapper = await response.json();
-const data = JSON.parse(wrapper.contents); // Aquí extraemos el contenido real
+    // 2. Intentar con proxies
+    for (let proxy of proxies) {
+        try {
+            console.log("Intentando con proxy:", proxy);
+            const response = await fetch(proxy + encodeURIComponent('https://api.football-data.org/v4/competitions/WC/standings'));
+            
+            if (!response.ok) continue; // Si falla, intenta con el siguiente proxy
 
-localStorage.setItem('wc_standings_cache', JSON.stringify(data));
-localStorage.setItem('wc_standings_time', ahora.toString());
-                }
-                renderStandings(data);
-            } catch (err) {
-                loader.classList.add('hidden');
-                errorEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-2xl block mb-2"></i> Error: ${err.message}`;
-                errorEl.classList.remove('hidden');
-            }
+            const wrapper = await response.json();
+            const data = proxy.includes('allorigins') ? JSON.parse(wrapper.contents) : wrapper;
+
+            localStorage.setItem('wc_standings_cache', JSON.stringify(data));
+            localStorage.setItem('wc_standings_time', ahora.toString());
+            
+            renderStandings(data);
+            return; // Éxito!
+        } catch (err) {
+            console.warn("Proxy falló, intentando siguiente...");
         }
+    }
+
+    // 3. Fallback final
+    loader.classList.add('hidden');
+    if (cacheGuardado) {
+        renderStandings(JSON.parse(cacheGuardado));
+    } else {
+        errorEl.innerHTML = "No pudimos conectar con los servidores. Intenta más tarde.";
+        errorEl.classList.remove('hidden');
+    }
+}
 
         function renderStandings(data) {
             const container = document.getElementById('standings-container');
