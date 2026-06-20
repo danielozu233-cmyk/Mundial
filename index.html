@@ -834,6 +834,42 @@
                         </div>
                     </div>
 
+                    <div id="admin-bonus-card" class="glass-card rounded-2xl border border-yellow-500/30 overflow-hidden shadow-lg hidden">
+                        <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
+                            <h3
+                                class="text-sm font-black text-yellow-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-circle-plus"></i> Puntos Manuales
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <form id="admin-bonus-form" class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-4 items-end">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Jugador</label>
+                                    <select id="admin-bonus-user" required
+                                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 outline-none transition-colors">
+                                        <option value="">Cargando jugadores...</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Puntos</label>
+                                    <select id="admin-bonus-points" required
+                                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-bold text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 outline-none transition-colors">
+                                        <option value="2">+2 PTS</option>
+                                        <option value="4">+4 PTS</option>
+                                    </select>
+                                </div>
+                                <button type="submit"
+                                    class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black py-3 px-6 rounded-xl text-sm transition-all hover:-translate-y-1 shadow-[0_5px_15px_rgba(234,179,8,0.35)]">
+                                    Agregar
+                                </button>
+                            </form>
+                            <div id="admin-bonus-summary"
+                                class="mt-4 text-xs text-slate-400 font-bold bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-3">
+                                Los puntos manuales se suman al total y se conservan aunque recalcules resultados globales.
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="glass-card rounded-2xl border border-blue-500/30 overflow-hidden shadow-lg">
                         <div class="bg-slate-900 px-5 py-4 border-b border-slate-800">
                             <h3
@@ -921,7 +957,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, query, where, runTransaction, writeBatch, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
@@ -941,6 +977,8 @@
         const googleProvider = new GoogleAuthProvider();
 
         const ADMIN_EMAILS = ["workplaceqr@gmail.com", "chrishernandez2801@gmail.com"];
+        const BONUS_ADMIN_EMAIL = "workplaceqr@gmail.com";
+        const PREDICTION_LOCK_MINUTES = 30;
         const WHATSAPP_ADMIN = "50250193116";
 
         const COUNTRIES = {
@@ -979,6 +1017,7 @@
         let globalResults = {};
         let userPredictions = {};
         let allMatchesData = [];
+        let manualBonusUsers = [];
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -1014,6 +1053,10 @@
             }
         }
 
+        function canManageManualBonus() {
+            return currentUser?.email === BONUS_ADMIN_EMAIL;
+        }
+
         window.switchTab = function (tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             const targetTab = document.getElementById(tabId);
@@ -1028,7 +1071,10 @@
             const titles = { 'quiniela-tab': 'Mis Pronósticos', 'leaderboard-tab': 'Ranking General', 'about-tab': 'Reglas del Juego', 'admin-tab': 'Centro de Mando', 'profile-tab': 'Mi Perfil' };
             document.getElementById('page-title').innerText = titles[tabId] || 'Panel';
             if (tabId === 'leaderboard-tab') loadLeaderboard();
-            if (tabId === 'admin-tab') loadPendingUsers();
+            if (tabId === 'admin-tab') {
+                loadPendingUsers();
+                if (canManageManualBonus()) loadManualBonusUsers();
+            }
         };
 
         function hideAllViews() {
@@ -1036,6 +1082,8 @@
             document.getElementById('complete-registration-container').classList.add('hidden');
             document.getElementById('verification-container').classList.add('hidden');
             document.getElementById('app-wrapper').classList.add('hidden');
+            const bonusCard = document.getElementById('admin-bonus-card');
+            if (bonusCard) bonusCard.classList.add('hidden');
         }
 
         async function fetchMatches() {
@@ -1101,6 +1149,8 @@
         }
 
         function updateProfileUI() {
+            userDataModel.totalPoints = normalizePoints(userDataModel.totalPoints);
+            userDataModel.manualBonusPoints = normalizePoints(userDataModel.manualBonusPoints);
             const avatarHtml = getAvatarHtml(userDataModel.photoUrl || currentUser.photoURL, userDataModel.name);
             document.getElementById('user-avatar').innerHTML = avatarHtml;
             document.getElementById('profile-large-avatar').innerHTML = avatarHtml;
@@ -1174,6 +1224,8 @@
                         if (isAdmin) {
                             const adminTabBtn = document.getElementById('btn-admin-tab');
                             if (adminTabBtn) adminTabBtn.classList.remove('hidden');
+                            const bonusCard = document.getElementById('admin-bonus-card');
+                            if (bonusCard && canManageManualBonus()) bonusCard.classList.remove('hidden');
                             const lHeader = document.getElementById('leaderboard-header-row');
                             if (lHeader && !lHeader.innerHTML.includes('Teléfono')) {
                                 lHeader.innerHTML += `<th class="px-6 py-4 hidden sm:table-cell text-right">Teléfono</th>`;
@@ -1293,6 +1345,7 @@
                 photoUrl: currentUser.photoURL || null,
                 phone: phone,
                 totalPoints: 0,
+                manualBonusPoints: 0,
                 isAdmin: isAdmin,
                 status: isAdmin ? 'aprobado' : 'pendiente'
             });
@@ -1330,7 +1383,7 @@
                 const real = globalResults[match.id] || { home: null, away: null };
 
                 const matchTime = new Date(match.time);
-                const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
+                const limitTime = new Date(matchTime.getTime() - (PREDICTION_LOCK_MINUTES * 60 * 1000));
                 const isLocked = now >= limitTime;
 
                 let pBadge = '', sBorder = 'border-slate-700/50';
@@ -1400,7 +1453,7 @@
 
             allMatchesData.forEach(m => {
                 const matchTime = new Date(m.time);
-                const limitTime = new Date(matchTime.getTime() - (60 * 60 * 1000));
+                const limitTime = new Date(matchTime.getTime() - (PREDICTION_LOCK_MINUTES * 60 * 1000));
 
                 if (now < limitTime) {
                     const h = fd.get(`pred-${m.id}-home`);
@@ -1422,8 +1475,9 @@
                 await setDoc(doc(db, "predictions", currentUser.uid), { predictions: newP }, { merge: true });
                 userPredictions = Object.assign(userPredictions, newP);
                 showToast("¡Tus pronósticos están asegurados!");
-                const myPts = calculateTotalUserScore(userPredictions, globalResults);
+                const myPts = calculateTotalWithManualBonus(userPredictions, globalResults, userDataModel);
                 await updateDoc(doc(db, "users", currentUser.uid), { totalPoints: myPts });
+                userDataModel.totalPoints = myPts;
                 document.getElementById('user-aside-points').innerText = myPts;
 
                 updateStats(userPredictions);
@@ -1461,7 +1515,110 @@
                 await updateDoc(doc(db, "users", uid), { status: 'aprobado' });
                 showToast("¡Usuario aprobado al 100%!");
                 loadPendingUsers();
+                if (canManageManualBonus()) loadManualBonusUsers();
             } catch (e) { showToast(e.message, 'error'); }
+        }
+
+        async function loadManualBonusUsers() {
+            if (!canManageManualBonus()) return;
+            const selector = document.getElementById('admin-bonus-user');
+            const summary = document.getElementById('admin-bonus-summary');
+            if (!selector) return;
+
+            selector.innerHTML = `<option value="">Cargando jugadores...</option>`;
+            const snap = await getDocs(query(collection(db, "users"), where("status", "==", "aprobado")));
+            manualBonusUsers = [];
+            snap.forEach(d => {
+                const data = d.data();
+                manualBonusUsers.push({ id: d.id, ...data, uid: data.uid || d.id });
+            });
+            manualBonusUsers.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            if (manualBonusUsers.length === 0) {
+                selector.innerHTML = `<option value="">No hay jugadores aprobados</option>`;
+                if (summary) summary.innerText = 'No hay jugadores aprobados disponibles para sumar puntos.';
+                return;
+            }
+
+            selector.innerHTML = `<option value="">Seleccionar jugador...</option>`;
+            manualBonusUsers.forEach(u => {
+                const bonus = normalizePoints(u.manualBonusPoints);
+                const total = normalizePoints(u.totalPoints);
+                selector.innerHTML += `<option value="${u.uid}">${u.name || u.email} - ${total} pts (${bonus} manuales)</option>`;
+            });
+            updateManualBonusSummary();
+        }
+
+        function updateManualBonusSummary() {
+            const selector = document.getElementById('admin-bonus-user');
+            const summary = document.getElementById('admin-bonus-summary');
+            if (!selector || !summary) return;
+            const user = manualBonusUsers.find(u => u.uid === selector.value);
+            if (!user) {
+                summary.innerText = 'Los puntos manuales se suman al total y se conservan aunque recalcules resultados globales.';
+                return;
+            }
+            summary.innerText = `${user.name || user.email}: ${normalizePoints(user.totalPoints)} pts totales, ${normalizePoints(user.manualBonusPoints)} pts manuales acumulados.`;
+        }
+
+        const bonusUserSelector = document.getElementById('admin-bonus-user');
+        if (bonusUserSelector) {
+            bonusUserSelector.addEventListener('change', updateManualBonusSummary);
+        }
+
+        const bonusForm = document.getElementById('admin-bonus-form');
+        if (bonusForm) {
+            bonusForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!canManageManualBonus()) {
+                    showToast('No tienes permiso para agregar puntos manuales.', 'error');
+                    return;
+                }
+
+                const uid = document.getElementById('admin-bonus-user')?.value;
+                const pointsToAdd = parseInt(document.getElementById('admin-bonus-points')?.value);
+                if (!uid || ![2, 4].includes(pointsToAdd)) {
+                    showToast('Selecciona un jugador y elige +2 o +4 puntos.', 'error');
+                    return;
+                }
+
+                document.getElementById('main-loader').style.display = 'flex';
+                document.getElementById('main-loader').classList.remove('opacity-0');
+
+                try {
+                    await runTransaction(db, async (transaction) => {
+                        const userRef = doc(db, "users", uid);
+                        const userSnap = await transaction.get(userRef);
+                        if (!userSnap.exists()) throw new Error('Jugador no encontrado.');
+
+                        const targetUser = userSnap.data();
+                        const pSnap = await transaction.get(doc(db, "predictions", uid));
+                        const predictions = pSnap.exists() ? (pSnap.data().predictions || {}) : {};
+                        const nextBonus = normalizePoints(targetUser.manualBonusPoints) + pointsToAdd;
+                        const nextTotal = calculateTotalUserScore(predictions, globalResults) + nextBonus;
+
+                        transaction.update(userRef, {
+                            manualBonusPoints: nextBonus,
+                            totalPoints: nextTotal
+                        });
+                    });
+
+                    if (uid === currentUser.uid) {
+                        userDataModel.manualBonusPoints = normalizePoints(userDataModel.manualBonusPoints) + pointsToAdd;
+                        userDataModel.totalPoints = calculateTotalWithManualBonus(userPredictions, globalResults, userDataModel);
+                        updateProfileUI();
+                    }
+
+                    showToast(`Se agregaron ${pointsToAdd} puntos permanentes.`);
+                    await loadManualBonusUsers();
+                    if (!document.getElementById('leaderboard-tab').classList.contains('hidden')) loadLeaderboard();
+                } catch (e) {
+                    showToast(e.message, 'error');
+                } finally {
+                    document.getElementById('main-loader').classList.add('opacity-0');
+                    setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+                }
+            });
         }
 
         const createMatchForm = document.getElementById('admin-create-match-form');
@@ -1546,19 +1703,35 @@
                 });
 
                 try {
+                    const previousResults = globalResults;
+                    const changedMatches = allMatchesData.filter(m => !areResultsEqual(previousResults[m.id], nGR[m.id]));
+
                     await setDoc(doc(db, "results", "global"), { results: nGR });
                     globalResults = nGR;
-                    const uSnap = await getDocs(collection(db, "users"));
-                    for (let ud of uSnap.docs) {
-                        const u = ud.data();
-                        const pSnap = await getDoc(doc(db, "predictions", u.uid));
-                        let pts = 0;
-                        if (pSnap.exists()) pts = calculateTotalUserScore(pSnap.data().predictions || {}, nGR);
-                        await updateDoc(doc(db, "users", u.uid), { totalPoints: pts });
-                        if (u.uid === currentUser.uid) {
-                            userDataModel.totalPoints = pts;
+                    if (changedMatches.length > 0) {
+                    const pSnap = await getDocs(collection(db, "predictions"));
+                    let batch = writeBatch(db);
+                    let pendingWrites = 0;
+                    for (let pd of pSnap.docs) {
+                        const uid = pd.id;
+                        const predictions = pd.data().predictions || {};
+                        const delta = calculateChangedMatchesDelta(predictions, previousResults, nGR, changedMatches);
+                        if (delta === 0) continue;
+                        batch.update(doc(db, "users", uid), { totalPoints: increment(delta) });
+                        pendingWrites++;
+                        if (uid === currentUser.uid) {
+                            userDataModel.totalPoints = Math.max(0, normalizePoints(userDataModel.totalPoints) + delta);
                             updateProfileUI();
                         }
+                        if (pendingWrites === 450) {
+                            await batch.commit();
+                            batch = writeBatch(db);
+                            pendingWrites = 0;
+                        }
+                    }
+                    if (pendingWrites > 0) {
+                        await batch.commit();
+                    }
                     }
                     showToast("¡Resultados Globales Actualizados!");
                     renderMatchesPredictionGrid();
@@ -1582,6 +1755,27 @@
             return 0;
         }
 
+        function areResultsEqual(a = {}, b = {}) {
+            const aHome = a?.home ?? null;
+            const aAway = a?.away ?? null;
+            const bHome = b?.home ?? null;
+            const bAway = b?.away ?? null;
+            return String(aHome) === String(bHome) && String(aAway) === String(bAway);
+        }
+
+        function calculateChangedMatchesDelta(preds, previousResults, nextResults, changedMatches) {
+            let delta = 0;
+            changedMatches.forEach(m => {
+                const p = preds[m.id];
+                if (!p) return;
+                const previous = previousResults[m.id] || {};
+                const next = nextResults[m.id] || {};
+                delta -= calcSingleMatchPoints(p.home, p.away, previous.home, previous.away);
+                delta += calcSingleMatchPoints(p.home, p.away, next.home, next.away);
+            });
+            return delta;
+        }
+
         function calculateTotalUserScore(preds, reals) {
             let total = 0;
             allMatchesData.forEach(m => {
@@ -1591,6 +1785,15 @@
             return total;
         }
 
+        function normalizePoints(value) {
+            const points = parseInt(value);
+            return isNaN(points) ? 0 : points;
+        }
+
+        function calculateTotalWithManualBonus(preds, reals, userData = {}) {
+            return calculateTotalUserScore(preds, reals) + normalizePoints(userData.manualBonusPoints);
+        }
+
         async function loadLeaderboard() {
             const tb = document.getElementById('leaderboard-table-body');
             if (!tb) return;
@@ -1598,7 +1801,12 @@
             try {
                 const qRes = await getDocs(query(collection(db, "users"), where("status", "==", "aprobado")));
                 let uList = [];
-                qRes.forEach(d => uList.push(d.data()));
+                qRes.forEach(d => {
+                    const u = d.data();
+                    u.totalPoints = normalizePoints(u.totalPoints);
+                    u.manualBonusPoints = normalizePoints(u.manualBonusPoints);
+                    uList.push(u);
+                });
 
                 uList.sort((a, b) => b.totalPoints - a.totalPoints);
 
