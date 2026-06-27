@@ -938,7 +938,11 @@
                             <form id="admin-results-form">
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                                     id="admin-matches-container"></div>
-                                <div class="mt-8 flex justify-end border-t border-slate-700/50 pt-6">
+                                <div class="mt-8 flex flex-col sm:flex-row justify-end gap-3 border-t border-slate-700/50 pt-6">
+                                    <button type="button" id="admin-recalculate-all-btn"
+                                        class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white border border-slate-600 font-black px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2 text-sm tracking-widest uppercase">
+                                        <i class="fa-solid fa-rotate"></i> Recalcular Todo
+                                    </button>
                                     <button type="submit"
                                         class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-[0_10px_20px_-5px_rgba(225,29,72,0.5)] flex items-center justify-center gap-2 text-sm tracking-widest uppercase">
                                         <i class="fa-solid fa-calculator"></i> Calcular Punteos Globales
@@ -1744,6 +1748,28 @@
             });
         }
 
+        const recalculateAllBtn = document.getElementById('admin-recalculate-all-btn');
+        if (recalculateAllBtn) {
+            recalculateAllBtn.addEventListener('click', async () => {
+                if (!userDataModel?.isAdmin) return;
+                document.getElementById('main-loader').style.display = 'flex';
+                document.getElementById('main-loader').classList.remove('opacity-0');
+
+                try {
+                    await fetchGlobalResults();
+                    await recalculateAllUserPoints();
+                    showToast('Punteos recalculados y actualizados correctamente.');
+                    updateProfileUI();
+                    if (!document.getElementById('leaderboard-tab').classList.contains('hidden')) loadLeaderboard();
+                } catch (err) {
+                    showToast(err.message, 'error');
+                } finally {
+                    document.getElementById('main-loader').classList.add('opacity-0');
+                    setTimeout(() => document.getElementById('main-loader').style.display = 'none', 500);
+                }
+            });
+        }
+
         function calcSingleMatchPoints(pH, pA, rH, rA) {
             if (rH === null || rA === null || rH === "" || rA === "") return 0;
             if (pH === null || pA === null || pH === "" || pA === "") return 0;
@@ -1792,6 +1818,38 @@
 
         function calculateTotalWithManualBonus(preds, reals, userData = {}) {
             return calculateTotalUserScore(preds, reals) + normalizePoints(userData.manualBonusPoints);
+        }
+
+        async function recalculateAllUserPoints() {
+            const uSnap = await getDocs(collection(db, "users"));
+            let batch = writeBatch(db);
+            let pendingWrites = 0;
+
+            for (let ud of uSnap.docs) {
+                const u = ud.data();
+                const uid = u.uid || ud.id;
+                const pSnap = await getDoc(doc(db, "predictions", uid));
+                const predictions = pSnap.exists() ? (pSnap.data().predictions || {}) : {};
+                const totalPoints = calculateTotalWithManualBonus(predictions, globalResults, u);
+
+                batch.update(doc(db, "users", uid), { totalPoints });
+                pendingWrites++;
+
+                if (uid === currentUser.uid) {
+                    userDataModel.totalPoints = totalPoints;
+                    userDataModel.manualBonusPoints = normalizePoints(u.manualBonusPoints);
+                }
+
+                if (pendingWrites === 450) {
+                    await batch.commit();
+                    batch = writeBatch(db);
+                    pendingWrites = 0;
+                }
+            }
+
+            if (pendingWrites > 0) {
+                await batch.commit();
+            }
         }
 
         async function loadLeaderboard() {
